@@ -1,0 +1,24 @@
+[data-theme="light"] {
+  --background: #f6fbf7;
+  --background-soft: #edf5ef;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-strong: rgba(255, 255, 255, 0.96);
+  --surface-muted: rgba(240, 247, 242, 0.82);
+
+  --foreground: #0b1812;
+  --foreground-muted: #4f6759;
+  --foreground-soft: #6e8578;
+
+  --border: rgba(11, 24, 18, 0.08);
+  --border-strong: rgba(11, 24, 18, 0.14);
+
+  --primary: #7ddc3a;
+  --primary-strong: #68c62a;
+  --primary-foreground: #08110b;
+
+  --secondary: #eaf3ec;
+  --secondary-foreground: #102019;
+
+  --accent: #dfeee3;
+  --accent-foreground: #102019;
+}

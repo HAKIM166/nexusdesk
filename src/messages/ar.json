@@ -1,0 +1,34 @@
+{
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "subtitle": "مرحبًا بعودتك — إليك ما يحدث في عملك اليوم.",
+    "kpis": {
+      "clients": "إجمالي العملاء",
+      "projects": "المشاريع النشطة",
+      "revenue": "الإيرادات",
+      "tasks": "المهام المعلقة"
+    },
+    "revenueTitle": "نظرة عامة على الإيرادات",
+    "revenueSubtitle": "أداء الإيرادات الشهري",
+    "projectStatusTitle": "حالة المشاريع",
+    "projectStatusSubtitle": "توزيع حالات المشاريع",
+    "clientsTitle": "قائمة العملاء",
+    "clientsSubtitle": "نظرة عامة على أحدث العملاء"
+  },
+  "topbar": {
+    "overview": "نظرة عامة",
+    "export": "تصدير",
+    "dark": "داكن",
+    "light": "فاتح"
+  },
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "clients": "العملاء",
+    "projects": "المشاريع",
+    "ai": "رسائل الذكاء الاصطناعي",
+    "settings": "الإعدادات",
+    "search": "بحث",
+    "workspace": "مساحة العمل",
+    "workspaceDescription": "واجهة CRM احترافية عالية المستوى لـ NexusDesk."
+  }
+}
