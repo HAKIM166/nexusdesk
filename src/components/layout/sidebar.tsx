@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Bot,
@@ -21,28 +21,8 @@ import { Locale } from "@/lib/constants";
 import { useClientStore } from "@/store/client-store";
 import { useProjectStore } from "@/store/project-store";
 import ThemeToggle from "@/components/ui/theme-toggle";
-
 import { useUIStore } from "@/store/ui-store";
-
-/* =========================
-   Type: Search result shape
-   شكل نتيجة البحث
-========================= */
-type SearchResult = {
-  id: string;
-  type: "client" | "project";
-  title: string;
-  subtitle: string;
-  href: string;
-};
-
-/* =========================
-   Helper: safe string getter
-   يحميك لو القيمة مش string
-========================= */
-function getTextValue(value: unknown) {
-  return typeof value === "string" ? value : "";
-}
+import { useSidebarSearch } from "@/hooks/use-sidebar-search";
 
 export default function Sidebar() {
   /* =========================
@@ -70,7 +50,9 @@ export default function Sidebar() {
      حالة البحث وفتح/قفل tasks
   ========================= */
   const [searchQuery, setSearchQuery] = useState("");
-  const [tasksOpen, setTasksOpen] = useState(false);
+  const [tasksOpen, setTasksOpen] = useState(
+    pathname.startsWith(`/${locale}/tasks`),
+  );
 
   /* =========================
      Labels Section
@@ -91,54 +73,7 @@ export default function Sidebar() {
      Search Logic Section
      من هنا بيتعمل فلترة للعملاء والمشاريع
   ========================= */
-  const searchResults = useMemo<SearchResult[]>(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return [];
-
-    const clientResults = clients
-      .map((client) => {
-        const clientRecord = client as Record<string, unknown>;
-
-        const id = getTextValue(clientRecord["id"]);
-        const name = getTextValue(clientRecord["name"]);
-        const company = getTextValue(clientRecord["company"]);
-        const email = getTextValue(clientRecord["email"]);
-
-        return {
-          id,
-          type: "client" as const,
-          title: name || company || email || "Unnamed client",
-          subtitle: company || email || "Client",
-          href: `/${locale}/clients/${id}`,
-          searchable: `${name} ${company} ${email}`.toLowerCase(),
-        };
-      })
-      .filter((client) => client.id && client.searchable.includes(query))
-      .map(({ searchable, ...client }) => client);
-
-    const projectResults = projects
-      .map((project) => {
-        const projectRecord = project as Record<string, unknown>;
-
-        const id = getTextValue(projectRecord["id"]);
-        const name = getTextValue(projectRecord["name"]);
-        const title = getTextValue(projectRecord["title"]);
-        const status = getTextValue(projectRecord["status"]);
-
-        return {
-          id,
-          type: "project" as const,
-          title: name || title || "Untitled project",
-          subtitle: status || "Project",
-          href: `/${locale}/projects/${id}`,
-          searchable: `${name} ${title} ${status}`.toLowerCase(),
-        };
-      })
-      .filter((project) => project.id && project.searchable.includes(query))
-      .map(({ searchable, ...project }) => project);
-
-    return [...clientResults, ...projectResults].slice(0, 6);
-  }, [clients, projects, searchQuery, locale]);
+  const searchResults = useSidebarSearch(searchQuery, clients, projects, locale);
 
   /* =========================
      Search Click Handler
@@ -169,7 +104,7 @@ export default function Sidebar() {
   ========================= */
   const linkClass = (href?: string) =>
     [
-      "relative flex h-[40px] items-center gap-3 rounded-[10px] px-3 text-start text-[13px] font-medium transition-all duration-200",
+      "relative flex h-[40px] items-center gap-3 rounded-sm px-3 text-start text-[13px] font-medium transition-all duration-200",
       href && isActive(href)
         ? "bg-[var(--sidebar-active)] text-[var(--sidebar-active-text)] shadow-[var(--sidebar-active-shadow)] before:absolute before:top-1/2 before:h-6 before:w-[3px] before:-translate-y-1/2 before:rounded-full before:bg-[var(--sidebar-active-border)] ltr:before:-left-[11px] rtl:before:-right-[11px]"
         : "text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--sidebar-hover-text)]",
@@ -196,15 +131,7 @@ export default function Sidebar() {
           : "left-0 border-r border-[var(--border)]"
       }`}
     >
-      {/* =========================
-          Sidebar Inner Wrapper
-          التحكم في padding الداخلي والمسافة من فوق
-      ========================= */}
       <div className="sidebar-scroll relative flex h-full w-full flex-col overflow-y-auto px-4 pb-5 pt-8">
-        {/* =========================
-    Logo Section
-    شعار NexusDesk أعلى السايدبار
-========================= */}
         <div className="mb-7 flex items-center px-1">
           <Image
             src={
@@ -220,12 +147,8 @@ export default function Sidebar() {
           />
         </div>
 
-        {/* =========================
-            Search Section
-            صندوق البحث + الأيقونة + اختصار CMD/F + النتائج
-        ========================= */}
+        {/* Search Section */}
         <div className="relative z-50 mb-4">
-          {/* Search Icon */}
           <Search
             size={15}
             className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[var(--sidebar-text)] ${
@@ -233,7 +156,6 @@ export default function Sidebar() {
             }`}
           />
 
-          {/* Search Input */}
           <input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
@@ -243,7 +165,6 @@ export default function Sidebar() {
             }`}
           />
 
-          {/* Keyboard Shortcut */}
           <div
             className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 items-center gap-1 rounded bg-[var(--surface-muted)] px-1.5 py-0.5 text-[9px] text-[var(--sidebar-soft)] lg:flex ${
               isArabic ? "left-2" : "right-2"
@@ -253,7 +174,6 @@ export default function Sidebar() {
             <span>F</span>
           </div>
 
-          {/* Search Results Dropdown */}
           {searchQuery.trim() && (
             <div className="absolute left-0 right-0 top-[48px] z-[999] max-h-[260px] overflow-y-auto rounded-xl border border-[var(--primary)]/15 bg-[#07140f] shadow-[0_24px_80px_rgba(0,0,0,0.75)]">
               {searchResults.length > 0 ? (
@@ -288,22 +208,13 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* =========================
-            Navigation Section
-            كل روابط السايدبار الأساسية
-        ========================= */}
         <nav className="flex flex-1 flex-col">
-          {/* =========================
-              Home Section
-              Dashboard / Calendar / Tasks
-          ========================= */}
           <div>
             <p className="mb-2 px-3 text-start text-[11px] font-medium text-[var(--sidebar-soft)]">
               {labels.home}
             </p>
 
             <div className="space-y-1.5">
-              {/* Dashboard Link */}
               <Link
                 href={`/${locale}/dashboard`}
                 className={`group ${linkClass("/dashboard")}`}
@@ -312,73 +223,77 @@ export default function Sidebar() {
                 <span>{messages.sidebar.dashboard}</span>
               </Link>
 
-              {/* Calendar Button */}
-              <button type="button" className={`group w-full ${linkClass()}`}>
-                <CalendarDays size={15} className={iconClass()} />
+              <Link
+                href={`/${locale}/calendar`}
+                className={`group ${linkClass("/calendar")}`}
+              >
+                <CalendarDays size={15} className={iconClass("/calendar")} />
                 <span>{labels.calendar}</span>
-              </button>
+              </Link>
 
-              {/* =========================
-                  Tasks Dropdown Section
-                  زر المهام والقائمة اللي تحته
-              ========================= */}
               <div>
                 <button
                   type="button"
                   onClick={() => setTasksOpen((value) => !value)}
-                  className="group flex h-[40px] w-full items-center justify-between rounded-[10px] px-3 text-start text-[13px] font-medium text-[var(--sidebar-muted)] transition-all duration-200 hover:bg-[var(--sidebar-hover)] hover:text-[var(--sidebar-hover-text)]"
+                  className={`group flex h-[40px] w-full items-center justify-between rounded-[10px] px-3 text-start text-[13px] font-medium transition-all duration-200 ${
+                    pathname.startsWith(`/${locale}/tasks`)
+                      ? "bg-[var(--sidebar-active)] text-[var(--sidebar-active-text)] shadow-[var(--sidebar-active-shadow)]"
+                      : "text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--sidebar-hover-text)]"
+                  }`}
                 >
                   <span className="flex items-center gap-3">
                     <ListTodo
                       size={15}
-                      className="text-[var(--sidebar-soft)] transition-colors group-hover:text-[var(--sidebar-hover-text)]"
+                      className={
+                        pathname.startsWith(`/${locale}/tasks`)
+                          ? "text-[var(--sidebar-active-text)]"
+                          : "text-[var(--sidebar-soft)] transition-colors group-hover:text-[var(--sidebar-hover-text)]"
+                      }
                     />
                     <span>{labels.tasks}</span>
                   </span>
 
                   <ChevronDown
                     size={14}
-                    className={`text-[var(--sidebar-soft)] transition group-hover:text-[var(--sidebar-hover-text)] ${
-                      tasksOpen ? "rotate-180" : ""
-                    }`}
+                    className={`transition ${
+                      pathname.startsWith(`/${locale}/tasks`)
+                        ? "text-[var(--sidebar-active-text)]"
+                        : "text-[var(--sidebar-soft)] group-hover:text-[var(--sidebar-hover-text)]"
+                    } ${tasksOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
-                {/* Tasks Submenu */}
                 {tasksOpen && (
                   <div className="ms-5 mt-2 space-y-1.5 border-s border-[var(--border-strong)] ps-4">
-                    {[labels.backlog, labels.inProgress, labels.done].map(
-                      (item) => (
-                        <button
-                          key={item}
-                          type="button"
-                          style={{
-                            fontSize: "11px",
-                            fontWeight: 400,
-                          }}
-                          className="block w-full rounded-md px-2 py-1.5 text-start text-[var(--sidebar-muted)] transition hover:bg-[var(--sidebar-hover)] hover:!text-[var(--sidebar-hover-text)]"
-                        >
-                          {item}
-                        </button>
-                      ),
-                    )}
+                    {[
+                      { label: labels.backlog, href: "/tasks/backlog" },
+                      { label: labels.inProgress, href: "/tasks/in-progress" },
+                      { label: labels.done, href: "/tasks/done" },
+                    ].map((item) => (
+                      <Link
+                        key={item.href}
+                        href={`/${locale}${item.href}`}
+                        className={`block rounded-md px-2 py-1.5 text-start text-[11px] font-normal transition ${
+                          isActive(item.href)
+                            ? "bg-[var(--sidebar-active)] text-[var(--sidebar-active-text)]"
+                            : "text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--sidebar-hover-text)]"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* =========================
-              Workspace Section
-              Clients / Projects
-          ========================= */}
           <div className="mt-7">
             <p className="mb-2 px-3 text-start text-[11px] font-medium text-[var(--sidebar-soft)]">
               {labels.workspace}
             </p>
 
             <div className="space-y-1.5">
-              {/* Clients Link */}
               <Link
                 href={`/${locale}/clients`}
                 className={`group ${linkClass("/clients")}`}
@@ -387,7 +302,6 @@ export default function Sidebar() {
                 <span>{messages.sidebar.clients}</span>
               </Link>
 
-              {/* Projects Link */}
               <Link
                 href={`/${locale}/projects`}
                 className={`group ${linkClass("/projects")}`}
@@ -401,17 +315,12 @@ export default function Sidebar() {
             </div>
           </div>
 
-          {/* =========================
-              System Section
-              AI Messages / Settings
-          ========================= */}
           <div className="mt-7">
             <p className="mb-2 px-3 text-start text-[11px] font-medium text-[var(--sidebar-soft)]">
               {labels.system}
             </p>
 
             <div className="space-y-1.5">
-              {/* AI Messages Link */}
               <Link
                 href={`/${locale}/messages-ai`}
                 className={`group ${linkClass("/messages-ai")}`}
@@ -420,7 +329,6 @@ export default function Sidebar() {
                 <span>{messages.sidebar.ai}</span>
               </Link>
 
-              {/* Settings Link */}
               <Link
                 href={`/${locale}/settings`}
                 className={`group ${linkClass("/settings")}`}
@@ -432,10 +340,6 @@ export default function Sidebar() {
           </div>
         </nav>
 
-        {/* =========================
-            Theme Toggle Section
-            زرار تغيير الثيم تحت
-        ========================= */}
         <div className="mt-6">
           <ThemeToggle />
         </div>

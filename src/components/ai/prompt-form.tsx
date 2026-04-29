@@ -67,43 +67,54 @@ export default function PromptForm({
   };
 
   return (
-    <div className="panel p-4 sm:p-5">
-      <div className={isArabic ? "text-right" : "text-left"}>
+    /* PROMPT_FORM_ROOT: منطقة الإدخال الرئيسية بدون panel خارجي */
+    <div className={isArabic ? "text-right" : "text-left"}>
+      {/* PROMPT_FORM_HEADER: عنوان صغير جدًا فوق الإدخال */}
+      <div className="mb-3">
         <h3 className="text-sm font-semibold text-[var(--foreground)]">
           {labels.title}
         </h3>
+
         <p className="mt-1 text-xs text-[var(--foreground-muted)]">
           {labels.helper}
         </p>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      {/* PROMPT_SUGGESTIONS: اقتراحات خفيفة بدون كروت تقيلة */}
+      <div
+        className={`mb-3 flex flex-wrap gap-2 ${
+          isArabic ? "justify-end" : "justify-start"
+        }`}
+      >
         {suggestions.map((suggestion) => (
           <button
             key={suggestion}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
             disabled={isLoading}
-            className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="text-xs text-[var(--foreground-muted)] transition hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {suggestion}
           </button>
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+      {/* PROMPT_FORM: الفورم الحقيقي للإرسال */}
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {/* PROMPT_TEXTAREA: مربع الكتابة الوحيد الواضح في المنطقة */}
         <textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={labels.placeholder}
           disabled={isLoading}
-          rows={4}
+          rows={3}
           dir={isArabic ? "rtl" : "ltr"}
-          className={`w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--foreground-muted)] focus:border-emerald-400/30 focus:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-70 ${
+          className={`w-full resize-none rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--foreground-muted)] focus:border-emerald-400/30 focus:bg-white/[0.055] disabled:cursor-not-allowed disabled:opacity-70 ${
             isArabic ? "text-right" : "text-left"
           }`}
         />
 
+        {/* PROMPT_FORM_FOOTER: رسالة بسيطة وزر الإرسال */}
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs text-[var(--foreground-muted)]">
             {value.trim().length === 0 && !isLoading ? labels.empty : "\u00A0"}

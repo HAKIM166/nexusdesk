@@ -1,12 +1,9 @@
 "use client";
 
 import { create } from "zustand";
+import { useNotificationStore } from "./notification-store";
 
-export type ProjectStatus =
-  | "Planned"
-  | "In Progress"
-  | "Completed"
-  | "On Hold";
+export type ProjectStatus = "Planned" | "In Progress" | "Completed" | "On Hold";
 
 export type Project = {
   id: string;
@@ -70,60 +67,99 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   setSelectedProject: (project) => set({ selectedProject: project }),
 
   addProject: (project) =>
-    set((state) => ({
-      projects: [
-        {
-          id: crypto.randomUUID(),
-          ...project,
-        },
-        ...state.projects,
-      ],
-    })),
+    set((state) => {
+      const newProject = {
+        id: crypto.randomUUID(),
+        ...project,
+      };
+
+      useNotificationStore.getState().addNotification({
+        type: "project",
+        title: "Project created",
+        description: `${project.title} added to workspace`,
+      });
+
+      return {
+        projects: [newProject, ...state.projects],
+      };
+    }),
 
   deleteProject: (id) =>
-    set((state) => ({
-      projects: state.projects.filter((project) => project.id !== id),
-      selectedProject:
-        state.selectedProject?.id === id ? null : state.selectedProject,
-    })),
+    set((state) => {
+      const deletedProject = state.projects.find((project) => project.id === id);
+
+      if (deletedProject) {
+        useNotificationStore.getState().addNotification({
+          type: "project",
+          title: "Project deleted",
+          description: `${deletedProject.title} removed from workspace`,
+        });
+      }
+
+      return {
+        projects: state.projects.filter((project) => project.id !== id),
+        selectedProject:
+          state.selectedProject?.id === id ? null : state.selectedProject,
+      };
+    }),
 
   updateProject: (id, updatedProject) =>
-    set((state) => ({
-      projects: state.projects.map((project) =>
-        project.id === id
-          ? {
-              ...project,
-              ...updatedProject,
-            }
-          : project
-      ),
-      selectedProject:
-        state.selectedProject?.id === id
-          ? {
-              ...state.selectedProject,
-              ...updatedProject,
-            }
-          : state.selectedProject,
-    })),
+    set((state) => {
+      useNotificationStore.getState().addNotification({
+        type: "project",
+        title: "Project updated",
+        description: `${updatedProject.title} details updated`,
+      });
+
+      return {
+        projects: state.projects.map((project) =>
+          project.id === id
+            ? {
+                ...project,
+                ...updatedProject,
+              }
+            : project,
+        ),
+        selectedProject:
+          state.selectedProject?.id === id
+            ? {
+                ...state.selectedProject,
+                ...updatedProject,
+              }
+            : state.selectedProject,
+      };
+    }),
 
   updateProjectStatus: (id, status) =>
-    set((state) => ({
-      projects: state.projects.map((project) =>
-        project.id === id
-          ? {
-              ...project,
-              status,
-            }
-          : project
-      ),
-      selectedProject:
-        state.selectedProject?.id === id
-          ? {
-              ...state.selectedProject,
-              status,
-            }
-          : state.selectedProject,
-    })),
+    set((state) => {
+      const currentProject = state.projects.find((project) => project.id === id);
+
+      if (currentProject) {
+        useNotificationStore.getState().addNotification({
+          type: "project",
+          title: "Project status updated",
+          description: `${currentProject.title} status changed to ${status}`,
+        });
+      }
+
+      return {
+        projects: state.projects.map((project) =>
+          project.id === id
+            ? {
+                ...project,
+                status,
+              }
+            : project,
+        ),
+        selectedProject:
+          state.selectedProject?.id === id
+            ? {
+                ...state.selectedProject,
+                status,
+              }
+            : state.selectedProject,
+      };
+    }),
 
   getProjectById: (id) => {
     return get().projects.find((project) => project.id === id);

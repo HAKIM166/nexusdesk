@@ -322,3 +322,168 @@ html[data-density="compact"] .section-subtitle {
   scrollbar-width: thin;
   scrollbar-color: var(--sidebar-hover) transparent;
 }
+
+/* NexusDesk Calendar */
+
+.nexus-calendar {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: transparent;
+  --fc-list-event-hover-bg-color: var(--surface-muted);
+  --fc-today-bg-color: rgba(182, 255, 102, 0.09);
+  --fc-event-bg-color: rgba(182, 255, 102, 0.16);
+  --fc-event-border-color: rgba(182, 255, 102, 0.35);
+  --fc-event-text-color: var(--foreground);
+  color: var(--foreground);
+}
+
+.nexus-calendar .fc {
+  font-family: inherit;
+}
+
+.nexus-calendar .fc-toolbar {
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.nexus-calendar .fc-toolbar-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+}
+
+.nexus-calendar .fc-button {
+  border: 1px solid var(--border) !important;
+  background: var(--surface-muted) !important;
+  color: var(--foreground) !important;
+  border-radius: 999px !important;
+  padding: 0.55rem 0.9rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+  box-shadow: none !important;
+}
+
+.nexus-calendar .fc-button:hover,
+.nexus-calendar .fc-button-active {
+  border-color: rgba(182, 255, 102, 0.35) !important;
+  background: rgba(182, 255, 102, 0.14) !important;
+  color: var(--primary) !important;
+}
+
+.nexus-calendar .fc-scrollgrid {
+  border: 1px solid var(--border) !important;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.nexus-calendar .fc-col-header-cell {
+  background: var(--surface-muted);
+  padding: 0.85rem 0;
+}
+
+.nexus-calendar .fc-col-header-cell-cushion {
+  color: var(--foreground-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.nexus-calendar .fc-daygrid-day {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.nexus-calendar .fc-daygrid-day-frame {
+  min-height: 118px;
+  padding: 0.45rem;
+}
+
+.nexus-calendar .fc-daygrid-day-number {
+  color: var(--foreground);
+  font-size: 0.82rem;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.nexus-calendar .fc-day-other .fc-daygrid-day-number {
+  opacity: 0.35;
+}
+
+.nexus-calendar .fc-event {
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(182, 255, 102, 0.08);
+}
+
+.nexus-calendar .fc-event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nexus-calendar .fc-timegrid-slot,
+.nexus-calendar .fc-timegrid-axis,
+.nexus-calendar .fc-timegrid-col {
+  border-color: var(--border) !important;
+}
+
+@media (max-width: 768px) {
+  .nexus-calendar .fc-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nexus-calendar .fc-toolbar-chunk {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nexus-calendar .fc-daygrid-day-frame {
+    min-height: 88px;
+  }
+}
+
+@keyframes notification-bell {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  20% {
+    transform: rotate(-12deg) scale(1.05);
+  }
+
+  40% {
+    transform: rotate(12deg) scale(1.05);
+  }
+
+  60% {
+    transform: rotate(-8deg) scale(1.03);
+  }
+
+  80% {
+    transform: rotate(8deg) scale(1.03);
+  }
+
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes notification-pulse {
+  0% {
+    transform: scale(0.85);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

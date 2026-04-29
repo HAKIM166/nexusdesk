@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useNotificationStore } from "./notification-store";
 
 type Theme = "dark" | "light";
 type Density = "comfortable" | "compact";
@@ -40,10 +41,25 @@ export const useUIStore = create<UIState>((set) => ({
   aiEnabled: true,
   aiAutoSuggestions: true,
 
-  setTheme: (theme) => {
-    applyTheme(theme);
-    set({ theme });
-  },
+  setTheme: (theme) =>
+    set((state) => {
+      if (state.theme === theme) {
+        return state;
+      }
+
+      applyTheme(theme);
+
+      useNotificationStore.getState().addNotification({
+        type: "theme",
+        title: "Theme changed",
+        description:
+          theme === "dark"
+            ? "Dark mode is now active"
+            : "Light mode is now active",
+      });
+
+      return { theme };
+    }),
 
   setDensity: (density) => {
     applyDensity(density);
@@ -57,6 +73,14 @@ export const useUIStore = create<UIState>((set) => ({
 
   setAIEnabled: (value) => {
     set({ aiEnabled: value });
+
+    useNotificationStore.getState().addNotification({
+      type: "ai",
+      title: value ? "AI enabled" : "AI disabled",
+      description: value
+        ? "Nexus AI is now active"
+        : "Nexus AI has been turned off",
+    });
   },
 
   setAISuggestions: (value) => {
