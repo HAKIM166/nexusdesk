@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { getDashboardMetrics } from "@/lib/dashboard-helpers";
@@ -8,6 +7,9 @@ import { getMessages } from "@/lib/helpers";
 import { Locale } from "@/lib/constants";
 import { useClientStore } from "@/store/client-store";
 import { useProjectStore } from "@/store/project-store";
+
+import QuickActionsSection from "./quick-actions-section";
+import RecentListsSection from "./recent-lists-section";
 
 import {
   Box,
@@ -36,34 +38,9 @@ type ProjectItem = {
   status?: string;
 };
 
-type QuickActionType = "clients" | "projects" | "ai";
-
 /* =========================
    HELPERS
    ========================= */
-
-function translateStatus(
-  status: string | undefined,
-  messages: ReturnType<typeof getMessages>,
-) {
-  const value = String(status || "").toLowerCase();
-
-  const statusMap: Record<string, string> = {
-    active: messages.common.status.Active,
-    pending: messages.common.status.Pending,
-    inactive: messages.common.status.Inactive,
-    completed: messages.common.status.Completed,
-    planned: messages.common.status.Planned,
-    "in progress": messages.common.status["In Progress"],
-    inprogress: messages.common.status["In Progress"],
-    "in-progress": messages.common.status["In Progress"],
-    onhold: messages.common.status["On Hold"],
-    "on hold": messages.common.status["On Hold"],
-    "on-hold": messages.common.status["On Hold"],
-  };
-
-  return statusMap[value] || status || "-";
-}
 
 /* =========================
    DASHBOARD DETAILS COMPONENT
@@ -98,50 +75,6 @@ export default function DashboardDetails() {
   const recentClients = metrics.recentClients as ClientItem[];
   const recentProjects = metrics.recentProjects as ProjectItem[];
 
-  /* =========================
-   QUICK ACTIONS DATA
-   ========================= */
-
-  const quickActions: {
-    href: string;
-    badge: string;
-    title: string;
-    description: string;
-    button: string;
-    type: QuickActionType;
-  }[] = [
-    {
-      href: `/${locale}/clients`,
-      badge: isArabic ? "العملاء" : "Clients",
-      title: isArabic ? "إدارة العملاء بذكاء" : "Smart Client Management",
-      description: isArabic
-        ? "نظّم بيانات العملاء والتواصل والملاحظات في مكان واحد واضح وسهل."
-        : "Keep every lead, contact, and client detail organized in one clean hub.",
-      button: isArabic ? "إدارة العملاء" : "Explore more",
-      type: "clients",
-    },
-    {
-      href: `/${locale}/projects`,
-      badge: isArabic ? "المشاريع" : "Workflows",
-      title: isArabic ? "سير عمل منظم" : "Automated Workflows",
-      description: isArabic
-        ? "تابع المشاريع والخطوات المهمة بدون زحمة أو تعقيد."
-        : "Track project progress and keep your workflow moving without clutter.",
-      button: isArabic ? "إدارة المشاريع" : "Explore more",
-      type: "projects",
-    },
-    {
-      href: `/${locale}/messages-ai`,
-      badge: isArabic ? "الذكاء الاصطناعي" : "AI Assistant",
-      title: isArabic ? "مساعد ذكي سريع" : "Real-Time Assistant",
-      description: isArabic
-        ? "اسأل الذكاء الاصطناعي واحصل على ملخصات وتحليلات سريعة."
-        : "Ask for insights, summaries, and quick decisions across your workspace.",
-      button: isArabic ? "اسأل الآن" : "Explore more",
-      type: "ai",
-    },
-  ];
-
   return (
     <div className="space-y-6">
       {/* =========================
@@ -152,311 +85,16 @@ export default function DashboardDetails() {
    - Links and logic stay the same
    ========================= */}
 
-      <section className="space-y-5">
-        {/* =========================
-     QUICK ACTIONS HEADER
-     ========================= */}
-
-        <div>
-          <span className="mb-3 inline-flex items-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-muted)] px-3 py-1 text-xs font-medium text-primary">
-            <span className="badge-dot" />
-            {isArabic ? "إجراءات سريعة" : "Quick Actions"}
-          </span>
-
-          <h3 className="section-title">
-            {isArabic
-              ? "كل إجراءاتك المهمة في مكان واحد."
-              : "All Your Key Actions. One Smart Hub."}
-          </h3>
-
-          <p className="section-subtitle mt-2 max-w-xl">
-            {isArabic
-              ? "اختصارات سريعة لإدارة العملاء والمشاريع والذكاء الاصطناعي بشكل بسيط."
-              : "Fast shortcuts to manage clients, workflows, and AI without clutter."}
-          </p>
-        </div>
-
-        {/* =========================
-     TOP TWO CARDS
-     ========================= */}
-
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-          {quickActions.slice(0, 2).map((action) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className="glass-card group relative overflow-hidden rounded-md p-5 transition "
-            >
-              {/* Card glow */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[var(--primary)] to-transparent opacity-10" />
-
-              <div className="relative grid gap-5 md:grid-cols-[1fr_220px] md:items-center">
-                {/* Text side */}
-                <div>
-                  <span className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-muted)] px-3 py-1 text-xs text-primary">
-                    <span className="badge-dot" />
-                    {action.badge}
-                  </span>
-
-                  <h4 className="mt-4 text-2xl font-semibold tracking-tight">
-                    {action.title}
-                  </h4>
-
-                  <p className="mt-3 text-sm leading-6 text-muted">
-                    {action.description}
-                  </p>
-
-                  <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm font-medium transition group-hover:border-[var(--border-strong)] group-hover:bg-[var(--primary)] group-hover:text-[var(--primary-foreground)]">
-                    {action.button}
-                    <span className={isArabic ? "rotate-180" : ""}>↗</span>
-                  </div>
-                </div>
-
-                {/* Preview side */}
-                <div className="flex justify-end">
-                  {action.type === "clients" && (
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <p className="text-xs text-soft">Sales Target</p>
-                          <p className="mt-1 text-2xl font-semibold">$20,679</p>
-                        </div>
-
-                        <span className="rounded-md bg-[var(--surface)] px-2 py-1 text-xs text-primary">
-                          ↗ 7%
-                        </span>
-                      </div>
-
-                      <div className="flex h-16 items-end gap-1">
-                        {[42, 54, 68, 76, 64, 88, 72, 58, 80, 92].map(
-                          (height, index) => (
-                            <span
-                              key={index}
-                              className="flex-1 rounded-md bg-[var(--primary)] opacity-75"
-                              style={{ height: `${height}%` }}
-                            />
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {action.type === "projects" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs text-soft">Workflow Progress</p>
-                          <p className="mt-1 text-2xl font-semibold">72%</p>
-                        </div>
-
-                        <span className="rounded-lg bg-[var(--primary)] px-3 py-1 text-xs font-bold text-[var(--primary-foreground)]">
-                          Active
-                        </span>
-                      </div>
-
-                      <div className="space-y-3">
-                        {[92, 68, 84].map((width, index) => (
-                          <div key={index}>
-                            <div className="mb-2 h-2 w-20 rounded-full bg-[var(--foreground-soft)] opacity-25" />
-
-                            <div className="h-2 overflow-hidden rounded-full bg-[var(--surface-muted)]">
-                              <div
-                                className="h-full rounded-full bg-[var(--primary)]"
-                                style={{ width: `${width}%` }}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* =========================
-   WIDE AI CARD
-   ========================= */}
-
-        <Link
-          href={quickActions[2].href}
-          className="glass-card group relative block overflow-hidden rounded-md p-5 transition "
-        >
-          {/* Card glow */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[var(--primary)] to-transparent opacity-10" />
-
-          <div className="relative grid gap-6 lg:grid-cols-[0.9fr_0.75fr] lg:items-center">
-            {/* Text side */}
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-muted)] px-3 py-1 text-xs text-primary">
-                <span className="badge-dot" />
-                {quickActions[2].badge}
-              </span>
-
-              <h4 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">
-                {quickActions[2].title}
-              </h4>
-
-              <p className="mt-3 max-w-lg text-sm leading-6 text-muted">
-                {quickActions[2].description}
-              </p>
-
-              <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm font-medium transition group-hover:border-[var(--border-strong)] group-hover:bg-[var(--primary)] group-hover:text-[var(--primary-foreground)]">
-                {quickActions[2].button}
-                <span className={isArabic ? "rotate-180" : ""}>↗</span>
-              </div>
-            </div>
-
-            {/* Preview side */}
-            <div className="flex justify-end">
-              <div className="w-full max-w-[520px] space-y-3">
-                {/* AI message preview */}
-                <div className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] p-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-[var(--primary)] text-sm font-bold text-[var(--primary-foreground)]">
-                      AI
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="h-2 w-28 rounded-md bg-[var(--foreground-soft)] opacity-35" />
-                      <div className="mt-3 h-2 w-40 rounded-md bg-[var(--foreground-soft)] opacity-20" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI insights preview */}
-                <div className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] p-4">
-                  <div className="mb-4 flex items-center justify-between">
-                    <p className="text-xs text-soft">Smart Insights</p>
-                    <span className="text-xs text-primary">↗ 12%</span>
-                  </div>
-
-                  <div className="flex h-20 items-end gap-2">
-                    {[30, 55, 42, 78, 64, 90, 52, 70].map((height, index) => (
-                      <span
-                        key={index}
-                        className="flex-1 rounded-t-xl bg-[var(--primary)] opacity-75"
-                        style={{ height: `${height}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-      </section>
+      <QuickActionsSection locale={locale} isArabic={isArabic} />
       {/* =========================
    RECENT CLIENTS / RECENT PROJECTS GRID
    ========================= */}
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        {/* =========================
-     RECENT CLIENTS CARD
-     ========================= */}
-
-        <div className="glass-card overflow-hidden">
-          {/* Card header */}
-          <div className="border-b border-[var(--border)] px-5 py-4">
-            <h3 className="text-lg font-semibold">
-              {messages.dashboard.clientsTitle}
-            </h3>
-
-            <p className="mt-1 text-sm text-muted">
-              {messages.dashboard.clientsSubtitle}
-            </p>
-          </div>
-
-          {/* Table header */}
-          <div className="grid grid-cols-[1.2fr_1.5fr] border-b border-[var(--border)] px-5 py-3 text-xs text-soft">
-            <span>Name</span>
-            <span>Email</span>
-          </div>
-
-          {/* Clients rows */}
-          <div>
-            {recentClients.length > 0 ? (
-              recentClients.map((client, index) => (
-                <div
-                  key={client.id || index}
-                  className="grid grid-cols-[1.2fr_1.5fr] items-center border-b border-[var(--border)] px-5 py-4 text-sm last:border-b-0 hover:bg-[var(--surface-muted)]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--surface-muted)] text-xs font-semibold text-primary">
-                      {(client.name || "-").slice(0, 1).toUpperCase()}
-                    </div>
-
-                    <p className="font-medium">{client.name || "-"}</p>
-                  </div>
-
-                  <p className="truncate text-muted">{client.email || "-"}</p>
-                </div>
-              ))
-            ) : (
-              <p className="px-5 py-5 text-sm text-muted">
-                {messages.dashboard.noClients}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* =========================
-     RECENT PROJECTS CARD
-     ========================= */}
-
-        <div className="glass-card overflow-hidden ">
-          {/* Card header */}
-          <div className="border-b border-[var(--border)] px-5 py-4">
-            <h3 className="text-lg font-semibold">
-              {messages.dashboard.projectsTableTitle}
-            </h3>
-
-            <p className="mt-1 text-sm text-muted">
-              {messages.dashboard.projectsTableSubtitle}
-            </p>
-          </div>
-
-          {/* Table header */}
-          <div className="grid grid-cols-[1.4fr_0.8fr] border-b border-[var(--border)] px-5 py-3 text-xs text-soft">
-            <span>Project</span>
-            <span>Status</span>
-          </div>
-
-          {/* Projects rows */}
-          <div>
-            {recentProjects.length > 0 ? (
-              recentProjects.map((project, index) => (
-                <div
-                  key={project.id || index}
-                  className="grid grid-cols-[1.4fr_0.8fr] items-center border-b border-[var(--border)] px-5 py-4 text-sm last:border-b-0 hover:bg-[var(--surface-muted)]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--surface-muted)] text-xs font-semibold text-primary">
-                      {(project.name || project.title || "-")
-                        .slice(0, 1)
-                        .toUpperCase()}
-                    </div>
-
-                    <p className="font-medium">
-                      {project.name || project.title || "-"}
-                    </p>
-                  </div>
-
-                  <span className="w-fit rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-1 text-xs text-primary">
-                    {translateStatus(project.status, messages)}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className="px-5 py-5 text-sm text-muted">
-                {messages.dashboard.noProjects}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
+      <RecentListsSection
+        messages={messages}
+        recentClients={recentClients}
+        recentProjects={recentProjects}
+      />
 
       {/* =========================
    PLANS / WORKSPACE PACKAGES SECTION
