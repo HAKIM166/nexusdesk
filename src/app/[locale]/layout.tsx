@@ -1,21 +1,21 @@
 import { Locale } from "@/lib/constants";
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 }) {
-  const isRTL = params.locale === "ar";
+  const { locale } = await params;
+  const isRTL = locale === "ar";
 
   return (
-    <html
-      lang={params.locale}
+    <div
       dir={isRTL ? "rtl" : "ltr"}
-      suppressHydrationWarning
+      className="min-h-screen bg-background text-foreground antialiased"
     >
-      <body>{children}</body>
-    </html>
+      {children}
+    </div>
   );
 }

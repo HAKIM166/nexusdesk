@@ -1,18 +1,28 @@
 import DashboardShell from "@/components/layout/dashboard-shell";
-import AIMessageBox from "@/components/ai/ai-message-box";
+import AIChatContainer from "@/components/ai/ai-chat-container";
+import { Locale } from "@/lib/constants";
+import { getMessages } from "@/lib/helpers";
 
-export default function AIPage() {
+type AIPageProps = {
+  params: Promise<{
+    locale: Locale;
+  }>;
+};
+
+export default async function AIPage({ params }: AIPageProps) {
+  const { locale } = await params;
+  const messages = getMessages(locale);
+  const isArabic = locale === "ar";
+
   return (
     <DashboardShell>
       <div className="space-y-8">
-        <div>
-          <h1 className="section-title">AI Assistant</h1>
-          <p className="section-subtitle">
-            Generate smart suggestions for your business
-          </p>
+        <div className={isArabic ? "text-right" : "text-left"}>
+          <h1 className="section-title">{messages.ai.title}</h1>
+          <p className="section-subtitle">{messages.ai.subtitle}</p>
         </div>
 
-        <AIMessageBox />
+        <AIChatContainer locale={locale} />
       </div>
     </DashboardShell>
   );

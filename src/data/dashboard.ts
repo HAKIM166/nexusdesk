@@ -1,8 +1,8 @@
 export const kpiData = [
-  { title: "Total Clients", value: "1,240" },
-  { title: "Active Projects", value: "312" },
-  { title: "Revenue", value: "$48,920" },
-  { title: "Pending Tasks", value: "27" },
+  { value: "1,240" },
+  { value: "312" },
+  { value: "$48,920" },
+  { value: "27" },
 ];
 
 export const revenueData = [

@@ -8,12 +8,47 @@
       "revenue": "Revenue",
       "tasks": "Pending Tasks"
     },
+    "completionRate": "Completion Rate",
+    "totalProjects": "Total Projects",
     "revenueTitle": "Revenue Overview",
     "revenueSubtitle": "Monthly revenue performance",
     "projectStatusTitle": "Project Status",
     "projectStatusSubtitle": "Distribution of project states",
     "clientsTitle": "Clients List",
-    "clientsSubtitle": "Overview of your recent clients"
+    "clientsSubtitle": "Overview of your recent clients",
+    "projectsTableTitle": "Projects List",
+    "projectsTableSubtitle": "Overview of your recent projects",
+    "noClients": "No clients yet.",
+    "noProjects": "No projects yet."
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "Manage all your clients and their information.",
+    "listTitle": "Clients List",
+    "listSubtitle": "Overview of your clients",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "form": {
+      "title": "Add New Client",
+      "subtitle": "Create a new client record",
+      "name": "Client name",
+      "company": "Company",
+      "email": "Email address",
+      "button": "Add Client"
+    }
+  },
+  "clientsTable": {
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "status": "Status"
+  },
+  "projectsTable": {
+    "project": "Project",
+    "client": "Client",
+    "status": "Status",
+    "budget": "Budget"
   },
   "topbar": {
     "overview": "Overview",
@@ -30,5 +65,95 @@
     "search": "Search",
     "workspace": "Workspace",
     "workspaceDescription": "High-end CRM dashboard interface for NexusDesk."
+  },
+  "common": {
+    "months": {
+      "Jan": "Jan",
+      "Feb": "Feb",
+      "Mar": "Mar",
+      "Apr": "Apr",
+      "May": "May",
+      "Jun": "Jun",
+      "Jul": "Jul"
+    },
+    "status": {
+      "Active": "Active",
+      "Pending": "Pending",
+      "Inactive": "Inactive",
+      "In Progress": "In Progress",
+      "Completed": "Completed",
+      "Planned": "Planned",
+      "On Hold": "On Hold"
+    }
+  },
+  "ai": {
+    "title": "AI Assistant",
+    "subtitle": "Generate smart suggestions for your business",
+    "placeholder": "Ask AI anything about your business...",
+    "generate": "Generate",
+    "generating": "Generating...",
+    "response": "Based on your data, you should focus on increasing client retention and improving project delivery speed."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your workspace preferences and application options.",
+
+    "appearance": "Appearance",
+    "appearanceDesc": "Control theme and visual preferences.",
+    "theme": "Theme",
+    "themeDesc": "Dark and light mode support",
+    "density": "Density",
+    "densityDesc": "Compact and comfortable layout modes",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+
+    "localization": "Localization",
+    "localizationDesc": "Manage language and regional behavior.",
+    "language": "Language",
+    "languageDesc": "English / Arabic support",
+    "direction": "Direction",
+    "directionDesc": "RTL / LTR switching",
+
+    "dataExport": "Data & Export",
+    "dataExportDesc": "Export reports and manage workspace data.",
+    "exportPlaceholderTitle": "Export tools",
+    "exportPlaceholderDesc": "Report export and workspace data tools will be connected here later.",
+
+    "aiPreferences": "AI Preferences",
+    "aiPreferencesDesc": "Control AI generation behavior.",
+    "aiEnabled": "AI assistant",
+    "aiEnabledDesc": "Enable or disable AI features across the workspace.",
+    "aiSuggestions": "Auto suggestions",
+    "aiSuggestionsDesc": "Show quick AI suggestions and smart follow-up actions.",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Manage all your projects and track their status.",
+    "listTitle": "Projects List",
+    "listSubtitle": "Overview of your current projects",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "ai": "AI",
+    "empty": "No projects yet",
+    "unknownClient": "Unknown Client",
+    "notSet": "Not set",
+    "form": {
+      "title": "Add New Project",
+      "subtitle": "Create a new project and assign it to a client",
+      "name": "Project title",
+      "client": "Select client",
+      "deadline": "Deadline",
+      "description": "Project description",
+      "button": "Add Project"
+    },
+    "status": {
+      "planned": "Planned",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "onHold": "On Hold"
+    }
   }
 }

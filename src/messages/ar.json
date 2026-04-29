@@ -8,12 +8,47 @@
       "revenue": "الإيرادات",
       "tasks": "المهام المعلقة"
     },
+    "completionRate": "معدل الإنجاز",
+    "totalProjects": "إجمالي المشاريع",
     "revenueTitle": "نظرة عامة على الإيرادات",
     "revenueSubtitle": "أداء الإيرادات الشهري",
     "projectStatusTitle": "حالة المشاريع",
     "projectStatusSubtitle": "توزيع حالات المشاريع",
     "clientsTitle": "قائمة العملاء",
-    "clientsSubtitle": "نظرة عامة على أحدث العملاء"
+    "clientsSubtitle": "نظرة عامة على أحدث العملاء",
+    "projectsTableTitle": "قائمة المشاريع",
+    "projectsTableSubtitle": "نظرة عامة على أحدث المشاريع",
+    "noClients": "لا يوجد عملاء حتى الآن.",
+    "noProjects": "لا توجد مشاريع حتى الآن."
+  },
+  "clients": {
+    "title": "العملاء",
+    "subtitle": "إدارة جميع عملائك وبياناتهم.",
+    "listTitle": "قائمة العملاء",
+    "listSubtitle": "نظرة عامة على عملائك",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "form": {
+      "title": "إضافة عميل جديد",
+      "subtitle": "إنشاء سجل عميل جديد",
+      "name": "اسم العميل",
+      "company": "الشركة",
+      "email": "البريد الإلكتروني",
+      "button": "إضافة عميل"
+    }
+  },
+  "clientsTable": {
+    "name": "الاسم",
+    "company": "الشركة",
+    "email": "البريد الإلكتروني",
+    "status": "الحالة"
+  },
+  "projectsTable": {
+    "project": "المشروع",
+    "client": "العميل",
+    "status": "الحالة",
+    "budget": "الميزانية"
   },
   "topbar": {
     "overview": "نظرة عامة",
@@ -30,5 +65,95 @@
     "search": "بحث",
     "workspace": "مساحة العمل",
     "workspaceDescription": "واجهة CRM احترافية عالية المستوى لـ NexusDesk."
+  },
+  "common": {
+    "months": {
+      "Jan": "يناير",
+      "Feb": "فبراير",
+      "Mar": "مارس",
+      "Apr": "أبريل",
+      "May": "مايو",
+      "Jun": "يونيو",
+      "Jul": "يوليو"
+    },
+    "status": {
+      "Active": "نشط",
+      "Pending": "قيد الانتظار",
+      "Inactive": "غير نشط",
+      "In Progress": "قيد التنفيذ",
+      "Completed": "مكتمل",
+      "Planned": "مخطط",
+      "On Hold": "متوقف مؤقتًا"
+    }
+  },
+  "ai": {
+    "title": "مساعد الذكاء الاصطناعي",
+    "subtitle": "إنشاء اقتراحات ذكية لأعمالك",
+    "placeholder": "اسأل الذكاء الاصطناعي عن عملك...",
+    "generate": "توليد",
+    "generating": "جارٍ التوليد...",
+    "response": "بناءً على بياناتك، يجب التركيز على زيادة الاحتفاظ بالعملاء وتحسين سرعة تنفيذ المشاريع."
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "إدارة تفضيلات مساحة العمل وخيارات التطبيق.",
+
+    "appearance": "المظهر",
+    "appearanceDesc": "التحكم في الثيم والتفضيلات البصرية.",
+    "theme": "الثيم",
+    "themeDesc": "دعم الوضع الداكن والفاتح",
+    "density": "الكثافة",
+    "densityDesc": "وضع مريح أو مضغوط",
+    "comfortable": "مريح",
+    "compact": "مضغوط",
+
+    "localization": "اللغة والمنطقة",
+    "localizationDesc": "إدارة اللغة وسلوك التطبيق.",
+    "language": "اللغة",
+    "languageDesc": "دعم العربية والإنجليزية",
+    "direction": "الاتجاه",
+    "directionDesc": "دعم RTL و LTR",
+
+    "dataExport": "البيانات والتصدير",
+    "dataExportDesc": "تصدير التقارير وإدارة البيانات.",
+    "exportPlaceholderTitle": "أدوات التصدير",
+    "exportPlaceholderDesc": "سيتم ربط أدوات تصدير التقارير وبيانات مساحة العمل هنا لاحقًا.",
+
+    "aiPreferences": "إعدادات الذكاء الاصطناعي",
+    "aiPreferencesDesc": "التحكم في سلوك الذكاء الاصطناعي.",
+    "aiEnabled": "مساعد الذكاء الاصطناعي",
+    "aiEnabledDesc": "تشغيل أو إيقاف ميزات الذكاء الاصطناعي في مساحة العمل.",
+    "aiSuggestions": "الاقتراحات التلقائية",
+    "aiSuggestionsDesc": "إظهار اقتراحات ذكية سريعة وإجراءات متابعة تلقائية.",
+    "enabled": "مفعل",
+    "disabled": "معطل"
+  },
+  "projects": {
+    "title": "المشاريع",
+    "subtitle": "إدارة جميع مشاريعك ومتابعة حالتها.",
+    "listTitle": "قائمة المشاريع",
+    "listSubtitle": "نظرة عامة على مشاريعك الحالية",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "ai": "AI",
+    "empty": "لا توجد مشاريع حتى الآن",
+    "unknownClient": "عميل غير معروف",
+    "notSet": "غير محدد",
+    "form": {
+      "title": "إضافة مشروع جديد",
+      "subtitle": "إنشاء مشروع جديد وربطه بعميل",
+      "name": "اسم المشروع",
+      "client": "اختر عميل",
+      "deadline": "الموعد النهائي",
+      "description": "وصف المشروع",
+      "button": "إضافة مشروع"
+    },
+    "status": {
+      "planned": "مخطط",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "onHold": "متوقف مؤقتًا"
+    }
   }
 }

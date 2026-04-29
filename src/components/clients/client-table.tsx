@@ -1,180 +1,126 @@
 "use client";
 
-import { useState } from "react";
-import { Client, useClientStore } from "@/store/client-store";
+import { useClientStore } from "@/store/client-store";
+import { Locale } from "@/lib/constants";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import type { Client } from "@/types";
 
-export default function ClientTable() {
-  const clients = useClientStore((state) => state.clients);
-  const deleteClient = useClientStore((state) => state.deleteClient);
-  const updateClient = useClientStore((state) => state.updateClient);
+type ClientTableProps = {
+  locale: Locale;
+};
 
-  const [editingEmail, setEditingEmail] = useState<string | null>(null);
-  const [editedClient, setEditedClient] = useState<Client | null>(null);
+export default function ClientTable({ locale }: ClientTableProps) {
+  const { clients, deleteClient, setSelectedClient } = useClientStore();
+  const isArabic = locale === "ar";
 
-  function startEditing(client: Client) {
-    setEditingEmail(client.email);
-    setEditedClient(client);
-  }
+  const [toast, setToast] = useState<string | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function saveEditing() {
-    if (!editingEmail || !editedClient) return;
-    updateClient(editingEmail, editedClient);
-    setEditingEmail(null);
-    setEditedClient(null);
-  }
+  const showToast = (message: string) => {
+    setToast(message);
 
-  function cancelEditing() {
-    setEditingEmail(null);
-    setEditedClient(null);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleDelete = (id: string) => {
+    deleteClient(id);
+    showToast(isArabic ? "تم حذف العميل" : "Client deleted");
+  };
+
+  const handleEdit = (client: Client) => {
+    setSelectedClient(client);
+  };
+
+  if (clients.length === 0) {
+    return (
+      <div
+        className={`text-sm text-[var(--foreground-muted)] ${
+          isArabic ? "text-right" : "text-left"
+        }`}
+      >
+        {isArabic ? "لا يوجد عملاء حتى الآن" : "No clients yet"}
+      </div>
+    );
   }
 
   return (
-    <div className="panel overflow-hidden">
-      <div className="border-b border-[var(--border)] px-6 py-4">
-        <h2 className="text-lg font-semibold text-white">Clients List</h2>
-        <p className="text-sm text-[var(--foreground-soft)]">
-          Overview of your recent clients
-        </p>
-      </div>
+    <>
+      {toast && (
+        <div className="fixed bottom-5 right-5 z-50 rounded-lg bg-black/80 px-4 py-2 text-sm text-white shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b border-[var(--border)] text-left">
-              <th className="px-6 py-4 text-sm font-medium text-[var(--foreground-soft)]">
-                Name
-              </th>
-              <th className="px-6 py-4 text-sm font-medium text-[var(--foreground-soft)]">
-                Company
-              </th>
-              <th className="px-6 py-4 text-sm font-medium text-[var(--foreground-soft)]">
-                Email
-              </th>
-              <th className="px-6 py-4 text-sm font-medium text-[var(--foreground-soft)]">
-                Status
-              </th>
-              <th className="px-6 py-4 text-sm font-medium text-[var(--foreground-soft)]">
-                Actions
-              </th>
+        <table className="w-full text-sm">
+          <thead className="text-[var(--foreground-muted)]">
+            <tr
+              className={`border-b border-white/10 ${
+                isArabic ? "text-right" : "text-left"
+              }`}
+            >
+              <th className="py-3">{isArabic ? "الاسم" : "Name"}</th>
+              <th className="py-3">{isArabic ? "الشركة" : "Company"}</th>
+              <th className="py-3">{isArabic ? "البريد" : "Email"}</th>
+              <th className="py-3">{isArabic ? "إجراءات" : "Actions"}</th>
             </tr>
           </thead>
 
           <tbody>
-            {clients.map((client, index) => {
-              const isEditing = editingEmail === client.email;
+            {clients.map((client) => (
+              <tr
+                key={client.id}
+                className={`border-b border-white/5 transition hover:bg-white/5 ${
+                  isArabic ? "text-right" : "text-left"
+                }`}
+              >
+                <td className="py-3 font-medium">
+                  <Link
+                    href={`/${locale}/clients/${client.id}`}
+                    className="transition hover:underline"
+                  >
+                    {client.name}
+                  </Link>
+                </td>
 
-              return (
-                <tr
-                  key={`${client.email}-${index}`}
-                  className="border-b border-[rgba(255,255,255,0.04)]"
-                >
-                  <td className="px-6 py-4 text-sm text-white">
-                    {isEditing ? (
-                      <input
-                        className="input-base"
-                        value={editedClient?.name ?? ""}
-                        onChange={(e) =>
-                          setEditedClient((prev) =>
-                            prev ? { ...prev, name: e.target.value } : prev
-                          )
-                        }
-                      />
-                    ) : (
-                      client.name
-                    )}
-                  </td>
+                <td className="py-3">{client.company}</td>
+                <td className="py-3">{client.email}</td>
 
-                  <td className="px-6 py-4 text-sm text-[var(--foreground-muted)]">
-                    {isEditing ? (
-                      <input
-                        className="input-base"
-                        value={editedClient?.company ?? ""}
-                        onChange={(e) =>
-                          setEditedClient((prev) =>
-                            prev ? { ...prev, company: e.target.value } : prev
-                          )
-                        }
-                      />
-                    ) : (
-                      client.company
-                    )}
-                  </td>
+                <td className="py-3">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(client)}
+                      className="rounded-lg border border-white/10 px-3 py-1 text-xs transition hover:bg-white/10"
+                    >
+                      {isArabic ? "تعديل" : "Edit"}
+                    </button>
 
-                  <td className="px-6 py-4 text-sm text-[var(--foreground-muted)]">
-                    {isEditing ? (
-                      <input
-                        className="input-base"
-                        value={editedClient?.email ?? ""}
-                        onChange={(e) =>
-                          setEditedClient((prev) =>
-                            prev ? { ...prev, email: e.target.value } : prev
-                          )
-                        }
-                      />
-                    ) : (
-                      client.email
-                    )}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {isEditing ? (
-                      <input
-                        className="input-base"
-                        value={editedClient?.status ?? ""}
-                        onChange={(e) =>
-                          setEditedClient((prev) =>
-                            prev ? { ...prev, status: e.target.value } : prev
-                          )
-                        }
-                      />
-                    ) : (
-                      <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--primary)]">
-                        {client.status}
-                      </span>
-                    )}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex gap-3 text-xs">
-                      {isEditing ? (
-                        <>
-                          <button
-                            onClick={saveEditing}
-                            className="text-[var(--primary)] hover:opacity-80"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={cancelEditing}
-                            className="text-[var(--foreground-soft)] hover:text-white"
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => startEditing(client)}
-                            className="text-blue-400 hover:text-blue-300"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => deleteClient(client.email)}
-                            className="text-red-400 hover:text-red-300"
-                          >
-                            Delete
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    <button
+                      onClick={() => handleDelete(client.id)}
+                      className="rounded-lg border border-red-500/30 px-3 py-1 text-xs text-red-400 transition hover:bg-red-500/10"
+                    >
+                      {isArabic ? "حذف" : "Delete"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }
