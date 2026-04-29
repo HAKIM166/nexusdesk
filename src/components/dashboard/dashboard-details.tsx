@@ -14,8 +14,6 @@ import PricingSection from "./pricing-section";
 import TestimonialsSection from "./testimonials-section";
 import DashboardFooter from "./dashboard-footer";
 
-
-
 /* =========================
    TYPES
    ========================= */
@@ -32,10 +30,6 @@ type ProjectItem = {
   title?: string;
   status?: string;
 };
-
-/* =========================
-   HELPERS
-   ========================= */
 
 /* =========================
    DASHBOARD DETAILS COMPONENT
