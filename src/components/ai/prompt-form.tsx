@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import { SendHorizontal } from "lucide-react";
+
 import { Locale } from "@/lib/constants";
 
 type PromptFormProps = {
@@ -27,12 +29,11 @@ export default function PromptForm({
   isLoading = false,
 }: PromptFormProps) {
   const [value, setValue] = useState("");
-
   const isArabic = locale === "ar";
 
   const suggestions = useMemo(
     () => (isArabic ? ARABIC_SUGGESTIONS : ENGLISH_SUGGESTIONS),
-    [isArabic]
+    [isArabic],
   );
 
   const labels = useMemo(
@@ -48,13 +49,18 @@ export default function PromptForm({
       sending: isArabic ? "جارٍ الإرسال..." : "Sending...",
       empty: isArabic ? "اكتب رسالة أولاً" : "Enter a message first",
     }),
-    [isArabic]
+    [isArabic],
   );
+
+  const textAlignClassName = isArabic ? "text-right" : "text-left";
+  const rowDirectionClassName = "flex-row";
+  const suggestionsAlignClassName = "justify-start";
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const trimmed = value.trim();
+
     if (!trimmed || isLoading) return;
 
     onSend(trimmed);
@@ -63,28 +69,24 @@ export default function PromptForm({
 
   const handleSuggestionClick = (suggestion: string) => {
     if (isLoading) return;
+
     onSend(suggestion);
   };
 
   return (
-    /* PROMPT_FORM_ROOT: منطقة الإدخال الرئيسية بدون panel خارجي */
-    <div className={isArabic ? "text-right" : "text-left"}>
-      {/* PROMPT_FORM_HEADER: عنوان صغير جدًا فوق الإدخال */}
+    <div dir={isArabic ? "rtl" : "ltr"} className={textAlignClassName}>
       <div className="mb-3">
         <h3 className="text-sm font-semibold text-[var(--foreground)]">
           {labels.title}
         </h3>
 
-        <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+        <p className="mt-1 text-xs leading-5 text-[var(--foreground-muted)]">
           {labels.helper}
         </p>
       </div>
 
-      {/* PROMPT_SUGGESTIONS: اقتراحات خفيفة بدون كروت تقيلة */}
       <div
-        className={`mb-3 flex flex-wrap gap-2 ${
-          isArabic ? "justify-end" : "justify-start"
-        }`}
+        className={`mb-3 flex flex-wrap gap-2 ${suggestionsAlignClassName}`}
       >
         {suggestions.map((suggestion) => (
           <button
@@ -92,40 +94,43 @@ export default function PromptForm({
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
             disabled={isLoading}
-            className="text-xs text-[var(--foreground-muted)] transition hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl border border-[var(--ai-chip-border)] bg-[var(--ai-chip-bg)] px-3 py-1.5 text-xs font-medium text-[var(--ai-chip-text)] transition hover:border-[var(--ai-chip-hover-border)] hover:bg-[var(--ai-chip-hover-bg)] hover:text-[var(--ai-chip-hover-text)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {suggestion}
           </button>
         ))}
       </div>
 
-      {/* PROMPT_FORM: الفورم الحقيقي للإرسال */}
       <form onSubmit={handleSubmit} className="space-y-3">
-        {/* PROMPT_TEXTAREA: مربع الكتابة الوحيد الواضح في المنطقة */}
         <textarea
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={labels.placeholder}
           disabled={isLoading}
-          rows={3}
+          rows={2}
           dir={isArabic ? "rtl" : "ltr"}
-          className={`w-full resize-none rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--foreground-muted)] focus:border-emerald-400/30 focus:bg-white/[0.055] disabled:cursor-not-allowed disabled:opacity-70 ${
-            isArabic ? "text-right" : "text-left"
-          }`}
+          className={`w-full resize-none rounded-2xl border border-[var(--ai-input-border)] bg-[var(--ai-input-bg)] px-4 py-3 text-sm leading-6 text-[var(--foreground)] outline-none transition placeholder:text-[var(--foreground-soft)] focus:border-[var(--ai-input-focus-border)] focus:bg-[var(--ai-input-focus-bg)] disabled:cursor-not-allowed disabled:opacity-70 ${textAlignClassName}`}
         />
 
-        {/* PROMPT_FORM_FOOTER: رسالة بسيطة وزر الإرسال */}
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-xs text-[var(--foreground-muted)]">
+        <div
+          className={`flex items-center justify-between gap-3 ${rowDirectionClassName}`}
+        >
+          <span className="min-w-0 flex-1 text-xs text-[var(--foreground-muted)]">
             {value.trim().length === 0 && !isLoading ? labels.empty : "\u00A0"}
           </span>
 
           <button
             type="submit"
             disabled={isLoading || value.trim().length === 0}
-            className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+            className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[var(--ai-send-border)] bg-[var(--ai-send-bg)] px-4 py-2 text-sm font-semibold text-[var(--ai-send-text)] transition hover:bg-[var(--ai-send-hover-bg)] disabled:cursor-not-allowed disabled:border-[var(--ai-send-disabled-border)] disabled:bg-[var(--ai-send-disabled-bg)] disabled:text-[var(--ai-send-disabled-text)] ${
+              isArabic ? "flex-row-reverse" : ""
+            }`}
           >
-            {isLoading ? labels.sending : labels.send}
+            <SendHorizontal
+              className={`h-4 w-4 ${isArabic ? "rotate-180" : ""}`}
+            />
+
+            <span>{isLoading ? labels.sending : labels.send}</span>
           </button>
         </div>
       </form>

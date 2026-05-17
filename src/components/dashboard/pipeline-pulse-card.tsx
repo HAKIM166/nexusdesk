@@ -24,58 +24,83 @@ export default function PipelinePulseCard() {
 
   const numberLocale = isArabic ? "ar-EG" : "en-US";
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(numberLocale, {
+  const numberFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(numberLocale, {
+        maximumFractionDigits: 0,
+      }),
+    [numberLocale],
+  );
+
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat(numberLocale, {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
     }).format(value);
+
+  const handleViewActions = () => {
+    document
+      .getElementById("dashboard-quick-actions")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const remainingPipeline = Math.max(
+    metrics.totalPipeline - metrics.totalRevenue,
+    0,
+  );
+
+  const salesPulseRate =
+    metrics.totalPipeline > 0
+      ? Math.round((metrics.totalRevenue / metrics.totalPipeline) * 100)
+      : 0;
 
   const bars = [
     30, 44, 58, 72, 64, 82, 54, 42, 68, 76, 96, 56, 70, 88, 62, 74, 52,
   ];
 
   return (
-    <motion.div
+    <motion.section
       initial="rest"
       animate="rest"
       whileHover="hover"
-      className={`panel relative h-full cursor-pointer overflow-hidden ${
+      className={`relative overflow-hidden border-t border-[var(--border)] pt-4 transition md:pt-5 ${
         isArabic ? "text-right" : "text-left"
       }`}
     >
-      <div className="flex min-h-[86px] items-start justify-between gap-4 border-b border-[var(--border)] px-6 py-4">
-        <div>
-          <p className="text-sm text-[var(--foreground-soft)]">
+      <div className="mb-4 flex items-start justify-between gap-3 px-1 md:mb-5">
+        <div className="min-w-0">
+          <h2 className="text-[18px] font-semibold leading-6 text-[var(--foreground)] md:text-lg">
             {isArabic ? "نبض المبيعات" : "Sales Pulse"}
+          </h2>
+
+          <p className="mt-1 text-[12px] leading-5 text-[var(--foreground-soft)] md:text-sm">
+            {isArabic ? "أداء الإيرادات الحالية" : "Current revenue movement"}
           </p>
-
-          <div className="mt-2 flex items-center gap-2">
-            <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-              {formatCurrency(metrics.totalPipeline)}
-            </h2>
-
-            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-[10px] font-semibold text-[var(--primary)]">
-              <ArrowUpRight size={11} />
-              7%
-            </span>
-          </div>
         </div>
 
         <button
           type="button"
-          className="flex h-8 w-8 items-center justify-center rounded-[8px] text-[var(--foreground-soft)] transition hover:bg-[var(--surface-2)] hover:text-[var(--foreground)]"
-          aria-label="More"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[var(--foreground-soft)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
+          aria-label={isArabic ? "المزيد" : "More"}
         >
-          <MoreHorizontal size={18} />
+          <MoreHorizontal size={17} />
         </button>
       </div>
 
-      <div className="relative px-6 py-5">
-        <div className="pointer-events-none absolute left-1/2 top-[96px] h-16 w-40 -translate-x-1/2 rounded-full bg-[var(--primary)]/15 blur-3xl" />
+      <div className="flex h-[245px] flex-col justify-between overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-muted)]/25 px-4 py-4 md:h-[320px] md:px-5 md:py-5">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="truncate text-[21px] font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
+            {formatCurrency(metrics.totalPipeline)}
+          </h3>
 
-        <div className="relative mx-auto flex h-[98px] max-w-[230px] items-end justify-center gap-2">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-[var(--primary)]/20 bg-[var(--primary)]/10 px-2 py-0.5 text-[10px] font-semibold text-[var(--primary)]">
+            <ArrowUpRight size={11} />
+            {numberFormatter.format(salesPulseRate)}%
+          </span>
+        </div>
+
+        <div className="relative mx-auto flex h-[70px] max-w-[270px] items-end justify-center gap-2 md:h-[98px] md:max-w-[260px]">
           {bars.map((height, index) => (
             <motion.span
               key={index}
@@ -105,45 +130,48 @@ export default function PipelinePulseCard() {
                 duration: 0.35,
                 ease: "easeOut",
               }}
-              className="w-[6px] rounded-full bg-gradient-to-t from-[var(--primary)] to-[#b6ff66] shadow-[0_0_14px_rgba(182,255,102,0.22)]"
+              className="w-[7px] rounded-full bg-gradient-to-t from-[var(--primary)] via-[var(--primary)]/80 to-[var(--accent-soft)] md:w-[6px]"
             />
           ))}
         </div>
 
-        <div className="mt-5 space-y-3">
-          <div className="flex items-center justify-between gap-4 text-sm">
-            <span className="flex items-center gap-2 text-[var(--foreground-soft)]">
-              <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />
-              {isArabic ? "الإيرادات" : "Revenue"}
+        <div className="space-y-2.5 md:space-y-3">
+          <div className="flex items-center justify-between gap-3 text-[13px] md:text-sm">
+            <span className="flex min-w-0 items-center gap-2 text-[var(--foreground-soft)]">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--primary)]" />
+              <span className="truncate">
+                {isArabic ? "الإيرادات" : "Revenue"}
+              </span>
             </span>
 
-            <span className="font-semibold text-[var(--foreground)]">
+            <span className="shrink-0 font-semibold text-[var(--foreground)]">
               {formatCurrency(metrics.totalRevenue)}
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-4 text-sm">
-            <span className="flex items-center gap-2 text-[var(--foreground-soft)]">
-              <span className="h-2 w-2 rounded-full bg-[var(--surface-2)]" />
-              {isArabic ? "المتبقي" : "Remaining"}
+          <div className="flex items-center justify-between gap-3 text-[13px] md:text-sm">
+            <span className="flex min-w-0 items-center gap-2 text-[var(--foreground-soft)]">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--accent-soft)]" />
+              <span className="truncate">
+                {isArabic ? "المتبقي" : "Remaining"}
+              </span>
             </span>
 
-            <span className="font-semibold text-[var(--foreground)]">
-              {formatCurrency(
-                Math.max(metrics.totalPipeline - metrics.totalRevenue, 0),
-              )}
+            <span className="shrink-0 font-semibold text-[var(--foreground)]">
+              {formatCurrency(remainingPipeline)}
             </span>
           </div>
         </div>
 
         <button
           type="button"
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-[8px] border border-[var(--border)]/60 bg-[var(--surface-2)] px-4 py-3 text-sm font-medium text-[var(--foreground)] transition hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5"
+          onClick={handleViewActions}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-[13px] font-medium text-[var(--foreground)] transition hover:border-[var(--primary)]/35 hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] md:px-4 md:py-3 md:text-sm"
         >
-          {isArabic ? "عرض التقرير" : "View report"}
-          <ArrowUpRight size={14} />
+          {isArabic ? "عرض الإجراءات" : "View actions"}
+          <ArrowUpRight size={13} />
         </button>
       </div>
-    </motion.div>
+    </motion.section>
   );
 }

@@ -6,6 +6,9 @@ export type Client = {
   company: string;
   email: string;
   status: ClientStatus;
+
+  avatarUrl?: string;
+
   createdAt?: string;
   updatedAt?: string;
 };

@@ -9,6 +9,7 @@ export const tasks: Task[] = [
     priority: "high",
     clientName: "NexusDesk",
     projectName: "Dashboard UI",
+    projectId: "project-001",
     dueDate: "2026-05-02",
   },
   {
@@ -19,6 +20,7 @@ export const tasks: Task[] = [
     priority: "medium",
     clientName: "NexusDesk",
     projectName: "Calendar",
+    projectId: "project-002",
     dueDate: "2026-05-04",
   },
   {
@@ -29,6 +31,7 @@ export const tasks: Task[] = [
     priority: "high",
     clientName: "NexusDesk",
     projectName: "Tasks",
+    projectId: "project-003",
     dueDate: "2026-05-01",
   },
   {
@@ -39,6 +42,7 @@ export const tasks: Task[] = [
     priority: "medium",
     clientName: "NexusDesk",
     projectName: "Dashboard Cleanup",
+    projectId: "project-004",
     dueDate: "2026-04-28",
   },
 ];

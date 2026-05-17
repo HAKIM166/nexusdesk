@@ -47,7 +47,25 @@ function buildSystemPrompt(params: {
   const { mode, clients = [], projects = [], client, project } = params;
 
   const enrichedProject = enrichProject(project);
-  const enrichedProjects = projects.map((item) => enrichProject(item));
+  const enrichedProjects = projects.slice(0, 6).map((item) => {
+    const enriched = enrichProject(item);
+
+    return {
+      id: enriched?.id,
+      title: enriched?.title,
+      status: enriched?.status,
+      deadline: enriched?.deadline,
+      budget: enriched?.budget,
+      remainingAmount: enriched?.remainingAmount,
+    };
+  });
+
+  const limitedClients = clients.slice(0, 6).map((client) => ({
+    id: client.id,
+    name: client.name,
+    company: client.company,
+    status: client.status,
+  }));
 
   const basePrompt = `
 You are Nexus AI inside a CRM system.
@@ -110,7 +128,7 @@ ${basePrompt}
 Context: General CRM
 
 Clients:
-${JSON.stringify(clients, null, 2)}
+${JSON.stringify(limitedClients, null, 2)}
 
 Projects:
 ${JSON.stringify(enrichedProjects, null, 2)}
@@ -156,10 +174,10 @@ async function callGroq(params: {
           },
         ],
         temperature: 0.3,
-        max_tokens: 250,
+        max_tokens: 120,
       }),
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
@@ -192,7 +210,7 @@ export async function POST(req: NextRequest) {
     if (!message) {
       return NextResponse.json(
         { message: "Message required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -209,7 +227,11 @@ export async function POST(req: NextRequest) {
       reply,
       provider: "groq",
     });
-  } catch {
-    return NextResponse.json({ message: "AI failed" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "AI failed";
+
+    console.error("AI route error:", message);
+
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

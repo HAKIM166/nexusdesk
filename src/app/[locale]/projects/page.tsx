@@ -17,29 +17,28 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
 
   return (
     <DashboardShell>
-      <div className="space-y-10">
-        {/* Header */}
-        <div className={isArabic ? "text-right" : "text-left"}>
-          <h1 className="section-title">
-            {messages.sidebar.projects}
-          </h1>
-
-          <p className="section-subtitle">
-            {locale === "ar"
-              ? "إدارة جميع مشاريعك ومتابعة حالتها."
-              : "Manage all your projects and track their status."}
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 pb-7 md:gap-6 md:pb-10 lg:gap-8">
+        <header
+          className={`max-w-2xl ${isArabic ? "mr-0 ml-auto text-right" : "text-left"}`}
+        >
+          <p className="mb-1 text-[11px] font-medium text-[var(--foreground-muted)] md:text-sm">
+            {messages.topbar.overview}
           </p>
-        </div>
 
-        {/* Form */}
-        <div className="panel">
+          <h1 className="section-title">{messages.sidebar.projects}</h1>
+
+          <p className="section-subtitle mt-1.5 md:mt-2">
+            {messages.projects.subtitle}
+          </p>
+        </header>
+
+        <section>
           <ProjectForm locale={locale} />
-        </div>
+        </section>
 
-        {/* Table */}
-        <div className="panel">
+        <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-2.5 md:rounded-xl md:p-4 lg:rounded-2xl lg:p-6">
           <ProjectTable locale={locale} />
-        </div>
+        </section>
       </div>
     </DashboardShell>
   );

@@ -53,7 +53,7 @@ canvas {
 }
 
 ::selection {
-  background: rgba(182, 255, 102, 0.25);
+  background: rgba(34, 211, 238, 0.2);
   color: var(--foreground);
 }
 
@@ -67,12 +67,12 @@ canvas {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(182, 255, 102, 0.18);
+  background: rgba(34, 211, 238, 0.18);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(182, 255, 102, 0.28);
+  background: rgba(34, 211, 238, 0.28);
 }
 
 .app-shell {
@@ -95,11 +95,9 @@ canvas {
 }
 
 .glass-card {
-  background: linear-gradient(
-    180deg,
-    var(--surface-strong) 0%,
-    var(--surface) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--surface-strong) 0%,
+      var(--surface) 100%);
   border: 1px solid var(--border);
   box-shadow: var(--card-shadow);
   backdrop-filter: blur(18px);
@@ -115,8 +113,8 @@ canvas {
 
 .glow-ring {
   box-shadow:
-    0 0 0 1px rgba(182, 255, 102, 0.08),
-    0 0 0 6px rgba(182, 255, 102, 0.02),
+    0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 0 0 6px rgba(34, 211, 238, 0.02),
     var(--glow-md);
 }
 
@@ -209,7 +207,7 @@ canvas {
 }
 
 .input-base:focus {
-  border-color: rgba(182, 255, 102, 0.3);
+  border-color: rgba(34, 211, 238, 0.3);
   box-shadow: var(--glow-sm);
   background: var(--surface-strong);
 }
@@ -229,8 +227,8 @@ canvas {
     box-shadow 0.2s ease,
     opacity 0.2s ease;
   box-shadow:
-    0 10px 24px rgba(182, 255, 102, 0.18),
-    0 0 24px rgba(182, 255, 102, 0.12);
+    0 10px 24px rgba(34, 211, 238, 0.18),
+    0 0 24px rgba(34, 211, 238, 0.12);
 }
 
 .btn-primary:hover {
@@ -300,6 +298,7 @@ html[data-density="compact"] .section-title {
 html[data-density="compact"] .section-subtitle {
   font-size: 0.85rem;
 }
+
 .sidebar-scroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -330,9 +329,9 @@ html[data-density="compact"] .section-subtitle {
   --fc-page-bg-color: transparent;
   --fc-neutral-bg-color: transparent;
   --fc-list-event-hover-bg-color: var(--surface-muted);
-  --fc-today-bg-color: rgba(182, 255, 102, 0.09);
-  --fc-event-bg-color: rgba(182, 255, 102, 0.16);
-  --fc-event-border-color: rgba(182, 255, 102, 0.35);
+  --fc-today-bg-color: rgba(34, 211, 238, 0.08);
+  --fc-event-bg-color: rgba(34, 211, 238, 0.14);
+  --fc-event-border-color: rgba(34, 211, 238, 0.35);
   --fc-event-text-color: var(--foreground);
   color: var(--foreground);
 }
@@ -367,8 +366,8 @@ html[data-density="compact"] .section-subtitle {
 
 .nexus-calendar .fc-button:hover,
 .nexus-calendar .fc-button-active {
-  border-color: rgba(182, 255, 102, 0.35) !important;
-  background: rgba(182, 255, 102, 0.14) !important;
+  border-color: rgba(34, 211, 238, 0.35) !important;
+  background: rgba(34, 211, 238, 0.14) !important;
   color: var(--primary) !important;
 }
 
@@ -417,7 +416,7 @@ html[data-density="compact"] .section-subtitle {
   padding: 0.22rem 0.55rem;
   font-size: 0.76rem;
   font-weight: 700;
-  box-shadow: 0 0 18px rgba(182, 255, 102, 0.08);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.08);
 }
 
 .nexus-calendar .fc-event-title {
@@ -485,5 +484,97 @@ html[data-density="compact"] .section-subtitle {
 
   100% {
     transform: scale(1);
+  }
+}
+
+/* ── Calendar Mobile Fix ── */
+@media (max-width: 640px) {
+  .nexus-calendar {
+    border-radius: 14px;
+  }
+
+  .nexus-calendar .fc-toolbar {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 10px 9px;
+    margin-bottom: 0;
+  }
+
+  .nexus-calendar .fc-toolbar-chunk {
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nexus-calendar .fc-toolbar-chunk:nth-child(2) {
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .nexus-calendar .fc-toolbar-chunk:nth-child(3) {
+    display: none;
+  }
+
+  .nexus-calendar .fc-toolbar-title {
+    max-width: 100%;
+    font-size: 0.95rem !important;
+    line-height: 1.2;
+    text-align: end;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nexus-calendar .fc-button {
+    min-height: 34px !important;
+    border-radius: 8px !important;
+    padding: 0.35rem 0.55rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .nexus-calendar .fc-button-group {
+    gap: 6px;
+  }
+
+  .nexus-calendar .fc-button-group > .fc-button {
+    border-radius: 8px !important;
+  }
+
+  .nexus-calendar .fc-col-header-cell {
+    padding: 0 !important;
+  }
+
+  .nexus-calendar .fc-col-header-cell-cushion {
+    padding: 7px 3px !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.04em;
+  }
+
+  .nexus-calendar .fc-daygrid-day-frame {
+    min-height: 44px !important;
+    padding: 3px !important;
+  }
+
+  .nexus-calendar .fc-daygrid-day-number {
+    padding: 4px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .nexus-calendar .fc-daygrid-day-events {
+    margin-top: 0 !important;
+  }
+
+  .nexus-calendar .fc-event {
+    border-radius: 6px !important;
+    padding: 1px 4px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.2;
+  }
+
+  .nexus-calendar .fc-daygrid-more-link {
+    font-size: 0.62rem !important;
   }
 }

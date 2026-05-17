@@ -29,6 +29,31 @@
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete",
+    "details": {
+      "label": "Client Details",
+      "totalProjects": "Total Projects",
+      "totalBudget": "Total Budget",
+      "paidAmount": "Paid Amount",
+      "remaining": "Remaining",
+      "informationTitle": "Client Information",
+      "informationSubtitle": "Overview of the current client data.",
+      "clientName": "Client Name",
+      "projectsTitle": "Client Projects",
+      "projectsSubtitle": "All projects linked to this client.",
+      "paid": "Paid",
+      "openColumn": "Open",
+      "openAction": "Open",
+      "noProjects": "No projects linked to this client yet.",
+      "quickActions": "Quick Actions",
+      "quickActionsSubtitle": "Perform the most important client actions.",
+      "editClient": "Edit Client",
+      "deleteClient": "Delete Client",
+      "askAi": "Ask AI About Client",
+      "summaryTitle": "Quick Summary",
+      "summarySubtitle": "Quick facts about this client's activity.",
+      "currentStatus": "Current Status",
+      "back": "Back to Clients"
+    },
     "form": {
       "title": "Add New Client",
       "subtitle": "Create a new client record",
@@ -58,9 +83,13 @@
   },
   "sidebar": {
     "dashboard": "Dashboard",
+    "calendar": "Calendar",
+    "tasks": "Tasks",
     "clients": "Clients",
     "projects": "Projects",
+    "employees": "Employees",
     "ai": "AI Messages",
+    "aiMessages": "AI Messages",
     "settings": "Settings",
     "search": "Search",
     "workspace": "Workspace",
@@ -83,7 +112,99 @@
       "In Progress": "In Progress",
       "Completed": "Completed",
       "Planned": "Planned",
-      "On Hold": "On Hold"
+      "On Hold": "On Hold",
+      "active": "Active",
+      "pending": "Pending",
+      "inactive": "Inactive"
+    }
+  },
+  "calendar": {
+    "kicker": "Schedule workspace",
+    "title": "Calendar",
+    "subtitle": "Add meetings, deadlines, follow-ups, and project checkpoints in one clean schedule.",
+    "totalEvents": "Total events",
+    "upcoming": "Upcoming",
+    "addEvent": "Add event",
+    "addEventDescription": "Select a day or drag across multiple days, then add a title.",
+    "eventTitlePlaceholder": "Event title",
+    "selected": "Selected",
+    "selectDateHint": "Select a day or drag across multiple days",
+    "addToCalendar": "Add to calendar",
+    "noEvents": "No events yet.",
+    "localSaveNote": "Your schedule is saved locally for now. Later, we can connect it with clients, projects, and tasks.",
+    "deleteConfirm": "Delete this event?",
+    "buttons": {
+      "today": "Today",
+      "month": "Month",
+      "week": "Week",
+      "day": "Day"
+    }
+  },
+  "tasks": {
+    "breadcrumb": "Tasks",
+    "pages": {
+      "backlog": {
+        "label": "Backlog",
+        "title": "Plan the next work",
+        "description": "Collect ideas, requests, and tasks before starting execution.",
+        "actionText": "Add Task"
+      },
+      "in-progress": {
+        "label": "In Progress",
+        "title": "Work in motion",
+        "description": "Track active tasks currently being handled by the team.",
+        "actionText": ""
+      },
+      "done": {
+        "label": "Done",
+        "title": "Completed work",
+        "description": "Review finished tasks and keep a record of delivered work.",
+        "actionText": ""
+      }
+    },
+    "stats": {
+      "currentSection": "Current section",
+      "totalTasks": "Total tasks",
+      "highPriority": "High priority"
+    },
+    "form": {
+      "close": "Close",
+      "taskTitle": "Task title",
+      "taskTitlePlaceholder": "Write task title",
+      "description": "Description",
+      "descriptionPlaceholder": "Small task description",
+      "project": "Project",
+      "generalTasks": "General Tasks",
+      "saveTask": "Save Task",
+      "noDescriptionAdded": "No description added yet."
+    },
+    "list": {
+      "tasks": "Tasks",
+      "task": "task",
+      "tasksPlural": "tasks"
+    },
+    "card": {
+      "start": "Start",
+      "complete": "Complete",
+      "back": "Back"
+    },
+    "seedTasks": {
+      "task-001": {
+        "title": "Prepare dashboard analytics cards",
+        "description": "Add revenue, completion rate, and active project insights."
+      },
+      "task-002": {
+        "title": "Design calendar scheduler layout",
+        "description": "Create a clean scheduler section matching the SaaS UI style."
+      },
+      "task-003": {
+        "title": "Build tasks kanban board",
+        "description": "Create backlog, in progress, and done sections."
+      },
+      "task-004": {
+        "title": "Split dashboard details component",
+        "description": "Move dashboard sections into smaller organized files."
+      }
     }
   },
   "ai": {
@@ -126,7 +247,16 @@
     "aiSuggestions": "Auto suggestions",
     "aiSuggestionsDesc": "Show quick AI suggestions and smart follow-up actions.",
     "enabled": "Enabled",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "controlLabel": "NexusDesk Control",
+    "workspaceData": "Workspace data",
+    "workspaceClients": "clients",
+    "workspaceProjects": "projects",
+    "aiStatus": "AI status",
+    "english": "English",
+    "arabic": "العربية",
+    "exportWorkspaceData": "Export workspace data",
+    "footerNote": "Workspace preferences are saved locally for now and can be connected to the backend later."
   },
   "projects": {
     "title": "Projects",
@@ -140,6 +270,27 @@
     "empty": "No projects yet",
     "unknownClient": "Unknown Client",
     "notSet": "Not set",
+    "details": {
+      "label": "Project Details",
+      "informationTitle": "Project Information",
+      "informationSubtitle": "Overview of the project data.",
+      "projectName": "Project Name",
+      "projectBudget": "Project Budget",
+      "paidAmount": "Paid Amount",
+      "remainingAmount": "Remaining Amount",
+      "projectDescription": "Project Description",
+      "noDescription": "No description yet",
+      "quickActions": "Quick Actions",
+      "editProject": "Edit Project",
+      "deleteProject": "Delete Project",
+      "askAi": "Ask AI About Project",
+      "updateStatus": "Update Status",
+      "summaryTitle": "Quick Summary",
+      "paid": "Paid",
+      "remaining": "Remaining",
+      "back": "Back to Projects",
+      "statusUpdatedToast": "Project status updated"
+    },
     "form": {
       "title": "Add New Project",
       "subtitle": "Create a new project and assign it to a client",
@@ -155,5 +306,339 @@
       "completed": "Completed",
       "onHold": "On Hold"
     }
+  },
+  "employees": {
+    "title": "Employees",
+    "subtitle": "Manage team members, roles, and workspace access.",
+    "stats": {
+      "total": "Total employees",
+      "active": "Active employees",
+      "departments": "Departments",
+      "pending": "Pending invites"
+    },
+    "departments": {
+      "subtitle": "Quick view of team distribution"
+    },
+    "page": {
+      "statsDescriptions": {
+        "total": "Workspace team size",
+        "active": "Ready to collaborate",
+        "departments": "Current team structure",
+        "pending": "Awaiting acceptance"
+      },
+      "notifications": {
+        "updatedTitle": "Employee updated",
+        "updatedDescription": "{name} was updated in the {department} team.",
+        "addedTitle": "Employee added",
+        "addedDescription": "{name} was added to the {department} team.",
+        "deletedTitle": "Employee deleted",
+        "deletedDescription": "{name} was removed from the {department} team.",
+        "statusUpdatedTitle": "Employee status updated",
+        "statusUpdatedDescription": "{name}'s status was changed to {status}."
+      },
+      "confirmDelete": "Are you sure you want to delete {name}?"
+    },
+    "table": {
+      "name": "Name",
+      "role": "Role",
+      "department": "Department",
+      "email": "Email",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "add": "Add Employee",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "inactive": "Inactive"
+    },
+    "employmentTypes": {
+      "fullTime": "Full-time",
+      "partTime": "Part-time",
+      "contract": "Contract",
+      "intern": "Intern"
+    },
+
+    "empty": "No employees yet.",
+    "form": {
+      "title": "Add New Employee",
+      "subtitle": "Create a new team member profile",
+      "name": "Employee name",
+      "role": "Role",
+      "department": "Department",
+      "email": "Email address",
+      "status": "Status",
+      "button": "Add Employee",
+      "editTitle": "Edit employee",
+
+      "cancel": "Cancel",
+      "save": "Save employee",
+      "phone": "Phone",
+      "location": "Location",
+      "joinedAt": "Joined date",
+      "employmentType": "Employment type",
+
+      "avatar": "Employee photo",
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "zoom": "Zoom",
+      "processing": "Processing...",
+      "cropHint": "Choose a photo, zoom it, and crop the best face area.",
+      "duplicate": "This employee already exists. Use a different email or employee details.",
+      "invalidImage": "Please choose a valid image file.",
+      "imageSize": "Image size must be less than 2MB.",
+      "imageFailed": "Could not process this image.",
+
+      "optional": "Optional",
+      "country": "Country",
+      "governorate": "Governorate / City",
+
+      "selectStatus": "Select status",
+      "searchDepartment": "Search department",
+      "searchCountry": "Search country",
+      "searchGovernorate": "Search governorate or city",
+      "selectEmploymentType": "Select employment type",
+
+      "noDepartmentResults": "No matching departments",
+      "noCountryResults": "No matching countries",
+      "noGovernorateResults": "No matching governorates or cities",
+      "noStatusResults": "No matching statuses",
+      "noEmploymentTypeResults": "No matching employment types",
+
+      "invalidPhone": "Phone number is not valid for the selected country.",
+      "possiblePhone": "Phone number length looks incorrect."
+    },
+    "details": {
+      "profile": "Employee profile",
+      "back": "Back to employees",
+      "notFoundTitle": "Employee not found",
+      "notFoundDescription": "This employee may have been removed or the profile link is invalid.",
+      "overview": "Overview",
+      "contact": "Contact information",
+      "team": "Team assignment",
+      "employeeId": "Employee ID",
+      "name": "Full name",
+      "role": "Role",
+      "department": "Department",
+      "email": "Email",
+      "status": "Status",
+      "photoFallback": "No photo uploaded",
+      "quickActions": "Quick actions",
+      "sendEmail": "Send email",
+      "viewInTable": "View in employees list",
+      "phone": "Phone",
+      "location": "Location",
+      "joinedAt": "Joined",
+      "employmentType": "Employment type",
+      "skills": "Skills",
+      "notes": "Notes",
+      "noNotes": "No additional notes for this employee yet.",
+      "profileSummary": "Profile summary",
+      "workDetails": "Work details",
+      "contactDetails": "Contact details",
+      "downloadData": "Download employee data",
+      "downloadTitle": "NexusDesk Employee Profile",
+      "footerNote": "Employee profiles work best when skills and details stay up to date.",
+      "skillsEditor": {
+        "searchPlaceholder": "Search and select relevant skills",
+        "hint": "Choose from suggested skills based on role and department. Max {max} skills.",
+        "limitError": "You can add up to {max} skills only.",
+        "selectedTitle": "Selected skills",
+        "suggestedTitle": "Suggested for this employee",
+        "emptyText": "No matching skills found",
+        "maxReachedText": "Maximum {max} skills selected",
+        "addSkill": "Add",
+        "removeSkill": "Remove"
+      },
+      "notesEditor": {
+        "placeholder": "Write brief notes about this employee...",
+        "hint": "Maximum {max} characters.",
+        "limitError": "Notes must be {max} characters or less."
+      }
+    }
+  },
+  "chat": {
+    "clientContextTitle": "Client-focused chat: {{name}}",
+    "projectContextTitle": "Project-focused chat: {{title}}",
+    "generalContextTitle": "General chat",
+    "clientContextDescription": "AI will analyze this specific client and suggest relevant next actions.",
+    "projectContextDescription": "AI will analyze this specific project and suggest risks and next steps.",
+    "generalContextDescription": "Ask AI about clients, projects, or the next best actions.",
+    "disabledEmptyState": "The AI assistant is disabled from settings. Enable it again to continue.",
+    "clientEmptyState": "Start by asking about {{name}}, for example: What is the next best action for this client?",
+    "projectEmptyState": "Start by asking about {{title}}, for example: Is this project at risk?",
+    "generalEmptyState": "Start chatting with Nexus AI about clients, projects, or next actions.",
+    "clientAutoPrompt": "Analyze this client {{name}} and suggest next actions.",
+    "projectAutoPrompt": "Analyze this project {{title}} and identify risks and next steps.",
+    "disabledAlert": "The AI assistant is disabled from settings. You can re-enable it anytime from the settings page.",
+    "readyToHelp": "Ready to help",
+    "currentlyDisabled": "Currently disabled",
+    "emptyEnabledTitle": "Start chatting with Nexus AI",
+    "emptyDisabledTitle": "Nexus AI is disabled",
+    "clientInsights": "Client insights",
+    "projectRisks": "Project risks",
+    "nextActions": "Next actions",
+    "loadingAssistantName": "Nexus AI",
+    "errorPrefix": "An error occurred while sending the message: ",
+    "pendingActionText": "Nexus AI has an actionable suggestion.",
+    "applyAction": "Apply Action"
+  },
+  "footer": {
+    "documentation": "Documentation",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions",
+    "rights": "© 2026 NexusDesk. All Rights Reserved"
+  },
+  "legal": {
+    "backToDashboard": "Back to Dashboard",
+    "terms": {
+      "badge": "Information page",
+      "title": "Terms and Conditions",
+      "subtitle": "This is a lightweight placeholder page explaining the general usage rules for NexusDesk as a SaaS dashboard demo.",
+      "sections": [
+        {
+          "title": "Platform usage",
+          "description": "NexusDesk is designed to showcase a modern workspace for managing clients, projects, tasks, and business activity."
+        },
+        {
+          "title": "Demo data",
+          "description": "Any data shown in the current version can be treated as demo or local data, not final production data."
+        },
+        {
+          "title": "Liability limits",
+          "description": "This content is intended for portfolio and demo purposes and does not represent a final legal agreement."
+        },
+        {
+          "title": "Future updates",
+          "description": "This page can be expanded later when the platform includes real accounts, subscriptions, or backend services."
+        }
+      ]
+    },
+    "privacy": {
+      "badge": "Information page",
+      "title": "Privacy Policy",
+      "subtitle": "This is a simple temporary privacy page describing how data is represented inside the NexusDesk demo.",
+      "sections": [
+        {
+          "title": "Data shown",
+          "description": "The platform displays client, project, and task information to demonstrate the product experience and information structure."
+        },
+        {
+          "title": "Current storage",
+          "description": "The current version may rely on local state or demo data until a production backend is connected."
+        },
+        {
+          "title": "Data sharing",
+          "description": "This page is not a final legal privacy policy. It is a clear placeholder suitable for the current demo version."
+        },
+        {
+          "title": "Later improvements",
+          "description": "When login, billing, or external integrations are added, this policy can be expanded with more accurate details."
+        }
+      ]
+    },
+    "documentation": {
+      "badge": "Help center",
+      "title": "Documentation",
+      "subtitle": "A quick overview of the main NexusDesk sections and how the current dashboard experience is organized.",
+      "sections": [
+        {
+          "title": "Dashboard",
+          "description": "View clients, projects, revenue, and workspace activity from one organized overview."
+        },
+        {
+          "title": "Clients and projects",
+          "description": "Manage clients, connect them to projects, and track status, budget, and key details."
+        },
+        {
+          "title": "Tasks and calendar",
+          "description": "Use task sections and calendar scheduling to organize upcoming work, meetings, and checkpoints."
+        },
+        {
+          "title": "AI assistant",
+          "description": "Nexus AI provides helpful suggestions and workspace-focused conversations for clients, projects, and next actions."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "badge": "NexusDesk",
+    "title": "Welcome back to your workspace.",
+    "subtitle": "Sign in to manage clients, projects, and tasks from one organized dashboard.",
+    "heroBadge": "NexusDesk",
+    "heroTitle": "A calmer way to manage clients, teams, and projects.",
+    "heroSubtitle": "A focused SaaS workspace designed for clean operations, clear decisions, and less visual noise.",
+
+    "name": "Name",
+    "email": "Email address",
+    "password": "Password",
+    "showPassword": "Show password",
+    "confirmPassword": "Confirm password",
+    "code": "Verification code",
+    "newPassword": "New password",
+
+    "namePlaceholder": "Enter your name",
+    "emailPlaceholder": "example@email.com",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "codePlaceholder": "Enter verification code",
+    "newPasswordPlaceholder": "Enter a new password",
+
+    "loginButton": "Login",
+    "registerButton": "Create account",
+    "forgotButton": "Send recovery code",
+    "verifyButton": "Verify code",
+    "newPasswordButton": "Update password",
+
+    "verifyCodeButton": "Verify code",
+    "savePasswordButton": "Save password",
+
+    "loginLoading": "Logging in...",
+    "registerLoading": "Creating account...",
+    "forgotLoading": "Sending recovery code...",
+    "verifyCodeLoading": "Verifying code...",
+    "savePasswordLoading": "Saving password...",
+
+    "missingEmail": "Please enter your email address.",
+    "missingCode": "Please enter the verification code.",
+    "missingNewPassword": "Please enter and confirm your new password.",
+    "missingLogin": "Please enter your email and password.",
+    "missingName": "Please enter your name.",
+    "passwordMismatch": "Passwords do not match.",
+    "emailExists": "This email is already registered.",
+    "checkEmail": "Account created. Please check your email to complete verification.",
+    "codeSent": "Recovery code sent to your email.",
+    "codeVerified": "Code verified. You can now set a new password.",
+    "passwordUpdated": "Password updated successfully.",
+    "invalid": "Invalid login credentials.",
+
+    "noAccount": "Don’t have an account?",
+    "createAccount": "Create account",
+    "haveAccount": "Already have an account?",
+    "backToLogin": "Back to login",
+    "forgotPassword": "Forgot password?",
+
+    "weakPassword": "Password is too weak.",
+    "passwordRuleMinLength": "At least 8 characters",
+    "passwordRuleUppercase": "At least one uppercase letter",
+    "passwordRuleLowercase": "At least one lowercase letter",
+    "passwordRuleNumber": "At least one number",
+    "passwordRuleSpecial": "At least one special character",
+
+    "lightModeLabel": "Switch to light mode",
+    "darkModeLabel": "Switch to dark mode",
+    "languageLabel": "عربي",
+
+    "demoNote": "",
+
+    "resetSent": "Recovery instructions have been sent to your email.",
+    "goDashboard": "Go to dashboard"
   }
 }

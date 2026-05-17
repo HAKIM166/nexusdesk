@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sendAIMessage } from "@/services/ai.service";
 import {
   AIAction,
@@ -12,6 +12,8 @@ import {
   SendAIMessageResponse,
 } from "@/types/ai";
 
+const AI_CHAT_STORAGE_KEY = "nexusdesk-ai-chat-messages";
+
 function createMessage(role: AIMessage["role"], content: string): AIMessage {
   return {
     id: crypto.randomUUID(),
@@ -19,6 +21,17 @@ function createMessage(role: AIMessage["role"], content: string): AIMessage {
     content,
     createdAt: new Date().toISOString(),
   };
+}
+
+function loadStoredMessages(): AIMessage[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const storedMessages = window.localStorage.getItem(AI_CHAT_STORAGE_KEY);
+    return storedMessages ? (JSON.parse(storedMessages) as AIMessage[]) : [];
+  } catch {
+    return [];
+  }
 }
 
 type SendMessageContext = {
@@ -50,38 +63,9 @@ function enrichProjectContext(project: AIProjectContext): AIProjectContext {
 function getQuickReply(text: string): string | null {
   const normalized = text.trim().toLowerCase();
 
-  const thanksWords = [
-    "شكرا",
-    "شكراً",
-    "متشكر",
-    "تسلم",
-    "ميرسي",
-    "thanks",
-    "thank you",
-    "thx",
-  ];
-
-  const greetingWords = [
-    "مرحبا",
-    "مرحباً",
-    "اهلا",
-    "أهلا",
-    "السلام عليكم",
-    "hello",
-    "hi",
-    "hey",
-  ];
-
-  const confirmWords = [
-    "تمام",
-    "اوكي",
-    "أوكي",
-    "ok",
-    "okay",
-    "done",
-    "ماشي",
-    "تمام كده",
-  ];
+  const thanksWords = ["شكرا", "شكراً", "متشكر", "تسلم", "ميرسي", "thanks", "thank you", "thx"];
+  const greetingWords = ["مرحبا", "مرحباً", "اهلا", "أهلا", "السلام عليكم", "hello", "hi", "hey"];
+  const confirmWords = ["تمام", "اوكي", "أوكي", "ok", "okay", "done", "ماشي", "تمام كده"];
 
   if (thanksWords.includes(normalized)) {
     return /[a-z]/i.test(normalized) ? "You're welcome." : "العفو.";
@@ -101,13 +85,22 @@ function getQuickReply(text: string): string | null {
 }
 
 export function useAIChat() {
-  const [messages, setMessages] = useState<AIMessage[]>([]);
+  const [messages, setMessages] = useState<AIMessage[]>(() =>
+    loadStoredMessages(),
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    window.localStorage.setItem(
+      AI_CHAT_STORAGE_KEY,
+      JSON.stringify(messages),
+    );
+  }, [messages]);
+
   const sendMessage = async (
     text: string,
-    context?: SendMessageContext
+    context?: SendMessageContext,
   ): Promise<SendMessageResult> => {
     const trimmed = text.trim();
     if (!trimmed || isLoading) return null;
@@ -124,9 +117,7 @@ export function useAIChat() {
       const assistantMessage = createMessage("assistant", quickReply);
       setMessages((prev) => [...prev, assistantMessage]);
 
-      return {
-        reply: quickReply,
-      };
+      return { reply: quickReply };
     }
 
     setIsLoading(true);
@@ -177,6 +168,7 @@ export function useAIChat() {
   };
 
   const resetMessages = () => {
+    window.localStorage.removeItem(AI_CHAT_STORAGE_KEY);
     setMessages([]);
     setError(null);
   };

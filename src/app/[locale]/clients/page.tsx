@@ -17,44 +17,49 @@ export default async function ClientsPage({ params }: ClientsPageProps) {
 
   return (
     <DashboardShell>
-      <div className="space-y-8">
+      <div className="space-y-5 pb-8 md:space-y-8 md:pb-0">
         {/* Header */}
-        <div className={isArabic ? "text-right" : "text-left"}>
+        <div
+  className={`max-w-2xl ${
+    isArabic ? "mr-0 ml-auto text-right" : "text-left"
+  }`}
+>
           <h1 className="section-title">{messages.clients.title}</h1>
-          <p className="section-subtitle">{messages.clients.subtitle}</p>
+
+          <p className="section-subtitle mt-1.5 md:mt-2">
+            {messages.clients.subtitle}
+          </p>
         </div>
 
         {/* Add Client Section */}
-        <div className="panel p-6 space-y-4">
+        <section className="panel space-y-4 p-4 md:p-6">
           <div className={isArabic ? "text-right" : "text-left"}>
-            <h2 className="text-lg font-semibold">
-              {isArabic ? "إضافة عميل جديد" : "Add New Client"}
+            <h2 className="text-[18px] font-semibold leading-6 text-[var(--foreground)] md:text-lg">
+              {messages.clients.form.title}
             </h2>
-            <p className="text-sm text-[var(--foreground-muted)]">
-              {isArabic
-                ? "أضف عميل جديد إلى النظام"
-                : "Add a new client to your CRM"}
+
+            <p className="mt-1 text-[13px] leading-5 text-[var(--foreground-muted)] md:text-sm md:leading-6">
+              {messages.clients.form.subtitle}
             </p>
           </div>
 
           <ClientForm locale={locale} />
-        </div>
+        </section>
 
         {/* Clients Table Section */}
-        <div className="panel p-6 space-y-4">
+        <section className="panel space-y-4 overflow-hidden p-4 md:p-6">
           <div className={isArabic ? "text-right" : "text-left"}>
-            <h2 className="text-lg font-semibold">
-              {isArabic ? "قائمة العملاء" : "Clients List"}
+            <h2 className="text-[18px] font-semibold leading-6 text-[var(--foreground)] md:text-lg">
+              {messages.clients.listTitle}
             </h2>
-            <p className="text-sm text-[var(--foreground-muted)]">
-              {isArabic
-                ? "عرض وإدارة جميع العملاء"
-                : "View and manage all clients"}
+
+            <p className="mt-1 text-[13px] leading-5 text-[var(--foreground-muted)] md:text-sm md:leading-6">
+              {messages.clients.listSubtitle}
             </p>
           </div>
 
           <ClientTable locale={locale} />
-        </div>
+        </section>
       </div>
     </DashboardShell>
   );

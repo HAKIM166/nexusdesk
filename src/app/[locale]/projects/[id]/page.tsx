@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
 import DashboardShell from "@/components/layout/dashboard-shell";
 import { Locale } from "@/lib/constants";
 import { getMessages } from "@/lib/helpers";
@@ -13,21 +15,22 @@ type ProjectStatus = "Planned" | "In Progress" | "Completed" | "On Hold";
 function getStatusClasses(status: string) {
   switch (status) {
     case "Planned":
-      return "border-blue-500/30 bg-blue-500/10 text-blue-300";
+      return "border-[var(--project-status-planned-border)] bg-[var(--project-status-planned-bg)] text-[var(--project-status-planned-text)]";
     case "In Progress":
-      return "border-amber-500/30 bg-amber-500/10 text-amber-300";
+      return "border-[var(--project-status-progress-border)] bg-[var(--project-status-progress-bg)] text-[var(--project-status-progress-text)]";
     case "Completed":
-      return "border-emerald-500/30 bg-emerald-500/10 text-emerald-300";
+      return "border-[var(--project-status-completed-border)] bg-[var(--project-status-completed-bg)] text-[var(--project-status-completed-text)]";
     case "On Hold":
+      return "border-[var(--project-status-hold-border)] bg-[var(--project-status-hold-bg)] text-[var(--project-status-hold-text)]";
     default:
-      return "border-white/10 bg-white/5 text-[var(--foreground-muted)]";
+      return "border-[var(--border)] bg-[var(--surface-muted)] text-[var(--foreground-muted)]";
   }
 }
 
 function getLocalizedProjectStatus(
   status: string,
   locale: Locale,
-  messages: ReturnType<typeof getMessages>
+  messages: ReturnType<typeof getMessages>,
 ) {
   if (locale === "ar") {
     if (status === "Planned") return messages.projects.status.planned;
@@ -48,27 +51,59 @@ export default function ProjectDetailsPage() {
 
   const messages = getMessages(locale);
   const isArabic = locale === "ar";
+  const detailsText = messages.projects.details;
 
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoadingProject, setIsLoadingProject] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const projects = useProjectStore((state) => state.projects);
+  const initializeProjects = useProjectStore(
+    (state) => state.initializeProjects,
+  );
   const deleteProject = useProjectStore((state) => state.deleteProject);
   const updateProject = useProjectStore((state) => state.updateProject);
   const setSelectedProject = useProjectStore(
-    (state) => state.setSelectedProject
+    (state) => state.setSelectedProject,
   );
   const clients = useClientStore((state) => state.clients);
+  const initializeClients = useClientStore((state) => state.initializeClients);
 
   const project = useMemo(
     () => projects.find((item) => item.id === id),
-    [projects, id]
+    [projects, id],
   );
 
   const [statusValue, setStatusValue] = useState<ProjectStatus>(
-    (project?.status as ProjectStatus) || "Planned"
+    (project?.status as ProjectStatus) || "Planned",
   );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadData() {
+      await Promise.all([initializeProjects(), initializeClients()]);
+
+      if (isMounted) {
+        setIsLoadingProject(false);
+      }
+    }
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [initializeClients, initializeProjects]);
+
+  if (!project && isLoadingProject) {
+    return null;
+  }
 
   if (!project && !isDeleting) {
     notFound();
@@ -83,7 +118,7 @@ export default function ProjectDetailsPage() {
   const localizedStatus = getLocalizedProjectStatus(
     project.status,
     locale,
-    messages
+    messages,
   );
 
   const formatCurrency = (value: number) => {
@@ -124,16 +159,16 @@ export default function ProjectDetailsPage() {
     router.push(`/${locale}/projects`);
   };
 
-  const handleDeleteProject = () => {
+  const handleDeleteProject = async () => {
     setIsDeleting(true);
-    deleteProject(project.id);
+    await deleteProject(project.id);
     router.push(`/${locale}/projects`);
   };
 
-  const handleUpdateStatus = () => {
+  const handleUpdateStatus = async () => {
     if (statusValue === project.status) return;
 
-    updateProject(project.id, {
+    await updateProject(project.id, {
       title: project.title,
       description: project.description,
       clientId: project.clientId,
@@ -143,41 +178,41 @@ export default function ProjectDetailsPage() {
       paidAmount: project.paidAmount,
     });
 
-    showToast(isArabic ? "تم تحديث حالة المشروع" : "Project status updated");
+    showToast(detailsText.statusUpdatedToast);
   };
+
+  const BackIcon = isArabic ? ArrowRight : ArrowLeft;
 
   return (
     <DashboardShell>
-      <div className="space-y-8">
+      <div className="space-y-4 pb-8 md:space-y-7">
         {toast && (
-          <div className="animate-fade-in fixed bottom-5 right-5 z-50 rounded-lg bg-black/80 px-4 py-2 text-sm text-white shadow-lg">
+          <div
+            className={`fixed inset-x-4 bottom-4 z-50 animate-fade-in rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2.5 text-sm text-[var(--foreground)] shadow-sm sm:inset-x-auto sm:bottom-5 ${
+              isArabic ? "sm:left-5" : "sm:right-5"
+            }`}
+          >
             {toast}
           </div>
         )}
 
         <div className={isArabic ? "text-right" : "text-left"}>
-          <div className="mb-4">
-            <button
-              type="button"
-              onClick={() => router.push(`/${locale}/projects`)}
-              className="rounded-lg border border-white/10 px-4 py-2 text-sm text-[var(--foreground-muted)] transition hover:bg-white/10 hover:text-[var(--foreground)]"
-            >
-              {isArabic ? "رجوع إلى المشاريع" : "Back to Projects"}
-            </button>
-          </div>
-
-          <p className="text-sm text-[var(--foreground-muted)]">
-            {isArabic ? "تفاصيل المشروع" : "Project Details"}
+          <p className="text-xs font-medium text-[var(--foreground-muted)] md:text-sm">
+            {detailsText.label}
           </p>
 
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl font-bold text-[var(--foreground)]">
+          <div
+            className={`mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 ${
+              isArabic ? "sm:justify-end" : "sm:justify-start"
+            }`}
+          >
+            <h1 className="text-2xl font-bold leading-tight text-[var(--foreground)] md:text-3xl">
               {project.title}
             </h1>
 
             <span
-              className={`rounded-full border px-3 py-1 text-xs font-medium ${getStatusClasses(
-                project.status
+              className={`inline-flex w-fit items-center rounded-md border px-2.5 py-1 text-[11px] font-medium md:px-3 md:text-xs ${getStatusClasses(
+                project.status,
               )}`}
             >
               {localizedStatus}
@@ -185,106 +220,112 @@ export default function ProjectDetailsPage() {
           </div>
 
           {project.description && (
-            <p className="mt-3 text-sm text-[var(--foreground-muted)]">
+            <p className="mt-3 line-clamp-3 max-w-3xl text-sm leading-6 text-[var(--foreground-muted)] md:line-clamp-none">
               {project.description}
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-          <div className="card space-y-6 xl:col-span-2">
-            <div>
-              <h2 className="text-lg font-semibold text-[var(--foreground)]">
-                {isArabic ? "معلومات المشروع" : "Project Information"}
+        <div className="grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-3">
+          <div className="card space-y-4 p-4 md:space-y-6 md:p-6 xl:col-span-2">
+            <div className={isArabic ? "text-right" : "text-left"}>
+              <h2 className="text-base font-semibold text-[var(--foreground)] md:text-lg">
+                {detailsText.informationTitle}
               </h2>
-              <p className="text-sm text-[var(--foreground-muted)]">
-                {isArabic
-                  ? "نظرة عامة على بيانات المشروع."
-                  : "Overview of the project data."}
+
+              <p className="mt-1 text-xs leading-5 text-[var(--foreground-muted)] md:text-sm">
+                {detailsText.informationSubtitle}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="col-span-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:col-span-1 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "اسم المشروع" : "Project Name"}
+                  {detailsText.projectName}
                 </p>
-                <p className="mt-2 font-medium text-[var(--foreground)]">
+
+                <p className="mt-2 line-clamp-2 text-sm font-medium text-[var(--foreground)] md:text-base">
                   {project.title}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "الحالة" : "Status"}
+                  {messages.projectsTable.status}
                 </p>
-                <p className="mt-2 font-medium text-[var(--foreground)]">
+
+                <p className="mt-2 text-sm font-medium text-[var(--foreground)] md:text-base">
                   {localizedStatus}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "العميل" : "Client"}
+                  {messages.projectsTable.client}
                 </p>
-                <p className="mt-2 font-medium text-[var(--foreground)]">
+
+                <p className="mt-2 truncate text-sm font-medium text-[var(--foreground)] md:text-base">
                   {client?.name || "-"}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "الموعد النهائي" : "Deadline"}
+                  {messages.projects.form.deadline}
                 </p>
-                <p className="mt-2 font-medium text-[var(--foreground)]">
+
+                <p className="mt-2 text-sm font-medium text-[var(--foreground)] md:text-base">
                   {project.deadline || messages.projects.notSet}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "ميزانية المشروع" : "Project Budget"}
+                  {detailsText.projectBudget}
                 </p>
-                <p className="mt-2 font-medium text-[var(--foreground)]">
+
+                <p className="mt-2 text-sm font-medium text-[var(--foreground)] md:text-base">
                   {formatCurrency(budget)}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "المبلغ المدفوع" : "Paid Amount"}
+                  {detailsText.paidAmount}
                 </p>
-                <p className="mt-2 font-medium text-emerald-300">
+
+                <p className="mt-2 text-sm font-medium text-[var(--success)] md:text-base">
                   {formatCurrency(paidAmount)}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4 md:col-span-2">
+              <div className="col-span-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "المبلغ المتبقي" : "Remaining Amount"}
+                  {detailsText.remainingAmount}
                 </p>
-                <p className="mt-2 font-medium text-amber-300">
+
+                <p className="mt-2 text-sm font-medium text-[var(--warning)] md:text-base">
                   {formatCurrency(remainingAmount)}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4 md:col-span-2">
+              <div className="col-span-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-3 md:p-4">
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  {isArabic ? "وصف المشروع" : "Project Description"}
+                  {detailsText.projectDescription}
                 </p>
-                <p className="mt-2 text-sm text-[var(--foreground)]">
-                  {project.description ||
-                    (isArabic ? "لا يوجد وصف بعد" : "No description yet")}
+
+                <p className="mt-2 max-h-32 overflow-y-auto text-sm leading-6 text-[var(--foreground)] md:max-h-none md:overflow-visible">
+                  {project.description || detailsText.noDescription}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="card space-y-4">
-              <div>
-                <h2 className="text-lg font-semibold text-[var(--foreground)]">
-                  {isArabic ? "إجراءات سريعة" : "Quick Actions"}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-1">
+            <div className="card space-y-4 p-4 md:p-6">
+              <div className={isArabic ? "text-right" : "text-left"}>
+                <h2 className="text-base font-semibold text-[var(--foreground)] md:text-lg">
+                  {detailsText.quickActions}
                 </h2>
               </div>
 
@@ -292,34 +333,36 @@ export default function ProjectDetailsPage() {
                 <button
                   type="button"
                   onClick={handleEditProject}
-                  className="w-full rounded-lg border border-white/10 px-4 py-2 text-sm transition hover:bg-white/10"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--accent)]"
                 >
-                  {isArabic ? "تعديل المشروع" : "Edit Project"}
+                  {detailsText.editProject}
                 </button>
 
                 <button
                   type="button"
                   onClick={handleDeleteProject}
-                  className="w-full rounded-lg border border-red-500/30 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10"
+                  className="w-full rounded-xl border border-[var(--project-status-hold-border)] bg-transparent px-4 py-2.5 text-sm font-medium text-[var(--project-status-hold-text)] transition-colors hover:bg-[var(--project-status-hold-bg)]"
                 >
-                  {isArabic ? "حذف المشروع" : "Delete Project"}
+                  {detailsText.deleteProject}
                 </button>
 
                 <button
                   type="button"
                   onClick={handleAskAIAboutProject}
-                  className="w-full rounded-lg border border-emerald-400/30 px-4 py-2 text-sm text-emerald-300 transition hover:bg-emerald-500/10"
+                  className="w-full rounded-xl border border-[var(--border-strong)] bg-transparent px-4 py-2.5 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--sidebar-hover)]"
                 >
-                  {isArabic
-                    ? "اسأل الذكاء الاصطناعي عن المشروع"
-                    : "Ask AI About Project"}
+                  {detailsText.askAi}
                 </button>
               </div>
             </div>
 
-            <div className="card space-y-4">
-              <h2 className="text-lg font-semibold text-[var(--foreground)]">
-                {isArabic ? "تعديل الحالة" : "Update Status"}
+            <div className="card space-y-4 p-4 md:p-6">
+              <h2
+                className={`text-base font-semibold text-[var(--foreground)] md:text-lg ${
+                  isArabic ? "text-right" : "text-left"
+                }`}
+              >
+                {detailsText.updateStatus}
               </h2>
 
               <div className="space-y-3">
@@ -328,7 +371,7 @@ export default function ProjectDetailsPage() {
                   onChange={(e) =>
                     setStatusValue(e.target.value as ProjectStatus)
                   }
-                  className={`input-base w-full ${
+                  className={`input-base min-h-11 w-full text-sm md:min-h-12 ${
                     isArabic ? "text-right" : "text-left"
                   }`}
                 >
@@ -349,70 +392,89 @@ export default function ProjectDetailsPage() {
                 <button
                   type="button"
                   onClick={handleUpdateStatus}
-                  className="w-full rounded-lg border border-white/10 px-4 py-2 text-sm transition hover:bg-white/10"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--accent)]"
                 >
-                  {isArabic ? "تحديث الحالة" : "Update Status"}
+                  {detailsText.updateStatus}
                 </button>
               </div>
             </div>
 
-            <div className="card space-y-4">
-              <h2 className="text-lg font-semibold text-[var(--foreground)]">
-                {isArabic ? "ملخص سريع" : "Quick Summary"}
+            <div className="card space-y-4 p-4 md:col-span-2 md:p-6 xl:col-span-1">
+              <h2
+                className={`text-base font-semibold text-[var(--foreground)] md:text-lg ${
+                  isArabic ? "text-right" : "text-left"
+                }`}
+              >
+                {detailsText.summaryTitle}
               </h2>
 
-              <div className="space-y-2 text-sm">
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "الحالة" : "Status"}:
-                </p>
-                <p className="text-[var(--foreground)]">{localizedStatus}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm md:grid-cols-3 xl:grid-cols-1">
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {messages.projectsTable.status}:
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[var(--foreground)]">
+                    {localizedStatus}
+                  </p>
+                </div>
 
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "العميل" : "Client"}:
-                </p>
-                <p className="text-[var(--foreground)]">
-                  {client?.name || "-"}
-                </p>
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {messages.projectsTable.client}:
+                  </p>
+                  <p className="mt-1 truncate text-sm font-medium text-[var(--foreground)]">
+                    {client?.name || "-"}
+                  </p>
+                </div>
 
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "الموعد النهائي" : "Deadline"}:
-                </p>
-                <p className="text-[var(--foreground)]">
-                  {project.deadline || messages.projects.notSet}
-                </p>
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {messages.projects.form.deadline}:
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[var(--foreground)]">
+                    {project.deadline || messages.projects.notSet}
+                  </p>
+                </div>
 
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "الميزانية" : "Budget"}:
-                </p>
-                <p className="text-[var(--foreground)]">
-                  {formatCurrency(budget)}
-                </p>
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {messages.projectsTable.budget}:
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[var(--foreground)]">
+                    {formatCurrency(budget)}
+                  </p>
+                </div>
 
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "المدفوع" : "Paid"}:
-                </p>
-                <p className="text-emerald-300">
-                  {formatCurrency(paidAmount)}
-                </p>
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {detailsText.paid}:
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[var(--success)]">
+                    {formatCurrency(paidAmount)}
+                  </p>
+                </div>
 
-                <p className="text-[var(--foreground-muted)]">
-                  {isArabic ? "المتبقي" : "Remaining"}:
-                </p>
-                <p className="text-amber-300">
-                  {formatCurrency(remainingAmount)}
-                </p>
+                <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    {detailsText.remaining}:
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[var(--warning)]">
+                    {formatCurrency(remainingAmount)}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className={isArabic ? "text-right" : "text-left"}>
+        <div className={`pt-1 ${isArabic ? "text-right" : "text-left"}`}>
           <button
             type="button"
             onClick={() => router.push(`/${locale}/projects`)}
-            className="rounded-lg border border-white/10 px-4 py-2 text-sm text-[var(--foreground-muted)] transition hover:bg-white/10 hover:text-[var(--foreground)]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--accent)] sm:w-auto"
           >
-            {isArabic ? "رجوع إلى المشاريع" : "Back to Projects"}
+            <BackIcon className="h-4 w-4" />
+            <span>{detailsText.back}</span>
           </button>
         </div>
       </div>

@@ -1,7 +1,13 @@
 "use client";
 
 import { create } from "zustand";
-import { tasks as initialTasks } from "@/data/tasks";
+
+import {
+  createTask,
+  deleteTaskById,
+  getTasks,
+  updateTaskStatusById,
+} from "@/services/tasks.service";
 import { Task, TaskStatus } from "@/types/task";
 import { useNotificationStore } from "./notification-store";
 
@@ -17,19 +23,45 @@ type NewTaskInput = {
 
 type TaskStore = {
   tasks: Task[];
-  addTask: (task: NewTaskInput) => void;
-  deleteTask: (id: string) => void;
-  updateTaskStatus: (id: string, status: TaskStatus) => void;
+  isLoading: boolean;
+  error: string | null;
+
+  initializeTasks: () => Promise<void>;
+  addTask: (task: NewTaskInput) => Promise<void>;
+  deleteTask: (id: string) => Promise<void>;
+  updateTaskStatus: (id: string, status: TaskStatus) => Promise<void>;
   getTasksByStatus: (status: TaskStatus) => Task[];
 };
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
-  tasks: initialTasks,
+  tasks: [],
+  isLoading: false,
+  error: null,
 
-  addTask: (task) =>
-    set((state) => {
-      const newTask: Task = {
-        id: crypto.randomUUID(),
+  initializeTasks: async () => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const tasks = await getTasks();
+
+      set({
+        tasks,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error ? error.message : "Failed to load tasks.",
+        isLoading: false,
+      });
+    }
+  },
+
+  addTask: async (task) => {
+    set({ error: null });
+
+    try {
+      const newTask = await createTask({
         title: task.title,
         description: task.description || "No description added yet.",
         status: "backlog",
@@ -38,22 +70,32 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         projectName: task.projectName ?? "General Tasks",
         projectId: task.projectId ?? "general",
         dueDate: task.dueDate ?? "2026-05-10",
-      };
+      });
 
       useNotificationStore.getState().addNotification({
         type: "task",
         title: "Task added",
-        description: `${task.title} added to backlog`,
+        description: `${newTask.title} added to backlog`,
       });
 
-      return {
+      set((state) => ({
         tasks: [newTask, ...state.tasks],
-      };
-    }),
+      }));
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error ? error.message : "Failed to create task.",
+      });
+    }
+  },
 
-  deleteTask: (id) =>
-    set((state) => {
-      const deletedTask = state.tasks.find((task) => task.id === id);
+  deleteTask: async (id) => {
+    set({ error: null });
+
+    const deletedTask = get().tasks.find((task) => task.id === id);
+
+    try {
+      await deleteTaskById(id);
 
       if (deletedTask) {
         useNotificationStore.getState().addNotification({
@@ -63,14 +105,24 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         });
       }
 
-      return {
+      set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== id),
-      };
-    }),
+      }));
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error ? error.message : "Failed to delete task.",
+      });
+    }
+  },
 
-  updateTaskStatus: (id, status) =>
-    set((state) => {
-      const currentTask = state.tasks.find((task) => task.id === id);
+  updateTaskStatus: async (id, status) => {
+    set({ error: null });
+
+    const currentTask = get().tasks.find((task) => task.id === id);
+
+    try {
+      const updatedTask = await updateTaskStatusById(id, status);
 
       if (currentTask && currentTask.status !== status) {
         useNotificationStore.getState().addNotification({
@@ -80,17 +132,20 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         });
       }
 
-      return {
+      set((state) => ({
         tasks: state.tasks.map((task) =>
-          task.id === id
-            ? {
-                ...task,
-                status,
-              }
-            : task,
+          task.id === id ? updatedTask : task,
         ),
-      };
-    }),
+      }));
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update task status.",
+      });
+    }
+  },
 
   getTasksByStatus: (status) => {
     return get().tasks.filter((task) => task.status === status);

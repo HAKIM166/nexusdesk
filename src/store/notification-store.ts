@@ -5,6 +5,7 @@ import { create } from "zustand";
 export type NotificationType =
   | "client"
   | "project"
+  | "employee"
   | "task"
   | "ai"
   | "theme"

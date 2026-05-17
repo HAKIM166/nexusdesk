@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Bell,
   FolderPlus,
+  IdCard,
   Languages,
   Moon,
   Sparkles,
@@ -50,8 +51,6 @@ function isToday(time: string) {
   );
 }
 
-
-
 export default function TopbarNotifications({
   locale,
   isArabic,
@@ -60,23 +59,23 @@ export default function TopbarNotifications({
   const [open, setOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-  function handleClickOutside(event: MouseEvent) {
-    if (
-      notificationsRef.current &&
-      !notificationsRef.current.contains(event.target as Node)
-    ) {
-      setOpen(false);
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
     }
-  }
 
-  if (open) {
-    document.addEventListener("mousedown", handleClickOutside);
-  }
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
 
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, [open]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   const notifications = useNotificationStore((s) => s.notifications);
   const removeNotification = useNotificationStore((s) => s.removeNotification);
@@ -112,6 +111,7 @@ export default function TopbarNotifications({
   function getIcon(type: NotificationType) {
     if (type === "client") return <UserPlus size={15} />;
     if (type === "project") return <FolderPlus size={15} />;
+    if (type === "employee") return <IdCard size={15} />;
     if (type === "language") return <Languages size={15} />;
     if (type === "theme") {
       return locale === "ar" ? <Moon size={15} /> : <Sun size={15} />;
@@ -119,16 +119,43 @@ export default function TopbarNotifications({
 
     return <Sparkles size={15} />;
   }
+  function getLocalizedNotification(notification: NotificationItem) {
+    if (notification.type === "language") {
+      return {
+        title: isArabic ? "تم تغيير اللغة" : "Language changed",
+        description: isArabic
+          ? "تم تغيير لغة مساحة العمل في NexusDesk."
+          : "NexusDesk workspace language has been updated.",
+      };
+    }
+
+    if (notification.type === "theme") {
+      return {
+        title: isArabic ? "تم تغيير المظهر" : "Theme changed",
+        description: isArabic
+          ? "تم تحديث مظهر مساحة العمل."
+          : "Workspace appearance has been updated.",
+      };
+    }
+
+    return {
+      title: notification.title,
+      description: notification.description,
+    };
+  }
 
   function renderNotification(notification: NotificationItem) {
+    const localizedNotification = getLocalizedNotification(notification);
     return (
       <div
         key={notification.id}
-        className={`group flex gap-3 border-b border-[var(--border)] px-4 py-3 last:border-b-0 ${
-          notification.read ? "opacity-75" : "bg-emerald-400/[0.04]"
+        className={`group flex gap-2.5 border-b border-[var(--notification-item-border)] px-3 py-2.5 last:border-b-0 sm:gap-3 sm:px-4 sm:py-3 ${
+          notification.read
+            ? "opacity-75"
+            : "bg-[var(--notification-item-unread-bg)]"
         }`}
       >
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300">
+        <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--notification-icon-bg)] text-[var(--notification-icon-text)] sm:h-8 sm:w-8 sm:rounded-xl">
           {getIcon(notification.type)}
         </div>
 
@@ -137,20 +164,20 @@ export default function TopbarNotifications({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 {!notification.read && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--notification-dot)]" />
                 )}
 
                 <p className="text-sm font-medium text-[var(--topbar-text)]">
-                  {notification.title}
+                  {localizedNotification.title}
                 </p>
               </div>
 
               <p className="mt-1 text-xs leading-5 text-[var(--topbar-muted)]">
-                {notification.description}
+                {localizedNotification.description}
               </p>
 
-              <p className="mt-2 text-[11px] text-emerald-300/80">
-                {formatTime(notification.time)}
+              <p className="mt-2 text-[11px] font-medium text-[var(--notification-time-text)]">
+                {isArabic ? "الآن" : formatTime(notification.time)}
               </p>
             </div>
 
@@ -160,7 +187,7 @@ export default function TopbarNotifications({
                 event.stopPropagation();
                 removeNotification(notification.id);
               }}
-              className="rounded-lg p-1 text-[var(--topbar-muted)] opacity-70 transition hover:bg-white/5 hover:text-[var(--topbar-text)] group-hover:opacity-100"
+              className="rounded-lg p-1 text-[var(--topbar-muted)] opacity-70 transition hover:bg-[var(--notification-close-bg-hover)] hover:text-[var(--notification-close-text-hover)] group-hover:opacity-100"
               aria-label={
                 locale === "ar" ? "إخفاء الإشعار" : "Dismiss notification"
               }
@@ -178,19 +205,25 @@ export default function TopbarNotifications({
       <button
         type="button"
         onClick={handleToggleNotifications}
-        className={`${actionButtonClass} relative h-10 w-10`}
+        className={`relative h-9 w-9 sm:h-10 sm:w-10 ${actionButtonClass}`}
         aria-label={locale === "ar" ? "فتح الإشعارات" : "Open notifications"}
       >
         <Bell
           key={unreadCount}
           size={17}
           className={
-            unreadCount > 0 ? "animate-[notification-bell_0.7s_ease-in-out]" : ""
+            unreadCount > 0
+              ? "animate-[notification-bell_0.7s_ease-in-out]"
+              : ""
           }
         />
 
         {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 animate-[notification-pulse_0.7s_ease-in-out] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
+          <span
+            className={`absolute -top-1 flex h-4 min-w-4 animate-[notification-pulse_0.7s_ease-in-out] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold leading-none text-white ${
+              isArabic ? "-left-1" : "-right-1"
+            }`}
+          >
             {unreadCount}
           </span>
         )}
@@ -198,8 +231,10 @@ export default function TopbarNotifications({
 
       {open && (
         <div
-          className={`absolute top-12 z-50 w-[360px] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--topbar-bg)] shadow-[0_24px_70px_rgba(0,0,0,0.35)] backdrop-blur-xl ${
-            isArabic ? "left-0 text-right" : "right-0 text-left"
+          className={`fixed left-3 right-3 top-[76px] z-50 max-h-[70vh] overflow-hidden rounded-xl border border-[var(--notification-panel-border)] bg-[var(--notification-panel-bg)] shadow-[var(--notification-shadow)] backdrop-blur-xl sm:absolute sm:left-auto sm:right-auto sm:top-12 sm:w-[340px] sm:rounded-2xl lg:w-[360px] ${
+            isArabic
+              ? "sm:left-3 lg:left-4 text-right"
+              : "sm:right-3 lg:right-4 text-left"
           }`}
         >
           <div className="flex items-start justify-between gap-3 border-b border-[var(--border)] px-4 py-3">
@@ -229,12 +264,12 @@ export default function TopbarNotifications({
             )}
           </div>
 
-          <div className="max-h-[360px] overflow-y-auto">
+          <div className="max-h-[calc(70vh-70px)] overflow-y-auto sm:max-h-[360px]">
             {notifications.length > 0 ? (
               <>
                 {todayNotifications.length > 0 && (
                   <div>
-                    <p className="border-b border-[var(--border)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--topbar-muted)]">
+                    <p className="border-b border-[var(--notification-header-border)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--topbar-muted)]">
                       {isArabic ? "اليوم" : "Today"}
                     </p>
 

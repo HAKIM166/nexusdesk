@@ -29,6 +29,31 @@
     "actions": "الإجراءات",
     "edit": "تعديل",
     "delete": "حذف",
+    "details": {
+      "label": "تفاصيل العميل",
+      "totalProjects": "عدد المشاريع",
+      "totalBudget": "إجمالي الميزانية",
+      "paidAmount": "المدفوع",
+      "remaining": "المتبقي",
+      "informationTitle": "معلومات العميل",
+      "informationSubtitle": "نظرة عامة على بيانات العميل الحالية.",
+      "clientName": "اسم العميل",
+      "projectsTitle": "مشاريع العميل",
+      "projectsSubtitle": "كل المشاريع المرتبطة بهذا العميل.",
+      "paid": "المدفوع",
+      "openColumn": "الانتقال",
+      "openAction": "فتح",
+      "noProjects": "لا توجد مشاريع مرتبطة بهذا العميل حتى الآن.",
+      "quickActions": "إجراءات سريعة",
+      "quickActionsSubtitle": "نفّذ أهم الإجراءات الخاصة بالعميل.",
+      "editClient": "تعديل العميل",
+      "deleteClient": "حذف العميل",
+      "askAi": "اسأل الذكاء الاصطناعي عن العميل",
+      "summaryTitle": "ملخص سريع",
+      "summarySubtitle": "معلومات سريعة عن نشاط العميل.",
+      "currentStatus": "الحالة الحالية",
+      "back": "رجوع إلى العملاء"
+    },
     "form": {
       "title": "إضافة عميل جديد",
       "subtitle": "إنشاء سجل عميل جديد",
@@ -58,9 +83,13 @@
   },
   "sidebar": {
     "dashboard": "لوحة التحكم",
+    "calendar": "التقويم",
+    "tasks": "المهام",
     "clients": "العملاء",
     "projects": "المشاريع",
+    "employees": "الموظفون",
     "ai": "رسائل الذكاء الاصطناعي",
+    "aiMessages": "رسائل الذكاء الاصطناعي",
     "settings": "الإعدادات",
     "search": "بحث",
     "workspace": "مساحة العمل",
@@ -83,7 +112,99 @@
       "In Progress": "قيد التنفيذ",
       "Completed": "مكتمل",
       "Planned": "مخطط",
-      "On Hold": "متوقف مؤقتًا"
+      "On Hold": "متوقف مؤقتًا",
+      "active": "نشط",
+      "pending": "قيد الانتظار",
+      "inactive": "غير نشط"
+    }
+  },
+  "calendar": {
+    "kicker": "مساحة الجدولة",
+    "title": "التقويم",
+    "subtitle": "أضف الاجتماعات والمواعيد النهائية والمتابعات ونقاط مراجعة المشاريع في جدول واضح ومنظم.",
+    "totalEvents": "إجمالي الأحداث",
+    "upcoming": "القادمة",
+    "addEvent": "إضافة حدث",
+    "addEventDescription": "اختر يومًا أو اسحب على عدة أيام، ثم أضف عنوان الحدث.",
+    "eventTitlePlaceholder": "عنوان الحدث",
+    "selected": "المحدد",
+    "selectDateHint": "اختر يومًا أو اسحب على عدة أيام",
+    "addToCalendar": "إضافة إلى التقويم",
+    "noEvents": "لا توجد أحداث بعد.",
+    "localSaveNote": "يتم حفظ جدولك محليًا حاليًا. لاحقًا يمكن ربطه بالعملاء والمشاريع والمهام.",
+    "deleteConfirm": "هل تريد حذف هذا الحدث؟",
+    "buttons": {
+      "today": "اليوم",
+      "month": "الشهر",
+      "week": "الأسبوع",
+      "day": "اليوم"
+    }
+  },
+  "tasks": {
+    "breadcrumb": "المهام",
+    "pages": {
+      "backlog": {
+        "label": "المؤجلة",
+        "title": "خطط للعمل القادم",
+        "description": "اجمع الأفكار والطلبات والمهام قبل بدء التنفيذ.",
+        "actionText": "إضافة مهمة"
+      },
+      "in-progress": {
+        "label": "قيد التنفيذ",
+        "title": "العمل قيد الحركة",
+        "description": "تابع المهام النشطة التي يعمل عليها الفريق حاليًا.",
+        "actionText": ""
+      },
+      "done": {
+        "label": "مكتملة",
+        "title": "الأعمال المكتملة",
+        "description": "راجع المهام المنتهية واحتفظ بسجل واضح للأعمال المسلّمة.",
+        "actionText": ""
+      }
+    },
+    "stats": {
+      "currentSection": "القسم الحالي",
+      "totalTasks": "إجمالي المهام",
+      "highPriority": "أولوية عالية"
+    },
+    "form": {
+      "close": "إغلاق",
+      "taskTitle": "عنوان المهمة",
+      "taskTitlePlaceholder": "اكتب عنوان المهمة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "وصف مختصر للمهمة",
+      "project": "المشروع",
+      "generalTasks": "مهام عامة",
+      "saveTask": "حفظ المهمة",
+      "noDescriptionAdded": "لم تتم إضافة وصف بعد."
+    },
+    "list": {
+      "tasks": "المهام",
+      "task": "مهمة",
+      "tasksPlural": "مهام"
+    },
+    "card": {
+      "start": "ابدأ",
+      "complete": "إكمال",
+      "back": "رجوع"
+    },
+    "seedTasks": {
+      "task-001": {
+        "title": "تجهيز كروت تحليلات لوحة التحكم",
+        "description": "إضافة مؤشرات الإيرادات ومعدل الإنجاز والمشاريع النشطة."
+      },
+      "task-002": {
+        "title": "تصميم تخطيط جدولة التقويم",
+        "description": "إنشاء قسم تقويم منظم ومتناسق مع شكل لوحة SaaS."
+      },
+      "task-003": {
+        "title": "بناء لوحة مهام كانبان",
+        "description": "إنشاء أقسام المهام المؤجلة وقيد التنفيذ والمكتملة."
+      },
+      "task-004": {
+        "title": "تقسيم تفاصيل لوحة التحكم",
+        "description": "نقل أقسام لوحة التحكم إلى ملفات أصغر وأكثر تنظيمًا."
+      }
     }
   },
   "ai": {
@@ -126,7 +247,16 @@
     "aiSuggestions": "الاقتراحات التلقائية",
     "aiSuggestionsDesc": "إظهار اقتراحات ذكية سريعة وإجراءات متابعة تلقائية.",
     "enabled": "مفعل",
-    "disabled": "معطل"
+    "disabled": "معطل",
+    "controlLabel": "NexusDesk Control",
+    "workspaceData": "بيانات مساحة العمل",
+    "workspaceClients": "عملاء",
+    "workspaceProjects": "مشاريع",
+    "aiStatus": "حالة الذكاء الاصطناعي",
+    "english": "English",
+    "arabic": "العربية",
+    "exportWorkspaceData": "تصدير بيانات مساحة العمل",
+    "footerNote": "يتم حفظ إعدادات مساحة العمل محليًا الآن، وسيتم ربطها بالخادم لاحقًا."
   },
   "projects": {
     "title": "المشاريع",
@@ -140,6 +270,27 @@
     "empty": "لا توجد مشاريع حتى الآن",
     "unknownClient": "عميل غير معروف",
     "notSet": "غير محدد",
+    "details": {
+      "label": "تفاصيل المشروع",
+      "informationTitle": "معلومات المشروع",
+      "informationSubtitle": "نظرة عامة على بيانات المشروع.",
+      "projectName": "اسم المشروع",
+      "projectBudget": "ميزانية المشروع",
+      "paidAmount": "المبلغ المدفوع",
+      "remainingAmount": "المبلغ المتبقي",
+      "projectDescription": "وصف المشروع",
+      "noDescription": "لا يوجد وصف بعد",
+      "quickActions": "إجراءات سريعة",
+      "editProject": "تعديل المشروع",
+      "deleteProject": "حذف المشروع",
+      "askAi": "اسأل الذكاء الاصطناعي عن المشروع",
+      "updateStatus": "تحديث الحالة",
+      "summaryTitle": "ملخص سريع",
+      "paid": "المدفوع",
+      "remaining": "المتبقي",
+      "back": "رجوع إلى المشاريع",
+      "statusUpdatedToast": "تم تحديث حالة المشروع"
+    },
     "form": {
       "title": "إضافة مشروع جديد",
       "subtitle": "إنشاء مشروع جديد وربطه بعميل",
@@ -155,5 +306,338 @@
       "completed": "مكتمل",
       "onHold": "متوقف مؤقتًا"
     }
+  },
+  "employees": {
+    "title": "الموظفون",
+    "subtitle": "إدارة أعضاء الفريق والأدوار وصلاحيات مساحة العمل.",
+    "stats": {
+      "total": "إجمالي الموظفين",
+      "active": "الموظفون النشطون",
+      "departments": "الأقسام",
+      "pending": "الدعوات المعلقة"
+    },
+    "departments": {
+      "subtitle": "نظرة سريعة على توزيع الفريق"
+    },
+    "page": {
+      "statsDescriptions": {
+        "total": "إجمالي أعضاء الفريق",
+        "active": "جاهزون للعمل الآن",
+        "departments": "توزيع الفريق الحالي",
+        "pending": "بانتظار الانضمام"
+      },
+      "notifications": {
+        "updatedTitle": "تم تحديث بيانات الموظف",
+        "updatedDescription": "تم تحديث بيانات {name} في فريق {department}.",
+        "addedTitle": "تم إضافة موظف جديد",
+        "addedDescription": "تم إضافة {name} إلى فريق {department}.",
+        "deletedTitle": "تم حذف الموظف",
+        "deletedDescription": "تم حذف {name} من فريق {department}.",
+        "statusUpdatedTitle": "تم تحديث حالة الموظف",
+        "statusUpdatedDescription": "تم تغيير حالة {name} إلى {status}."
+      },
+      "confirmDelete": "هل أنت متأكد من حذف {name}؟"
+    },
+    "table": {
+      "name": "الاسم",
+      "role": "الدور",
+      "department": "القسم",
+      "email": "البريد الإلكتروني",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "add": "إضافة موظف",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "view": "عرض",
+      "save": "حفظ",
+      "cancel": "إلغاء"
+    },
+    "status": {
+      "active": "نشط",
+      "pending": "قيد الانتظار",
+      "inactive": "غير نشط"
+    },
+    "employmentTypes": {
+      "fullTime": "دوام كامل",
+      "partTime": "دوام جزئي",
+      "contract": "عقد",
+      "intern": "تدريب"
+    },
+
+    "empty": "لا يوجد موظفون حتى الآن.",
+    "form": {
+      "title": "إضافة موظف جديد",
+      "subtitle": "إنشاء ملف عضو جديد في الفريق",
+      "name": "اسم الموظف",
+      "role": "الدور",
+      "department": "القسم",
+      "email": "البريد الإلكتروني",
+      "status": "الحالة",
+      "button": "إضافة موظف",
+      "editTitle": "تعديل موظف",
+
+      "cancel": "إلغاء",
+      "save": "حفظ الموظف",
+      "phone": "رقم الهاتف",
+      "location": "الموقع",
+      "joinedAt": "تاريخ الانضمام",
+      "employmentType": "نوع التوظيف",
+
+      "avatar": "صورة الموظف",
+      "uploadPhoto": "رفع صورة",
+      "removePhoto": "إزالة الصورة",
+      "zoom": "التكبير",
+      "processing": "جاري المعالجة...",
+      "cropHint": "اختر صورة، ثم قربها واقص أفضل منطقة للوجه.",
+      "duplicate": "هذا الموظف موجود بالفعل. استخدم بريدًا أو بيانات مختلفة.",
+      "invalidImage": "من فضلك اختر ملف صورة صالح.",
+      "imageSize": "حجم الصورة يجب أن يكون أقل من 2MB.",
+      "imageFailed": "تعذر معالجة هذه الصورة.",
+
+      "optional": "اختياري",
+      "country": "الدولة",
+      "governorate": "المحافظة / المدينة",
+
+      "selectStatus": "اختر الحالة",
+      "searchDepartment": "ابحث عن القسم",
+      "searchCountry": "ابحث عن الدولة",
+      "searchGovernorate": "ابحث عن المحافظة أو المدينة",
+      "selectEmploymentType": "اختر نوع التوظيف",
+
+      "noDepartmentResults": "لا توجد أقسام مطابقة",
+      "noCountryResults": "لا توجد دول مطابقة",
+      "noGovernorateResults": "لا توجد محافظات أو مدن مطابقة",
+      "noStatusResults": "لا توجد حالات مطابقة",
+      "noEmploymentTypeResults": "لا توجد أنواع توظيف مطابقة",
+
+      "invalidPhone": "رقم الهاتف غير صحيح لهذه الدولة.",
+      "possiblePhone": "رقم الهاتف قصير أو طويل بشكل غير صحيح."
+    },
+    "details": {
+      "profile": "ملف الموظف",
+      "back": "الرجوع للموظفين",
+      "notFoundTitle": "الموظف غير موجود",
+      "notFoundDescription": "قد يكون هذا الموظف تم حذفه أو رابط الملف غير صحيح.",
+      "overview": "نظرة عامة",
+      "contact": "بيانات التواصل",
+      "team": "توزيع الفريق",
+      "employeeId": "رقم الموظف",
+      "name": "الاسم الكامل",
+      "role": "الدور الوظيفي",
+      "department": "القسم",
+      "email": "البريد الإلكتروني",
+      "status": "الحالة",
+      "photoFallback": "لا توجد صورة مرفوعة",
+      "quickActions": "إجراءات سريعة",
+      "sendEmail": "إرسال بريد",
+      "viewInTable": "عرض في قائمة الموظفين",
+      "phone": "رقم الهاتف",
+      "location": "الموقع",
+      "joinedAt": "تاريخ الانضمام",
+      "employmentType": "نوع التوظيف",
+      "skills": "المهارات",
+      "notes": "ملاحظات",
+      "noNotes": "لا توجد ملاحظات إضافية لهذا الموظف حاليًا.",
+      "profileSummary": "ملخص الملف الشخصي",
+      "workDetails": "تفاصيل العمل",
+      "contactDetails": "بيانات التواصل",
+      "downloadData": "تنزيل بيانات الموظف",
+      "downloadTitle": "ملف موظف NexusDesk",
+      "footerNote": "ملف الموظف يكون أفضل عندما تبقى بياناته ومهاراته محدثة باستمرار.",
+      "skillsEditor": {
+        "searchPlaceholder": "ابحث واختر المهارات المناسبة",
+        "hint": "اختر من المهارات المقترحة حسب الدور والقسم. الحد الأقصى {max} مهارات.",
+        "limitError": "لا يمكن إضافة أكثر من {max} مهارات.",
+        "selectedTitle": "المهارات المختارة",
+        "suggestedTitle": "مقترحة لهذا الموظف",
+        "emptyText": "لا توجد مهارات مطابقة",
+        "maxReachedText": "تم الوصول للحد الأقصى {max} مهارات",
+        "addSkill": "إضافة",
+        "removeSkill": "إزالة"
+      },
+      "notesEditor": {
+        "placeholder": "اكتب ملاحظات مختصرة عن هذا الموظف...",
+        "hint": "الحد الأقصى {max} حرف.",
+        "limitError": "الملاحظات يجب ألا تتجاوز {max} حرف."
+      }
+    }
+  },
+  "chat": {
+    "clientContextTitle": "محادثة خاصة بالعميل: {{name}}",
+    "projectContextTitle": "محادثة خاصة بالمشروع: {{title}}",
+    "generalContextTitle": "محادثة عامة",
+    "clientContextDescription": "سيحلل الذكاء الاصطناعي هذا العميل تحديدًا ويقترح الخطوات التالية المناسبة.",
+    "projectContextDescription": "سيحلل الذكاء الاصطناعي هذا المشروع تحديدًا ويقترح المخاطر والخطوات التالية.",
+    "generalContextDescription": "يمكنك سؤال الذكاء الاصطناعي عن العملاء أو المشاريع أو الخطوات القادمة.",
+    "disabledEmptyState": "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. فعّله مرة أخرى للمتابعة.",
+    "clientEmptyState": "ابدأ بسؤال عن العميل {{name}}، مثل: ما الخطوة التالية المناسبة معه؟",
+    "projectEmptyState": "ابدأ بسؤال عن المشروع {{title}}، مثل: هل هذا المشروع معرض للخطر؟",
+    "generalEmptyState": "ابدأ محادثة مع Nexus AI حول العملاء أو المشاريع أو الخطوات القادمة.",
+    "clientAutoPrompt": "حلل هذا العميل {{name}} واقترح الخطوات التالية.",
+    "projectAutoPrompt": "حلل هذا المشروع {{title}} وحدد المخاطر والخطوات التالية.",
+    "disabledAlert": "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. يمكنك إعادة تفعيله من صفحة الإعدادات في أي وقت.",
+    "readyToHelp": "جاهز للمساعدة",
+    "currentlyDisabled": "متوقف حاليًا",
+    "emptyEnabledTitle": "ابدأ محادثة مع Nexus AI",
+    "emptyDisabledTitle": "Nexus AI متوقف حاليًا",
+    "clientInsights": "تحليل العملاء",
+    "projectRisks": "مخاطر المشاريع",
+    "nextActions": "الخطوات القادمة",
+    "loadingAssistantName": "Nexus AI",
+    "errorPrefix": "حدث خطأ أثناء إرسال الرسالة: ",
+    "pendingActionText": "يوجد اقتراح قابل للتنفيذ من Nexus AI.",
+    "applyAction": "تنفيذ الاقتراح"
+  },
+  "footer": {
+    "documentation": "التوثيق",
+    "privacy": "سياسة الخصوصية",
+    "terms": "الشروط والأحكام",
+    "rights": "© 2026 NexusDesk. جميع الحقوق محفوظة"
+  },
+  "legal": {
+    "backToDashboard": "الرجوع إلى لوحة التحكم",
+    "terms": {
+      "badge": "صفحة معلومات",
+      "title": "الشروط والأحكام",
+      "subtitle": "هذه صفحة مؤقتة بسيطة توضح القواعد العامة لاستخدام واجهة NexusDesk كمنتج SaaS تجريبي ضمن البورتفوليو.",
+      "sections": [
+        {
+          "title": "استخدام المنصة",
+          "description": "تم تصميم NexusDesk لعرض تجربة إدارة العملاء والمشاريع والمهام داخل لوحة تحكم حديثة ومنظمة."
+        },
+        {
+          "title": "البيانات التجريبية",
+          "description": "أي بيانات معروضة داخل النسخة الحالية يمكن اعتبارها بيانات تجريبية أو محلية وليست بيانات إنتاج حقيقية."
+        },
+        {
+          "title": "حدود المسؤولية",
+          "description": "المحتوى الحالي مخصص للعرض والتجربة، ولا يمثل اتفاقية قانونية نهائية أو وثيقة شروط رسمية."
+        },
+        {
+          "title": "التحديثات المستقبلية",
+          "description": "يمكن تحديث هذه الصفحة لاحقًا عند ربط المنصة بخدمات حقيقية أو نظام اشتراكات أو حسابات مستخدمين."
+        }
+      ]
+    },
+    "privacy": {
+      "badge": "صفحة معلومات",
+      "title": "سياسة الخصوصية",
+      "subtitle": "هذه صفحة خصوصية بسيطة ومؤقتة تشرح طريقة التعامل مع البيانات داخل نسخة NexusDesk التجريبية.",
+      "sections": [
+        {
+          "title": "البيانات المستخدمة",
+          "description": "تعرض المنصة بيانات خاصة بالعملاء والمشاريع والمهام بهدف توضيح تجربة المنتج وطريقة تنظيم المعلومات."
+        },
+        {
+          "title": "التخزين الحالي",
+          "description": "في النسخة الحالية قد يتم الاعتماد على التخزين المحلي أو بيانات تجريبية إلى أن يتم ربط النظام بخادم إنتاجي."
+        },
+        {
+          "title": "مشاركة البيانات",
+          "description": "لا يتم تقديم هذه الصفحة كسياسة خصوصية قانونية نهائية، وإنما كمحتوى توضيحي مناسب لنسخة العرض."
+        },
+        {
+          "title": "تحسينات لاحقة",
+          "description": "عند إضافة تسجيل دخول أو اشتراكات أو تكاملات خارجية، يمكن توسيع هذه السياسة بتفاصيل أكثر دقة."
+        }
+      ]
+    },
+    "documentation": {
+      "badge": "مركز المساعدة",
+      "title": "التوثيق",
+      "subtitle": "نظرة سريعة على أقسام NexusDesk الأساسية وطريقة استخدام لوحة التحكم في النسخة الحالية.",
+      "sections": [
+        {
+          "title": "لوحة التحكم",
+          "description": "تعرض نظرة عامة على العملاء والمشاريع والإيرادات وحالة العمل داخل مساحة واحدة."
+        },
+        {
+          "title": "العملاء والمشاريع",
+          "description": "يمكن إدارة العملاء وربطهم بالمشاريع ومتابعة الميزانية والحالة والتفاصيل الأساسية لكل عنصر."
+        },
+        {
+          "title": "المهام والتقويم",
+          "description": "توفر المنصة أقسامًا لتنظيم المهام ومتابعة المواعيد والاجتماعات والنقاط المهمة."
+        },
+        {
+          "title": "الذكاء الاصطناعي",
+          "description": "يوفر Nexus AI اقتراحات ومحادثات مساعدة لتحليل العملاء والمشاريع والخطوات التالية."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "badge": "NexusDesk",
+    "title": "مرحبًا بك في مساحة عملك.",
+    "subtitle": "سجّل الدخول لإدارة العملاء والمشاريع والمهام من لوحة واحدة منظمة.",
+    "heroBadge": "NexusDesk",
+    "heroTitle": "مساحة عمل هادئة لإدارة فريقك ومشاريعك.",
+    "heroSubtitle": "واجهة بسيطة، منظمة، وسريعة تساعدك تتابع كل شيء بدون زحمة أو مؤثرات مزعجة.",
+
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "code": "رمز التحقق",
+    "newPassword": "كلمة المرور الجديدة",
+
+    "namePlaceholder": "اكتب اسمك",
+    "emailPlaceholder": "example@email.com",
+    "passwordPlaceholder": "اكتب كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد كتابة كلمة المرور",
+    "codePlaceholder": "أدخل رمز التحقق",
+    "newPasswordPlaceholder": "اكتب كلمة مرور جديدة",
+
+    "loginButton": "تسجيل الدخول",
+    "registerButton": "إنشاء حساب",
+    "forgotButton": "إرسال رمز الاستعادة",
+    "verifyButton": "تحقق من الرمز",
+    "newPasswordButton": "تحديث كلمة المرور",
+    "verifyCodeButton": "تحقق من الرمز",
+    "savePasswordButton": "حفظ كلمة المرور",
+
+    "loginLoading": "جاري تسجيل الدخول...",
+    "registerLoading": "جاري إنشاء الحساب...",
+    "forgotLoading": "جاري إرسال رمز الاستعادة...",
+    "verifyCodeLoading": "جاري التحقق من الرمز...",
+    "savePasswordLoading": "جاري حفظ كلمة المرور...",
+
+    "missingEmail": "من فضلك أدخل البريد الإلكتروني.",
+    "missingCode": "من فضلك أدخل رمز التحقق.",
+    "missingNewPassword": "من فضلك أدخل كلمة المرور الجديدة وتأكيدها.",
+    "missingLogin": "من فضلك أدخل البريد الإلكتروني وكلمة المرور.",
+    "missingName": "من فضلك أدخل الاسم.",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+    "emailExists": "هذا البريد الإلكتروني مستخدم بالفعل.",
+    "checkEmail": "تم إنشاء الحساب. تحقق من بريدك الإلكتروني لإكمال التفعيل.",
+    "codeSent": "تم إرسال رمز الاستعادة إلى بريدك الإلكتروني.",
+    "codeVerified": "تم التحقق من الرمز. يمكنك الآن تعيين كلمة مرور جديدة.",
+    "passwordUpdated": "تم تحديث كلمة المرور بنجاح.",
+    "invalid": "بيانات الدخول غير صحيحة.",
+
+    "noAccount": "ليس لديك حساب؟",
+    "createAccount": "إنشاء حساب",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "forgotPassword": "نسيت كلمة المرور؟",
+
+    "weakPassword": "كلمة المرور ضعيفة.",
+    "passwordRuleMinLength": "8 أحرف على الأقل",
+    "passwordRuleUppercase": "حرف كبير واحد على الأقل",
+    "passwordRuleLowercase": "حرف صغير واحد على الأقل",
+    "passwordRuleNumber": "رقم واحد على الأقل",
+    "passwordRuleSpecial": "رمز خاص واحد على الأقل",
+
+    "lightModeLabel": "التبديل إلى الوضع الفاتح",
+    "darkModeLabel": "التبديل إلى الوضع الداكن",
+    "languageLabel": "EN",
+
+    "demoNote": "",
+
+    "resetSent": "تم إرسال تعليمات الاستعادة إلى بريدك الإلكتروني.",
+    "goDashboard": "الذهاب إلى لوحة التحكم"
   }
 }

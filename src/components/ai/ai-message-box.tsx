@@ -27,7 +27,7 @@ export default function AIMessageBox({
 
   const lines = formatContent(message.content)
     .split("\n")
-    .filter((l) => l.trim());
+    .filter((line) => line.trim());
 
   const actions = isArabic
     ? [
@@ -49,35 +49,38 @@ export default function AIMessageBox({
             ? "justify-start"
             : "justify-end"
           : isArabic
-          ? "justify-end"
-          : "justify-start"
+            ? "justify-end"
+            : "justify-start"
       }`}
     >
       <div
-        className={`max-w-[65%] sm:max-w-[70%] lg:max-w-[60%] rounded-2xl border px-4 py-3 ${
+        dir={isArabic ? "rtl" : "ltr"}
+        className={`min-w-0 max-w-[92%] rounded-2xl border px-3.5 py-3 sm:max-w-[84%] sm:px-4 md:max-w-[72%] ${
+          isArabic ? "text-right" : "text-left"
+        } ${
           isUser
-            ? "bg-emerald-500/10 border-emerald-400/20 text-emerald-200"
-            : "bg-white/5 border-white/10 text-[var(--foreground)]"
+            ? "border-[var(--ai-user-message-border)] bg-[var(--ai-user-message-bg)] text-[var(--foreground)]"
+            : "border-[var(--ai-assistant-message-border)] bg-[var(--ai-assistant-message-bg)] text-[var(--foreground)]"
         }`}
       >
-        {/* Header */}
-        <div className="mb-2 text-xs opacity-70">
+        <div
+          className={`mb-2 text-xs font-semibold ${
+            isUser
+              ? "text-[var(--ai-user-message-label)]"
+              : "text-[var(--ai-assistant-message-label)]"
+          }`}
+        >
           {isUser ? (isArabic ? "أنت" : "You") : "Nexus AI"}
         </div>
 
-        {/* Content */}
-        <div
-          dir={isArabic ? "rtl" : "ltr"}
-          className={`space-y-1 text-sm ${
-            isArabic ? "text-right" : "text-left"
-          }`}
-        >
-          {lines.map((line, i) => (
-            <p key={i}>{line}</p>
+        <div className="space-y-1.5 text-sm leading-6">
+          {lines.map((line, index) => (
+            <p key={`${message.id}-${index}`} className="break-words">
+              {line}
+            </p>
           ))}
         </div>
 
-        {/* 🔥 ACTION BUTTONS */}
         {isAssistant && onAction && (
           <div
             className={`mt-3 flex flex-wrap gap-2 ${
@@ -87,8 +90,9 @@ export default function AIMessageBox({
             {actions.map((action) => (
               <button
                 key={action.label}
+                type="button"
                 onClick={() => onAction(action.text)}
-                className="rounded-lg border border-white/10 px-3 py-1 text-xs transition hover:bg-white/10"
+                className="rounded-xl border border-[var(--ai-chip-border)] bg-[var(--ai-chip-bg)] px-3 py-1.5 text-xs font-medium text-[var(--ai-chip-text)] transition hover:border-[var(--ai-chip-hover-border)] hover:bg-[var(--ai-chip-hover-bg)] hover:text-[var(--ai-chip-hover-text)]"
               >
                 {action.label}
               </button>

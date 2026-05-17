@@ -2,20 +2,141 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Bot, Trash2 } from "lucide-react";
+
+import AIMessageBox from "@/components/ai/ai-message-box";
+import PromptForm from "@/components/ai/prompt-form";
 import { Locale } from "@/lib/constants";
+import { getMessages } from "@/lib/helpers";
 import { useAIChat } from "@/hooks/use-ai-chat";
 import { useClientStore } from "@/store/client-store";
 import { useProjectStore } from "@/store/project-store";
 import { useUIStore } from "@/store/ui-store";
-import PromptForm from "@/components/ai/prompt-form";
-import AIMessageBox from "@/components/ai/ai-message-box";
 import { AIAction, AIRequestMode } from "@/types/ai";
-
-import { Sparkles, Bot, Check } from "lucide-react";
 
 type AIChatContainerProps = {
   locale: Locale;
 };
+
+type AIChatCopy = {
+  clientContextTitle: string;
+  projectContextTitle: string;
+  generalContextTitle: string;
+  clientContextDescription: string;
+  projectContextDescription: string;
+  generalContextDescription: string;
+  disabledEmptyState: string;
+  clientEmptyState: string;
+  projectEmptyState: string;
+  generalEmptyState: string;
+  clientAutoPrompt: string;
+  projectAutoPrompt: string;
+  disabledAlert: string;
+  readyToHelp: string;
+  currentlyDisabled: string;
+  emptyEnabledTitle: string;
+  emptyDisabledTitle: string;
+  clientInsights: string;
+  projectRisks: string;
+  nextActions: string;
+  loadingAssistantName: string;
+  errorPrefix: string;
+  pendingActionText: string;
+  applyAction: string;
+};
+
+function getAIChatCopy(
+  messages: ReturnType<typeof getMessages>,
+  isArabic: boolean,
+): AIChatCopy {
+  const fallback: AIChatCopy = isArabic
+    ? {
+        clientContextTitle: "محادثة خاصة بالعميل: {{name}}",
+        projectContextTitle: "محادثة خاصة بالمشروع: {{title}}",
+        generalContextTitle: "محادثة عامة",
+        clientContextDescription:
+          "سيحلل الذكاء الاصطناعي هذا العميل تحديدًا ويقترح الخطوات التالية المناسبة.",
+        projectContextDescription:
+          "سيحلل الذكاء الاصطناعي هذا المشروع تحديدًا ويقترح المخاطر والخطوات التالية.",
+        generalContextDescription:
+          "يمكنك سؤال الذكاء الاصطناعي عن العملاء أو المشاريع أو الخطوات القادمة.",
+        disabledEmptyState:
+          "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. فعّله مرة أخرى للمتابعة.",
+        clientEmptyState:
+          "ابدأ بسؤال عن العميل {{name}}، مثل: ما الخطوة التالية المناسبة معه؟",
+        projectEmptyState:
+          "ابدأ بسؤال عن المشروع {{title}}، مثل: هل هذا المشروع معرض للخطر؟",
+        generalEmptyState:
+          "ابدأ محادثة مع Nexus AI حول العملاء أو المشاريع أو الخطوات القادمة.",
+        clientAutoPrompt: "حلل هذا العميل {{name}} واقترح الخطوات التالية.",
+        projectAutoPrompt:
+          "حلل هذا المشروع {{title}} وحدد المخاطر والخطوات التالية.",
+        disabledAlert:
+          "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. يمكنك إعادة تفعيله من صفحة الإعدادات في أي وقت.",
+        readyToHelp: "جاهز للمساعدة",
+        currentlyDisabled: "متوقف حاليًا",
+        emptyEnabledTitle: "ابدأ محادثة مع Nexus AI",
+        emptyDisabledTitle: "Nexus AI متوقف حاليًا",
+        clientInsights: "تحليل العملاء",
+        projectRisks: "مخاطر المشاريع",
+        nextActions: "الخطوات القادمة",
+        loadingAssistantName: "Nexus AI",
+        errorPrefix: "حدث خطأ أثناء إرسال الرسالة: ",
+        pendingActionText: "يوجد اقتراح قابل للتنفيذ من Nexus AI.",
+        applyAction: "تنفيذ الاقتراح",
+      }
+    : {
+        clientContextTitle: "Client-focused chat: {{name}}",
+        projectContextTitle: "Project-focused chat: {{title}}",
+        generalContextTitle: "General chat",
+        clientContextDescription:
+          "AI will analyze this specific client and suggest relevant next actions.",
+        projectContextDescription:
+          "AI will analyze this specific project and suggest risks and next steps.",
+        generalContextDescription:
+          "Ask AI about clients, projects, or the next best actions.",
+        disabledEmptyState:
+          "The AI assistant is disabled from settings. Enable it again to continue.",
+        clientEmptyState:
+          "Start by asking about {{name}}, for example: What is the next best action for this client?",
+        projectEmptyState:
+          "Start by asking about {{title}}, for example: Is this project at risk?",
+        generalEmptyState:
+          "Start chatting with Nexus AI about clients, projects, or next actions.",
+        clientAutoPrompt:
+          "Analyze this client {{name}} and suggest next actions.",
+        projectAutoPrompt:
+          "Analyze this project {{title}} and identify risks and next steps.",
+        disabledAlert:
+          "The AI assistant is disabled from settings. You can re-enable it anytime from the settings page.",
+        readyToHelp: "Ready to help",
+        currentlyDisabled: "Currently disabled",
+        emptyEnabledTitle: "Start chatting with Nexus AI",
+        emptyDisabledTitle: "Nexus AI is disabled",
+        clientInsights: "Client insights",
+        projectRisks: "Project risks",
+        nextActions: "Next actions",
+        loadingAssistantName: "Nexus AI",
+        errorPrefix: "An error occurred while sending the message: ",
+        pendingActionText: "Nexus AI has an actionable suggestion.",
+        applyAction: "Apply Action",
+      };
+
+  const aiMessages = messages.ai as typeof messages.ai & {
+    chat?: Partial<AIChatCopy>;
+  };
+
+  return {
+    ...fallback,
+    ...(aiMessages.chat ?? {}),
+  };
+}
+
+function interpolate(template: string, values: Record<string, string>) {
+  return Object.entries(values).reduce((text, [key, value]) => {
+    return text.replaceAll(`{{${key}}}`, value);
+  }, template);
+}
 
 export default function AIChatContainer({ locale }: AIChatContainerProps) {
   const searchParams = useSearchParams();
@@ -31,6 +152,12 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
 
   const clients = useClientStore((state) => state.clients);
   const projects = useProjectStore((state) => state.projects);
+  const initializeClients = useClientStore((state) => state.initializeClients);
+  const initializeProjects = useProjectStore(
+    (state) => state.initializeProjects,
+  );
+  const clientsLoading = useClientStore((state) => state.isLoading);
+  const projectsLoading = useProjectStore((state) => state.isLoading);
 
   const updateClientStatus = useClientStore(
     (state) => state.updateClientStatus,
@@ -42,14 +169,34 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
   const aiEnabled = useUIStore((state) => state.aiEnabled);
   const aiAutoSuggestions = useUIStore((state) => state.aiAutoSuggestions);
 
-  const { messages, isLoading, error, sendMessage } = useAIChat();
+  const { messages, isLoading, error, sendMessage, resetMessages } =
+    useAIChat();
 
   const [pendingAction, setPendingAction] = useState<AIAction | undefined>(
     undefined,
   );
+
   const autoPromptSentRef = useRef(false);
 
   const isArabic = locale === "ar";
+  const appMessages = getMessages(locale);
+
+  const chatCopy = useMemo(
+    () => getAIChatCopy(appMessages, isArabic),
+    [appMessages, isArabic],
+  );
+
+  const direction = isArabic ? "rtl" : "ltr";
+  const textAlignClassName = isArabic ? "text-right" : "text-left";
+  const alignContainerClassName = isArabic ? "items-end" : "items-start";
+  const rowClassName = "justify-start";
+  const messageFlowClassName = isArabic ? "items-end" : "items-start";
+  const contentSideClassName = isArabic ? "ml-auto" : "";
+
+  useEffect(() => {
+    initializeClients();
+    initializeProjects();
+  }, [initializeClients, initializeProjects]);
 
   const client = useMemo(() => {
     if (!clientId) return undefined;
@@ -63,77 +210,67 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
 
   const contextTitle = useMemo(() => {
     if (mode === "client" && client) {
-      return isArabic
-        ? `محادثة خاصة بالعميل: ${client.name}`
-        : `Client-focused chat: ${client.name}`;
+      return interpolate(chatCopy.clientContextTitle, {
+        name: client.name,
+      });
     }
 
     if (mode === "project" && project) {
-      return isArabic
-        ? `محادثة خاصة بالمشروع: ${project.title}`
-        : `Project-focused chat: ${project.title}`;
+      return interpolate(chatCopy.projectContextTitle, {
+        title: project.title,
+      });
     }
 
-    return isArabic ? "محادثة عامة" : "General chat";
-  }, [mode, client, project, isArabic]);
+    return chatCopy.generalContextTitle;
+  }, [mode, client, project, chatCopy]);
 
   const contextDescription = useMemo(() => {
     if (mode === "client" && client) {
-      return isArabic
-        ? "سيحلل الذكاء الاصطناعي هذا العميل تحديدًا ويقترح الخطوات التالية المناسبة."
-        : "AI will analyze this specific client and suggest relevant next actions.";
+      return chatCopy.clientContextDescription;
     }
 
     if (mode === "project" && project) {
-      return isArabic
-        ? "سيحلل الذكاء الاصطناعي هذا المشروع تحديدًا ويقترح المخاطر والخطوات التالية."
-        : "AI will analyze this specific project and suggest risks and next steps.";
+      return chatCopy.projectContextDescription;
     }
 
-    return isArabic
-      ? "يمكنك سؤال الذكاء الاصطناعي عن العملاء أو المشاريع أو الخطوات القادمة."
-      : "Ask AI about clients, projects, or the next best actions.";
-  }, [mode, client, project, isArabic]);
+    return chatCopy.generalContextDescription;
+  }, [mode, client, project, chatCopy]);
 
   const emptyStateText = useMemo(() => {
     if (!aiEnabled) {
-      return isArabic
-        ? "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. فعّله مرة أخرى للمتابعة."
-        : "The AI assistant is disabled from settings. Enable it again to continue.";
+      return chatCopy.disabledEmptyState;
     }
 
     if (mode === "client" && client) {
-      return isArabic
-        ? `ابدأ بسؤال عن العميل "${client.name}"، مثل: ما الخطوة التالية المناسبة معه؟`
-        : `Start by asking about "${client.name}", for example: What is the next best action for this client?`;
+      return interpolate(chatCopy.clientEmptyState, {
+        name: `"${client.name}"`,
+      });
     }
 
     if (mode === "project" && project) {
-      return isArabic
-        ? `ابدأ بسؤال عن المشروع "${project.title}"، مثل: هل هذا المشروع معرض للخطر؟`
-        : `Start by asking about "${project.title}", for example: Is this project at risk?`;
+      return interpolate(chatCopy.projectEmptyState, {
+        title: `"${project.title}"`,
+      });
     }
 
-    return isArabic
-      ? "ابدأ محادثة مع Nexus AI حول العملاء أو المشاريع أو الخطوات القادمة."
-      : "Start chatting with Nexus AI about clients, projects, or next actions.";
-  }, [aiEnabled, mode, client, project, isArabic]);
+    return chatCopy.generalEmptyState;
+  }, [aiEnabled, mode, client, project, chatCopy]);
 
   const autoPrompt = useMemo(() => {
     if (mode === "client" && client) {
-      return isArabic
-        ? `حلل هذا العميل "${client.name}" واقترح الخطوات التالية.`
-        : `Analyze this client "${client.name}" and suggest next actions.`;
+      return interpolate(chatCopy.clientAutoPrompt, {
+        name: `"${client.name}"`,
+      });
     }
 
     if (mode === "project" && project) {
-      return isArabic
-        ? `حلل هذا المشروع "${project.title}" وحدد المخاطر والخطوات التالية.`
-        : `Analyze this project "${project.title}" and identify risks and next steps.`;
+      return interpolate(chatCopy.projectAutoPrompt, {
+        title: `"${project.title}"`,
+      });
     }
 
     return null;
-  }, [mode, client, project, isArabic]);
+  }, [mode, client, project, chatCopy]);
 
   const handleSend = useCallback(
     async (text: string) => {
@@ -179,6 +316,17 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
     setPendingAction(undefined);
   }, [pendingAction, updateClientStatus, updateProjectStatus]);
 
+  const handleClearChat = useCallback(() => {
+    const shouldClear = window.confirm(
+      isArabic ? "هل تريد مسح المحادثة؟" : "Clear this chat?",
+    );
+
+    if (!shouldClear) return;
+
+    resetMessages();
+    setPendingAction(undefined);
+    autoPromptSentRef.current = false;
+  }, [isArabic, resetMessages]);
   useEffect(() => {
     if (!aiEnabled) return;
     if (autoPromptSentRef.current) return;
@@ -219,124 +367,98 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
     project,
   ]);
 
+  if (clientsLoading || projectsLoading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
   return (
-    /* AI_PAGE_ROOT: الحاوية الأساسية للصفحة كلها */
-    <div className="flex min-h-[calc(100vh-150px)] flex-col">
-      {/* AI_TOP_CONTEXT: عنوان صغير جدًا فوق الشات بدل كارت كبير */}
+    <section dir={direction} className="flex flex-col">
       <div
-        className={`mb-4 flex items-center justify-between gap-4 ${
-          isArabic ? "text-right" : "text-left"
-        }`}
+        className={`flex w-full flex-col gap-8 ${alignContainerClassName} ${textAlignClassName} md:gap-10`}
       >
-        <div className="min-w-0 space-y-1">
-          {/* AI_BADGE: بادج Nexus AI الصغيرة */}
-          <div
-            className={`flex items-center gap-2 ${
-              isArabic ? "justify-end" : "justify-start"
-            }`}
-          >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-400/10 text-xs text-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.18)]">
+        <div
+          className={`w-full max-w-2xl ${contentSideClassName} ${textAlignClassName}`}
+        >
+          <div className={`mb-3 flex items-center gap-2 ${rowClassName}`}>
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-[var(--ai-mark-border)] bg-[var(--ai-mark-bg)] text-[11px] text-[var(--ai-mark-text)]">
               ✦
             </span>
 
-            <span className="text-xs font-medium uppercase tracking-[0.22em] text-emerald-300/80">
-              Nexus AI
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--ai-brand-text)]">
+              NEXUS AI
             </span>
           </div>
 
-          {/* AI_CONTEXT_TITLE: عنوان المود الحالي */}
-          <h2 className="truncate text-lg font-semibold text-[var(--foreground)]">
+          <h2 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)] md:text-2xl">
             {contextTitle}
           </h2>
 
-          {/* AI_CONTEXT_DESCRIPTION: وصف صغير جدًا بدون مساحة كبيرة */}
-          <p className="max-w-2xl text-xs leading-5 text-[var(--foreground-soft)] sm:text-sm">
+          <p className="mt-2 text-sm leading-6 text-[var(--foreground-soft)] md:text-base">
             {contextDescription}
           </p>
-        </div>
-      </div>
-
-      {/* AI_DISABLED_ALERT: رسالة تظهر فقط لو الذكاء متوقف من الإعدادات */}
-      {!aiEnabled && (
-        <div
-          className={`mb-4 rounded-2xl border border-red-500/15 bg-red-500/8 px-4 py-3 text-sm text-red-300 ${
-            isArabic ? "text-right" : "text-left"
-          }`}
-        >
-          {isArabic
-            ? "تم تعطيل مساعد الذكاء الاصطناعي من الإعدادات. يمكنك إعادة تفعيله من صفحة الإعدادات في أي وقت."
-            : "The AI assistant is disabled from settings. You can re-enable it anytime from the settings page."}
-        </div>
-      )}
-
-      {/* AI_CHAT_SHELL: جسم الشات الرئيسي بدون مربع خارجي واضح */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* AI_MESSAGES_AREA: منطقة الرسائل والـ empty state */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5">
-          {messages.length === 0 ? (
-            /* AI_EMPTY_STATE: بداية خفيفة جدًا قبل أول رسالة بدون كارت كبير */
-            <div
-              className={`flex min-h-[120px] items-start ${
-                isArabic ? "justify-end text-right" : "justify-start text-left"
-              }`}
+          {messages.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClearChat}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-soft)] px-3 py-2 text-xs font-medium text-[var(--foreground-soft)] transition hover:border-red-400/40 hover:text-red-300 sm:text-sm"
             >
-              <div className="max-w-md pt-1">
-                {/* AI_EMPTY_STATUS: حالة بسيطة بأيقونة حقيقية بدل الإيموجي */}
-                <div
-                  className={`mb-3 flex items-center gap-2 ${
-                    isArabic ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <Bot className="h-4 w-4 text-emerald-400" />
+              <Trash2 className="h-4 w-4" />
+              {isArabic ? "مسح المحادثة" : "Clear chat"}
+            </button>
+          )}
+        </div>
 
-                  <span className="text-xs font-medium text-[var(--foreground-soft)]">
-                    {aiEnabled
-                      ? isArabic
-                        ? "جاهز للمساعدة"
-                        : "Ready to help"
-                      : isArabic
-                        ? "متوقف حاليًا"
-                        : "Currently disabled"}
-                  </span>
-                </div>
+        {!aiEnabled && (
+          <div
+            className={`w-full rounded-xl border border-red-500/15 bg-red-500/8 px-4 py-3 text-sm leading-6 text-red-300 ${textAlignClassName}`}
+          >
+            {chatCopy.disabledAlert}
+          </div>
+        )}
 
-                {/* AI_EMPTY_HEADING: عنوان بداية صغير وهادئ */}
-                <p className="text-base font-semibold tracking-[-0.02em] text-[var(--foreground)] sm:text-lg">
+        <div className={`w-full ${textAlignClassName}`}>
+          {messages.length === 0 ? (
+            <div className={`w-full max-w-2xl ${contentSideClassName}`}>
+              <div className={`mb-3 flex items-center gap-2 ${rowClassName}`}>
+                <Bot className="h-4 w-4 shrink-0 text-[var(--ai-status-icon)]" />
+
+                <span className="text-sm font-medium text-[var(--ai-status-text)]">
                   {aiEnabled
-                    ? isArabic
-                      ? "ابدأ محادثة مع Nexus AI"
-                      : "Start chatting with Nexus AI"
-                    : isArabic
-                      ? "Nexus AI متوقف حاليًا"
-                      : "Nexus AI is disabled"}
-                </p>
-
-                {/* AI_EMPTY_DESCRIPTION: وصف البداية بدون مساحة كبيرة */}
-                <p className="mt-2 max-w-md text-sm leading-6 text-[var(--foreground-soft)]">
-                  {emptyStateText}
-                </p>
-
-                {/* AI_EMPTY_HINTS: تلميحات صغيرة جدًا بدون شكل كروت واضح */}
-                {aiEnabled && (
-                  <div
-                    className={`mt-3 flex flex-wrap gap-x-3 gap-y-2 text-xs text-[var(--foreground-soft)] ${
-                      isArabic ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <span>
-                      {isArabic ? "تحليل العملاء" : "Client insights"}
-                    </span>
-                    <span className="text-emerald-400/50">•</span>
-                    <span>{isArabic ? "مخاطر المشاريع" : "Project risks"}</span>
-                    <span className="text-emerald-400/50">•</span>
-                    <span>{isArabic ? "الخطوات القادمة" : "Next actions"}</span>
-                  </div>
-                )}
+                    ? chatCopy.readyToHelp
+                    : chatCopy.currentlyDisabled}
+                </span>
               </div>
+
+              <p className="text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)] md:text-2xl">
+                {aiEnabled
+                  ? chatCopy.emptyEnabledTitle
+                  : chatCopy.emptyDisabledTitle}
+              </p>
+
+              <p className="mt-2 text-sm leading-6 text-[var(--foreground-soft)] md:text-base">
+                {emptyStateText}
+              </p>
+
+              {aiEnabled && (
+                <div
+                  className={`mt-4 flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-[var(--ai-hint-text)] ${rowClassName}`}
+                >
+                  <span>{chatCopy.clientInsights}</span>
+                  <span className="text-[var(--ai-dot-text)]">•</span>
+                  <span>{chatCopy.projectRisks}</span>
+                  <span className="text-[var(--ai-dot-text)]">•</span>
+                  <span>{chatCopy.nextActions}</span>
+                </div>
+              )}
             </div>
           ) : (
-            /* AI_MESSAGES_LIST: قائمة الرسائل بعد بداية الشات */
-            <div className="space-y-5">
+            <div
+              className={`flex max-h-[calc(100vh-430px)] flex-col gap-3 overflow-y-auto pr-1 ${messageFlowClassName}`}
+            >
               {messages.map((message) => (
                 <AIMessageBox
                   key={message.id}
@@ -348,83 +470,60 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
             </div>
           )}
 
-          {/* AI_LOADING_MESSAGE: شكل التفكير أثناء انتظار الرد */}
           {isLoading && aiEnabled && (
-            <div
-              className={`mt-5 flex w-full ${
-                isArabic ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div className="max-w-xs rounded-2xl border border-white/[0.07] bg-white/[0.025] px-4 py-3">
+            <div className={`mt-4 flex w-full ${rowClassName}`}>
+              <div className="max-w-xs rounded-xl border border-[var(--ai-assistant-message-border)] bg-[var(--ai-assistant-message-bg)] px-3.5 py-3">
                 <div
-                  className={`mb-2 flex items-center gap-2 text-xs font-medium text-[var(--foreground-soft)] ${
-                    isArabic
-                      ? "justify-end text-right"
-                      : "justify-start text-left"
-                  }`}
+                  className={`mb-2 flex items-center gap-2 text-xs font-medium text-[var(--foreground-soft)] ${rowClassName} ${textAlignClassName}`}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                  <span>Nexus AI</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--ai-status-icon)]" />
+                  <span>{chatCopy.loadingAssistantName}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 [animation-delay:150ms]" />
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 [animation-delay:300ms]" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--ai-status-icon)]" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--ai-status-icon)] [animation-delay:150ms]" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--ai-status-icon)] [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
           )}
 
-          {/* AI_ERROR_MESSAGE: رسالة الخطأ لو حصل مشكلة في الإرسال */}
           {error && aiEnabled && (
             <div
-              className={`mt-5 rounded-2xl border border-red-500/15 bg-red-500/8 px-4 py-3 text-sm text-red-300 ${
-                isArabic ? "text-right" : "text-left"
-              }`}
+              className={`mt-4 rounded-xl border border-red-500/15 bg-red-500/8 px-3.5 py-3 text-xs leading-5 text-red-300 sm:text-sm ${textAlignClassName}`}
             >
-              {isArabic
-                ? "حدث خطأ أثناء إرسال الرسالة: "
-                : "An error occurred while sending the message: "}
+              {chatCopy.errorPrefix}
               {error}
             </div>
           )}
 
-          {/* AI_PENDING_ACTION: اقتراح قابل للتنفيذ من الذكاء الاصطناعي */}
           {pendingAction && aiAutoSuggestions && aiEnabled && (
             <div
-              className={`mt-5 rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.07] p-4 ${
-                isArabic ? "text-right" : "text-left"
-              }`}
+              className={`mt-4 rounded-xl border border-[var(--ai-pending-border)] bg-[var(--ai-pending-bg)] p-3.5 ${textAlignClassName}`}
             >
-              <div
-                className={`mb-3 flex items-center gap-2 ${
-                  isArabic ? "justify-end" : "justify-start"
-                }`}
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400/10 text-xs text-emerald-300">
+              <div className={`mb-3 flex items-center gap-2 ${rowClassName}`}>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--ai-pending-icon-bg)] text-xs text-[var(--ai-pending-icon-text)]">
                   ✓
                 </span>
 
-                <p className="text-sm text-[var(--foreground-soft)]">
-                  {isArabic
-                    ? "يوجد اقتراح قابل للتنفيذ من Nexus AI."
-                    : "Nexus AI has an actionable suggestion."}
+                <p className="text-xs leading-5 text-[var(--foreground-soft)] sm:text-sm">
+                  {chatCopy.pendingActionText}
                 </p>
               </div>
 
               <button
+                type="button"
                 onClick={handleApplyAction}
-                className="rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/20"
+                className="w-full rounded-xl border border-[var(--ai-send-border)] bg-[var(--ai-send-bg)] px-4 py-2.5 text-sm font-medium text-[var(--ai-send-text)] transition hover:bg-[var(--ai-send-hover-bg)] sm:w-auto"
               >
-                {isArabic ? "تنفيذ الاقتراح" : "Apply Action"}
+                {chatCopy.applyAction}
               </button>
             </div>
           )}
         </div>
 
-        {/* AI_PROMPT_AREA: منطقة الإدخال أسفل الشات */}
-        <div className="pt-4">
+        <div className="w-full">
           <PromptForm
             locale={locale}
             onSend={handleSend}
@@ -432,6 +531,6 @@ export default function AIChatContainer({ locale }: AIChatContainerProps) {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

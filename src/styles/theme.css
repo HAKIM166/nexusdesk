@@ -1,155 +1,1145 @@
 :root {
-  --background: #07110c;
-  --background-soft: #0b1812;
+  /* ── Backgrounds ── */
+  --background: #0a0f1e;
+  --background-soft: #0d1424;
 
-  --surface: rgba(11, 24, 18, 0.72);
-  --surface-strong: rgba(14, 30, 22, 0.92);
-  --surface-muted: rgba(18, 36, 27, 0.72);
+  /* ── Surfaces ── */
+  --surface: rgba(15, 23, 42, 0.72);
+  --surface-strong: rgba(20, 30, 55, 0.92);
+  --surface-muted: rgba(30, 41, 70, 0.72);
 
-  --foreground: #f5fff8;
-  --foreground-muted: #b8d2c1;
-  --foreground-soft: #88a394;
+  /* ── Foreground ── */
+  --foreground: #e2e8f0;
+  --foreground-muted: #94a3b8;
+  --foreground-soft: #64748b;
 
-  --border: rgba(168, 255, 196, 0.1);
-  --border-strong: rgba(168, 255, 196, 0.18);
+  /* ── Borders ── */
+  --border: rgba(148, 163, 184, 0.1);
+  --border-strong: rgba(148, 163, 184, 0.18);
 
-  --primary: #b6ff66;
-  --primary-strong: #9dff3f;
-  --primary-foreground: #08110b;
+  /* ── Primary (Cyan/Teal) ── */
+  --primary: #22d3ee;
+  --primary-strong: #06b6d4;
+  --primary-foreground: #0a0f1e;
+  --auth-link: #67e8f9;
 
-  --secondary: #12241b;
-  --secondary-foreground: #d8ffe6;
+  /* ── Secondary ── */
+  --secondary: #1e2d4a;
+  --secondary-foreground: #cbd5e1;
 
-  --accent: #183325;
-  --accent-foreground: #d8ffe6;
+  /* ── Accent ── */
+  --accent: #1e3050;
+  --accent-foreground: #cbd5e1;
 
-  --success: #59ffa0;
-  --warning: #ffd66b;
-  --danger: #ff7a7a;
+  /* ── Status ── */
+  --success: #2baa59;
+  --warning: #fbbf24;
+  --danger: #f87171;
 
+  /* ── Charts ── */
+  --chart-revenue-line: #38bdf8;
+  --chart-revenue-active: #67e8f9;
+  --chart-revenue-fill: #38bdf8;
+  --chart-revenue-grid: rgba(255, 255, 255, 0.06);
+  --chart-revenue-tick: #88a394;
+
+  --chart-tooltip-bg: rgba(10, 22, 32, 0.96);
+  --chart-tooltip-border: rgba(56, 189, 248, 0.18);
+  --chart-tooltip-text: #f5fbff;
+  --chart-tooltip-label: #9fb6c1;
+
+  /* ── Glows ── */
   --page-glow:
-    radial-gradient(circle at top left, rgba(182, 255, 102, 0.09), transparent 24%),
-    radial-gradient(circle at top right, rgba(89, 255, 160, 0.06), transparent 18%),
-    radial-gradient(circle at bottom center, rgba(182, 255, 102, 0.05), transparent 28%);
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.07), transparent 24%),
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent 18%),
+    radial-gradient(circle at bottom center, rgba(34, 211, 238, 0.04), transparent 28%);
 
   --shell-glow:
-    radial-gradient(circle at 15% 20%, rgba(182, 255, 102, 0.05), transparent 20%),
-    radial-gradient(circle at 80% 10%, rgba(89, 255, 160, 0.04), transparent 18%),
-    radial-gradient(circle at 50% 90%, rgba(182, 255, 102, 0.04), transparent 24%);
+    radial-gradient(circle at 15% 20%, rgba(34, 211, 238, 0.04), transparent 20%),
+    radial-gradient(circle at 80% 10%, rgba(99, 102, 241, 0.03), transparent 18%),
+    radial-gradient(circle at 50% 90%, rgba(34, 211, 238, 0.03), transparent 24%);
 
-  --sidebar-bg: rgba(6, 17, 15, 0.97);
-  --sidebar-text: #f5fff8;
-  --sidebar-muted: rgba(245, 255, 248, 0.52);
-  --sidebar-soft: rgba(245, 255, 248, 0.34);
-  --sidebar-input: rgba(10, 25, 19, 0.96);
+  /* ── Sidebar ── */
+  --sidebar-bg: rgba(8, 14, 28, 0.97);
+  --sidebar-text: #e2e8f0;
+  --sidebar-muted: rgba(226, 232, 240, 0.52);
+  --sidebar-soft: rgba(226, 232, 240, 0.34);
+  --sidebar-input: rgba(10, 18, 38, 0.96);
 
-  --sidebar-hover: rgba(182, 255, 102, 0.1);
-  --sidebar-hover-text: #d8ff9a;
+  --sidebar-hover: rgba(34, 211, 238, 0.1);
+  --sidebar-hover-text: #67e8f9;
 
-  --sidebar-active: rgba(182, 255, 102, 0.18);
-  --sidebar-active-text: #d8ff9a;
-  --sidebar-active-border: #b6ff66;
-  --sidebar-active-shadow: 0 0 22px rgba(182, 255, 102, 0.18);
+  --sidebar-active: rgba(34, 211, 238, 0.16);
+  --sidebar-active-text: #67e8f9;
+  --sidebar-active-border: #22d3ee;
+  --sidebar-active-shadow: 0 0 22px rgba(34, 211, 238, 0.16);
 
-  --topbar-bg: rgba(7, 17, 15, 0.82);
-  --topbar-text: #f5fff8;
-  --topbar-muted: rgba(245, 255, 248, 0.62);
+  /* ── Topbar ── */
+  --topbar-bg: rgba(8, 13, 26, 0.86);
+  --topbar-border: rgba(148, 163, 184, 0.10);
 
-  --toggle-bg: #11241c;
-  --toggle-border: #2a4a38;
+  --topbar-text: #e2e8f0;
+  --topbar-muted: rgba(226, 232, 240, 0.58);
 
-  --toggle-active-bg: rgba(156, 255, 101, 0.16);
-  --toggle-active-color: #b6ff66;
-  --toggle-active-shadow: 0 0 18px rgba(156, 255, 101, 0.14);
+  --topbar-action-bg: rgba(20, 30, 55, 0.72);
+  --topbar-action-border: rgba(148, 163, 184, 0.12);
+  --topbar-action-text: rgba(226, 232, 240, 0.72);
 
-  --toggle-hover-bg: rgba(255, 255, 255, 0.075);
-  --toggle-hover-color: #b6ff66;
-  --toggle-hover-shadow: 0 0 14px rgba(156, 255, 101, 0.1);
+  --topbar-action-hover-bg: rgba(34, 211, 238, 0.08);
+  --topbar-action-hover-border: rgba(34, 211, 238, 0.20);
+  --topbar-action-hover-text: #e2e8f0;
 
-  --toggle-muted-color: rgba(245, 255, 248, 0.48);
+  /* ── Theme Toggle ── */
+  --toggle-bg: #1e2d4a;
+  --toggle-border: #2d4266;
 
-  --toggle-active-border: rgba(182, 255, 102, 0.35);
-  --toggle-hover-border: rgba(182, 255, 102, 0.22);
+  --toggle-active-bg: rgba(34, 211, 238, 0.14);
+  --toggle-active-color: #22d3ee;
+  --toggle-active-shadow: 0 0 18px rgba(34, 211, 238, 0.14);
 
-  --export-bg: #7bd84a;
-  --export-hover-bg: #8fea58;
-  --export-text: #07110c;
-  --export-border: rgba(182, 255, 102, 0.22);
-  --export-shadow: 0 0 16px rgba(123, 216, 74, 0.16);
+  --toggle-hover-bg: rgba(255, 255, 255, 0.06);
+  --toggle-hover-color: #22d3ee;
+  --toggle-hover-shadow: 0 0 14px rgba(34, 211, 238, 0.1);
+
+  --toggle-muted-color: rgba(226, 232, 240, 0.48);
+
+  --toggle-active-border: rgba(34, 211, 238, 0.35);
+  --toggle-hover-border: rgba(34, 211, 238, 0.22);
+
+  /* ── Export Button ── */
+  --export-bg: rgba(8, 145, 178, 0.88);
+  --export-hover-bg: rgba(6, 182, 212, 0.92);
+  --export-text: #ffffff;
+  --export-border: rgba(34, 211, 238, 0.28);
+  --export-shadow: none;
+
+  /* ── KPI Semantic Colors ── */
+  --kpi-revenue-icon: #5eead4;
+  --kpi-revenue-soft: rgba(45, 212, 191, 0.12);
+
+  --kpi-clients-icon: #a5b4fc;
+  --kpi-clients-soft: rgba(129, 140, 248, 0.12);
+
+  --kpi-projects-icon: #e879f9;
+  --kpi-projects-soft: rgba(217, 70, 239, 0.12);
+
+  --kpi-completion-icon: #a3e635;
+  --kpi-completion-soft: rgba(163, 230, 53, 0.12);
+
+  /* ── Client Details ── */
+
+  --client-avatar-bg: rgba(34, 211, 238, 0.12);
+  --client-avatar-text: #67e8f9;
+
+  --client-card-bg: rgba(15, 23, 42, 0.38);
+  --client-card-border: rgba(148, 163, 184, 0.08);
+
+  --client-stat-paid: #4ade80;
+  --client-stat-remaining: #facc15;
+
+  --client-action-bg: rgba(255, 255, 255, 0.02);
+  --client-action-hover: rgba(34, 211, 238, 0.08);
+  --client-action-border: rgba(148, 163, 184, 0.12);
+
+  --client-status-active-bg: rgba(74, 222, 128, 0.12);
+  --client-status-active-text: #4ade80;
+
+  --client-status-pending-bg: rgba(250, 204, 21, 0.12);
+  --client-status-pending-text: #facc15;
+
+  --client-status-inactive-bg: rgba(248, 113, 113, 0.12);
+  --client-status-inactive-text: #f87171;
+
+  /* ── Project Status ── */
+  --project-status-completed-bg: rgba(43, 170, 89, 0.12);
+  --project-status-completed-text: #4ade80;
+  --project-status-completed-border: rgba(43, 170, 89, 0.22);
+
+  --project-status-progress-bg: rgba(34, 211, 238, 0.12);
+  --project-status-progress-text: #67e8f9;
+  --project-status-progress-border: rgba(34, 211, 238, 0.22);
+
+  --project-status-planned-bg: rgba(251, 191, 36, 0.12);
+  --project-status-planned-text: #fbbf24;
+  --project-status-planned-border: rgba(251, 191, 36, 0.22);
+
+  --project-status-hold-bg: rgba(248, 113, 113, 0.12);
+  --project-status-hold-text: #f87171;
+  --project-status-hold-border: rgba(248, 113, 113, 0.22);
+
+  /* ── Logo ── */
+  --logo-icon: #22d3ee;
+  --logo-icon-soft: rgba(34, 211, 238, 0.18);
+  --logo-text-main: #e2e8f0;
+  --logo-text-accent: #38bdf8;
+  --logo-tagline: rgba(148, 163, 184, 0.82);
+  --logo-glow: 0 0 22px rgba(34, 211, 238, 0.16);
+
+
+    /* ── Employee Theme ── */
+  --employee-hero-bg: rgba(15, 23, 42, 0.74);
+  --employee-hero-bg-soft: rgba(8, 47, 73, 0.28);
+  --employee-hero-border: rgba(34, 211, 238, 0.18);
+  --employee-hero-shadow: rgba(0, 0, 0, 0.18);
+
+  --employee-panel-bg: rgba(15, 23, 42, 0.42);
+  --employee-panel-border: rgba(148, 163, 184, 0.12);
+
+  --employee-chip-bg: rgba(34, 211, 238, 0.10);
+  --employee-chip-border: rgba(34, 211, 238, 0.20);
+  --employee-chip-text: #67e8f9;
+
+  --employee-primary-action-bg: rgba(8, 145, 178, 0.92);
+  --employee-primary-action-hover-bg: rgba(6, 182, 212, 0.92);
+  --employee-primary-action-border: rgba(34, 211, 238, 0.28);
+  --employee-primary-action-text: #ffffff;
+  --employee-primary-action-shadow: rgba(34, 211, 238, 0.14);
+
+  --employee-soft-action-bg: rgba(148, 163, 184, 0.06);
+  --employee-soft-action-border: rgba(148, 163, 184, 0.12);
+
+  --employee-pulse-icon-bg: rgba(16, 185, 129, 0.12);
+  --employee-pulse-icon-text: #34d399;
+  --employee-progress-track: rgba(148, 163, 184, 0.12);
+  --employee-progress-start: #22d3ee;
+  --employee-progress-end: #34d399;
+
+  --employee-mini-card-bg: rgba(15, 23, 42, 0.36);
+  --employee-mini-card-border: rgba(148, 163, 184, 0.10);
+
+  --employee-stat-border: rgba(148, 163, 184, 0.12);
+  --employee-stat-shadow: rgba(0, 0, 0, 0.16);
+
+  --employee-stat-total-bg: rgba(8, 47, 73, 0.26);
+  --employee-stat-total-bg-soft: rgba(15, 23, 42, 0.54);
+  --employee-stat-total-icon-bg: rgba(34, 211, 238, 0.12);
+  --employee-stat-total-icon-text: #67e8f9;
+
+  --employee-stat-active-bg: rgba(6, 78, 59, 0.22);
+  --employee-stat-active-bg-soft: rgba(15, 23, 42, 0.54);
+  --employee-stat-active-icon-bg: rgba(16, 185, 129, 0.12);
+  --employee-stat-active-icon-text: #34d399;
+
+  --employee-stat-departments-bg: rgba(46, 16, 101, 0.22);
+  --employee-stat-departments-bg-soft: rgba(15, 23, 42, 0.54);
+  --employee-stat-departments-icon-bg: rgba(139, 92, 246, 0.14);
+  --employee-stat-departments-icon-text: #a78bfa;
+
+  --employee-stat-pending-bg: rgba(69, 26, 3, 0.24);
+  --employee-stat-pending-bg-soft: rgba(15, 23, 42, 0.54);
+  --employee-stat-pending-icon-bg: rgba(245, 158, 11, 0.14);
+  --employee-stat-pending-icon-text: #fbbf24;
+
+  --employee-card-bg: rgba(15, 23, 42, 0.42);
+  --employee-card-border: rgba(148, 163, 184, 0.12);
+  --employee-card-shadow: rgba(0, 0, 0, 0.18);
+  --employee-row-border: rgba(148, 163, 184, 0.09);
+  --employee-row-hover-bg: rgba(34, 211, 238, 0.045);
+
+  --employee-department-icon-bg: rgba(139, 92, 246, 0.14);
+  --employee-department-icon-text: #a78bfa;
+  --employee-department-row-bg: rgba(15, 23, 42, 0.34);
+  --employee-department-row-border: rgba(148, 163, 184, 0.10);
+  --employee-department-dot: #22d3ee;
+  --employee-department-count-bg: rgba(34, 211, 238, 0.10);
+  --employee-department-count-text: #67e8f9;
+
+  --employee-avatar-bg: rgba(34, 211, 238, 0.12);
+  --employee-avatar-bg-soft: rgba(139, 92, 246, 0.12);
+  --employee-avatar-border: rgba(34, 211, 238, 0.20);
+  --employee-avatar-text: var(--foreground);
+
+  --employee-department-badge-bg: rgba(34, 211, 238, 0.08);
+  --employee-department-badge-border: rgba(34, 211, 238, 0.16);
+  --employee-department-badge-text: #cbd5e1;
+
+  --employee-table-chip-bg: rgba(34, 211, 238, 0.08);
+  --employee-table-chip-border: rgba(34, 211, 238, 0.18);
+  --employee-table-chip-text: #67e8f9;
+
+  --employee-action-bg: rgba(15, 23, 42, 0.42);
+  --employee-action-hover-bg: rgba(34, 211, 238, 0.08);
+  --employee-action-border: rgba(148, 163, 184, 0.12);
+  --employee-action-text: var(--foreground-muted);
+
+  --employee-status-active-bg: rgba(16, 185, 129, 0.12);
+  --employee-status-active-border: rgba(16, 185, 129, 0.28);
+  --employee-status-active-text: #34d399;
+  --employee-dot-active: #34d399;
+
+  --employee-status-pending-bg: rgba(245, 158, 11, 0.14);
+  --employee-status-pending-border: rgba(245, 158, 11, 0.30);
+  --employee-status-pending-text: #fbbf24;
+  --employee-dot-pending: #fbbf24;
+
+  --employee-status-inactive-bg: rgba(148, 163, 184, 0.10);
+  --employee-status-inactive-border: rgba(148, 163, 184, 0.20);
+  --employee-status-inactive-text: var(--foreground-muted);
+  --employee-dot-inactive: var(--foreground-muted);
+
 }
 
 [data-theme="light"] {
-  --background: #f4f7f4;
-  --background-soft: #e9efe9;
+  /* ── Backgrounds ── */
+  --background: #f1f5f9;
+  --background-soft: #e8edf5;
 
+  /* ── Surfaces ── */
   --surface: rgba(255, 255, 255, 0.92);
   --surface-strong: rgba(255, 255, 255, 0.98);
-  --surface-muted: rgba(33, 70, 52, 0.045);
+  --surface-muted: rgba(15, 23, 42, 0.04);
 
-  --foreground: #101914;
-  --foreground-muted: #51645a;
-  --foreground-soft: #718379;
+  /* ── Foreground ── */
+  --foreground: #0f172a;
+  --foreground-muted: #475569;
+  --foreground-soft: #64748b;
 
-  --border: rgba(24, 48, 36, 0.12);
-  --border-strong: rgba(24, 48, 36, 0.2);
+  /* ── Borders ── */
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(15, 23, 42, 0.18);
 
-  --primary: #2f7d4f;
-  --primary-strong: #256a42;
+  /* ── Primary (Cyan/Teal) ── */
+  --primary: #0891b2;
+  --primary-strong: #0e7490;
   --primary-foreground: #ffffff;
+  --auth-link: #0e7490;
 
-  --secondary: #e4ece6;
-  --secondary-foreground: #14231a;
+  /* ── Secondary ── */
+  --secondary: #e2e8f0;
+  --secondary-foreground: #1e293b;
 
-  --accent: #dfeae2;
-  --accent-foreground: #14231a;
+  /* ── Accent ── */
+  --accent: #dbeafe;
+  --accent-foreground: #1e293b;
 
-  --success: #198754;
-  --warning: #c98212;
-  --danger: #d64545;
+  /* ── Status ── */
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
 
+  /* ── Charts ── */
+  --chart-revenue-line: #0891b2;
+  --chart-revenue-active: #0e7490;
+  --chart-revenue-fill: #0891b2;
+  --chart-revenue-grid: rgba(15, 23, 42, 0.08);
+  --chart-revenue-tick: #78908a;
+
+  --chart-tooltip-bg: rgba(255, 255, 255, 0.96);
+  --chart-tooltip-border: rgba(8, 145, 178, 0.16);
+  --chart-tooltip-text: #0f172a;
+  --chart-tooltip-label: #64748b;
+
+  /* ── Glows ── */
   --page-glow:
-    radial-gradient(circle at top left, rgba(47, 125, 79, 0.075), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(47, 125, 79, 0.045), transparent 24%);
+    radial-gradient(circle at top left, rgba(8, 145, 178, 0.06), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.04), transparent 24%);
 
   --shell-glow:
-    radial-gradient(circle at 15% 20%, rgba(47, 125, 79, 0.045), transparent 20%),
-    radial-gradient(circle at 80% 10%, rgba(47, 125, 79, 0.035), transparent 18%);
+    radial-gradient(circle at 15% 20%, rgba(8, 145, 178, 0.04), transparent 20%),
+    radial-gradient(circle at 80% 10%, rgba(99, 102, 241, 0.03), transparent 18%);
 
-  --sidebar-bg: #fbfdfb;
-  --sidebar-text: #14231a;
-  --sidebar-muted: rgba(20, 35, 26, 0.62);
-  --sidebar-soft: rgba(20, 35, 26, 0.42);
-  --sidebar-input: #edf3ee;
+  /* ── Sidebar ── */
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #1e293b;
+  --sidebar-muted: rgba(30, 41, 59, 0.62);
+  --sidebar-soft: rgba(30, 41, 59, 0.42);
+  --sidebar-input: #f1f5f9;
 
-  --sidebar-hover: rgba(35, 101, 67, 0.12);
-  --sidebar-hover-text: #1f6b43;
+  --sidebar-hover: rgba(8, 145, 178, 0.1);
+  --sidebar-hover-text: #0e7490;
 
-  --sidebar-active: rgba(35, 101, 67, 0.2);
-  --sidebar-active-text: #1f6b43;
-  --sidebar-active-border: #1f6b43;
-  --sidebar-active-shadow: 0 10px 22px rgba(35, 101, 67, 0.16);
+  --sidebar-active: rgba(8, 145, 178, 0.16);
+  --sidebar-active-text: #0e7490;
+  --sidebar-active-border: #0891b2;
+  --sidebar-active-shadow: 0 10px 22px rgba(8, 145, 178, 0.14);
 
-  --topbar-bg: rgba(255, 255, 255, 0.9);
-  --topbar-text: #14231a;
-  --topbar-muted: rgba(20, 35, 26, 0.62);
-  --toggle-bg: #dfe8e2;
-  --toggle-border: #b8cbbf;
-  --toggle-active-bg: rgba(35, 101, 67, 0.32);
-  --toggle-active-color: #155b35;
-  --toggle-active-shadow: 0 10px 24px rgba(35, 101, 67, 0.18);
+  /* ── Topbar ── */
+  --topbar-bg: rgba(248, 250, 252, 0.88);
+  --topbar-border: rgba(15, 23, 42, 0.08);
 
-  --toggle-hover-bg: rgba(35, 101, 67, 0.16);
-  --toggle-hover-color: #155b35;
-  --toggle-hover-shadow: 0 8px 18px rgba(35, 101, 67, 0.12);
+  --topbar-text: #0f172a;
+  --topbar-muted: rgba(71, 85, 105, 0.72);
 
-  --toggle-muted-color: rgba(20, 35, 26, 0.62);
-  --toggle-active-border: #8fb89d;
-  --toggle-hover-border: #a9c8b2;
+  --topbar-action-bg: rgba(255, 255, 255, 0.72);
+  --topbar-action-border: rgba(15, 23, 42, 0.10);
+  --topbar-action-text: rgba(30, 41, 59, 0.72);
 
+  --topbar-action-hover-bg: rgba(8, 145, 178, 0.08);
+  --topbar-action-hover-border: rgba(8, 145, 178, 0.20);
+  --topbar-action-hover-text: #0f172a;
 
-  --export-bg: #2f7d4f;
-  --export-hover-bg: #256a42;
+  /* ── Theme Toggle ── */
+  --toggle-bg: #e2e8f0;
+  --toggle-border: #cbd5e1;
+
+  --toggle-active-bg: rgba(8, 145, 178, 0.18);
+  --toggle-active-color: #0e7490;
+  --toggle-active-shadow: 0 10px 24px rgba(8, 145, 178, 0.16);
+
+  --toggle-hover-bg: rgba(8, 145, 178, 0.1);
+  --toggle-hover-color: #0e7490;
+  --toggle-hover-shadow: 0 8px 18px rgba(8, 145, 178, 0.1);
+
+  --toggle-muted-color: rgba(30, 41, 59, 0.62);
+  --toggle-active-border: #7dd3e8;
+  --toggle-hover-border: #a5d8e8;
+
+  /* ── Export Button ── */
+  --export-bg: #0891b2;
+  --export-hover-bg: #0e7490;
   --export-text: #ffffff;
-  --export-border: rgba(47, 125, 79, 0.18);
-  --export-shadow: 0 10px 20px rgba(47, 125, 79, 0.12);
+  --export-border: rgba(8, 145, 178, 0.22);
+  --export-shadow: none;
+
+  /* ── KPI Semantic Colors ── */
+  --kpi-revenue-icon: #0f766e;
+  --kpi-revenue-soft: rgba(20, 184, 166, 0.055);
+
+  --kpi-clients-icon: #4f46e5;
+  --kpi-clients-soft: rgba(99, 102, 241, 0.052);
+
+  --kpi-projects-icon: #7e22ce;
+  --kpi-projects-soft: rgba(168, 85, 247, 0.048);
+
+  --kpi-completion-icon: #4d7c0f;
+  --kpi-completion-soft: rgba(132, 204, 22, 0.052);
+
+  /* ── Client Details ── */
+
+  --client-avatar-bg: rgba(8, 145, 178, 0.12);
+  --client-avatar-text: #0e7490;
+
+  --client-card-bg: rgba(255, 255, 255, 0.72);
+  --client-card-border: rgba(15, 23, 42, 0.08);
+
+  --client-stat-paid: #059669;
+  --client-stat-remaining: #d97706;
+
+  --client-action-bg: rgba(15, 23, 42, 0.02);
+  --client-action-hover: rgba(8, 145, 178, 0.08);
+  --client-action-border: rgba(15, 23, 42, 0.08);
+
+  --client-status-active-bg: rgba(5, 150, 105, 0.12);
+  --client-status-active-text: #059669;
+
+  --client-status-pending-bg: rgba(217, 119, 6, 0.12);
+  --client-status-pending-text: #d97706;
+
+  --client-status-inactive-bg: rgba(220, 38, 38, 0.12);
+  --client-status-inactive-text: #dc2626;
+
+  /* ── Project Status ── */
+  --project-status-completed-bg: rgba(5, 150, 105, 0.1);
+  --project-status-completed-text: #047857;
+  --project-status-completed-border: rgba(5, 150, 105, 0.18);
+
+  --project-status-progress-bg: rgba(8, 145, 178, 0.1);
+  --project-status-progress-text: #0e7490;
+  --project-status-progress-border: rgba(8, 145, 178, 0.18);
+
+  --project-status-planned-bg: rgba(217, 119, 6, 0.1);
+  --project-status-planned-text: #b45309;
+  --project-status-planned-border: rgba(217, 119, 6, 0.18);
+
+  --project-status-hold-bg: rgba(220, 38, 38, 0.1);
+  --project-status-hold-text: #b91c1c;
+  --project-status-hold-border: rgba(220, 38, 38, 0.18);
+
+  /* ── Logo ── */
+  --logo-icon: #0f766e;
+  --logo-icon-soft: rgba(15, 118, 110, 0.14);
+  --logo-text-main: #0f172a;
+  --logo-text-accent: #0891b2;
+  --logo-tagline: rgba(71, 85, 105, 0.82);
+  --logo-glow: 0 10px 22px rgba(8, 145, 178, 0.12);
+
+
+  /* ── Employee Theme Light ── */
+  --employee-hero-bg: rgba(255, 255, 255, 0.86);
+  --employee-hero-bg-soft: rgba(236, 254, 255, 0.72);
+  --employee-hero-border: rgba(8, 145, 178, 0.14);
+  --employee-hero-shadow: rgba(15, 23, 42, 0.06);
+
+  --employee-panel-bg: rgba(255, 255, 255, 0.64);
+  --employee-panel-border: rgba(15, 23, 42, 0.08);
+
+  --employee-chip-bg: rgba(8, 145, 178, 0.08);
+  --employee-chip-border: rgba(8, 145, 178, 0.16);
+  --employee-chip-text: #0e7490;
+
+  --employee-primary-action-bg: #0891b2;
+  --employee-primary-action-hover-bg: #0e7490;
+  --employee-primary-action-border: rgba(8, 145, 178, 0.20);
+  --employee-primary-action-text: #ffffff;
+  --employee-primary-action-shadow: rgba(8, 145, 178, 0.12);
+
+  --employee-soft-action-bg: rgba(15, 23, 42, 0.03);
+  --employee-soft-action-border: rgba(15, 23, 42, 0.08);
+
+  --employee-pulse-icon-bg: rgba(5, 150, 105, 0.10);
+  --employee-pulse-icon-text: #059669;
+  --employee-progress-track: rgba(15, 23, 42, 0.08);
+  --employee-progress-start: #0891b2;
+  --employee-progress-end: #059669;
+
+  --employee-mini-card-bg: rgba(255, 255, 255, 0.56);
+  --employee-mini-card-border: rgba(15, 23, 42, 0.08);
+
+  --employee-stat-border: rgba(15, 23, 42, 0.08);
+  --employee-stat-shadow: rgba(15, 23, 42, 0.04);
+
+  --employee-stat-total-bg: rgba(236, 254, 255, 0.62);
+  --employee-stat-total-bg-soft: rgba(255, 255, 255, 0.78);
+  --employee-stat-total-icon-bg: rgba(8, 145, 178, 0.10);
+  --employee-stat-total-icon-text: #0891b2;
+
+  --employee-stat-active-bg: rgba(236, 253, 245, 0.62);
+  --employee-stat-active-bg-soft: rgba(255, 255, 255, 0.78);
+  --employee-stat-active-icon-bg: rgba(5, 150, 105, 0.10);
+  --employee-stat-active-icon-text: #059669;
+
+  --employee-stat-departments-bg: rgba(245, 243, 255, 0.70);
+  --employee-stat-departments-bg-soft: rgba(255, 255, 255, 0.78);
+  --employee-stat-departments-icon-bg: rgba(124, 58, 237, 0.10);
+  --employee-stat-departments-icon-text: #7c3aed;
+
+  --employee-stat-pending-bg: rgba(255, 251, 235, 0.74);
+  --employee-stat-pending-bg-soft: rgba(255, 255, 255, 0.78);
+  --employee-stat-pending-icon-bg: rgba(217, 119, 6, 0.10);
+  --employee-stat-pending-icon-text: #d97706;
+
+  --employee-card-bg: rgba(255, 255, 255, 0.72);
+  --employee-card-border: rgba(15, 23, 42, 0.08);
+  --employee-card-shadow: rgba(15, 23, 42, 0.05);
+  --employee-row-border: rgba(15, 23, 42, 0.07);
+  --employee-row-hover-bg: rgba(8, 145, 178, 0.045);
+
+  --employee-department-icon-bg: rgba(124, 58, 237, 0.10);
+  --employee-department-icon-text: #7c3aed;
+  --employee-department-row-bg: rgba(255, 255, 255, 0.54);
+  --employee-department-row-border: rgba(15, 23, 42, 0.08);
+  --employee-department-dot: #0891b2;
+  --employee-department-count-bg: rgba(8, 145, 178, 0.08);
+  --employee-department-count-text: #0e7490;
+
+  --employee-avatar-bg: rgba(8, 145, 178, 0.10);
+  --employee-avatar-bg-soft: rgba(124, 58, 237, 0.08);
+  --employee-avatar-border: rgba(8, 145, 178, 0.16);
+  --employee-avatar-text: var(--foreground);
+
+  --employee-department-badge-bg: rgba(8, 145, 178, 0.06);
+  --employee-department-badge-border: rgba(8, 145, 178, 0.14);
+  --employee-department-badge-text: #334155;
+
+  --employee-table-chip-bg: rgba(8, 145, 178, 0.07);
+  --employee-table-chip-border: rgba(8, 145, 178, 0.16);
+  --employee-table-chip-text: #0e7490;
+
+  --employee-action-bg: rgba(255, 255, 255, 0.62);
+  --employee-action-hover-bg: rgba(8, 145, 178, 0.08);
+  --employee-action-border: rgba(15, 23, 42, 0.08);
+  --employee-action-text: var(--foreground-muted);
+
+  --employee-status-active-bg: rgba(5, 150, 105, 0.10);
+  --employee-status-active-border: rgba(5, 150, 105, 0.22);
+  --employee-status-active-text: #047857;
+  --employee-dot-active: #059669;
+
+  --employee-status-pending-bg: rgba(217, 119, 6, 0.10);
+  --employee-status-pending-border: rgba(217, 119, 6, 0.22);
+  --employee-status-pending-text: #b45309;
+  --employee-dot-pending: #d97706;
+
+  --employee-status-inactive-bg: rgba(100, 116, 139, 0.08);
+  --employee-status-inactive-border: rgba(100, 116, 139, 0.16);
+  --employee-status-inactive-text: var(--foreground-muted);
+  --employee-dot-inactive: var(--foreground-muted);
+
+}
+
+/* ── Dashboard Footer Big Wordmark ── */
+.dashboard-footer-surface {
+  --dashboard-footer-wordmark-top: rgba(226, 232, 240, 0.78);
+  --dashboard-footer-wordmark-mid: rgba(125, 211, 252, 0.46);
+  --dashboard-footer-wordmark-bottom: rgba(34, 211, 238, 0.18);
+
+  --footer-wordmark-blur: rgba(34, 211, 238, 0.13);
+}
+
+[data-theme="light"] .dashboard-footer-surface {
+  --dashboard-footer-wordmark-top: rgba(15, 23, 42, 0.52);
+  --dashboard-footer-wordmark-mid: rgba(14, 116, 144, 0.28);
+  --dashboard-footer-wordmark-bottom: rgba(8, 145, 178, 0.16);
+
+  --footer-wordmark-blur: rgba(8, 145, 178, 0.13);
+}
+
+/* ── Calendar Surface Colors ── */
+:root {
+  --calendar-surface: rgba(15, 23, 42, 0.54);
+  --calendar-surface-soft: rgba(15, 23, 42, 0.34);
+  --calendar-border: rgba(148, 163, 184, 0.16);
+
+  --calendar-heading: rgb(226, 232, 240);
+  --calendar-muted: rgb(148, 163, 184);
+
+  --calendar-today-bg: rgba(34, 211, 238, 0.12);
+  --calendar-hover-bg: rgba(34, 211, 238, 0.08);
+
+  --calendar-event-bg: rgba(34, 211, 238, 0.16);
+  --calendar-event-border: rgba(34, 211, 238, 0.34);
+  --calendar-event-text: rgb(236, 254, 255);
+
+  --calendar-button-bg: rgba(34, 211, 238, 0.12);
+  --calendar-button-text: rgb(103, 232, 249);
+  --calendar-button-border: rgba(34, 211, 238, 0.24);
+
+  --calendar-button-active-bg: rgba(34, 211, 238, 0.88);
+  --calendar-button-active-text: rgb(8, 15, 23);
+
+  --calendar-action-bg: rgba(34, 211, 238, 0.08);
+  --calendar-action-border: rgba(34, 211, 238, 0.20);
+  --calendar-action-text: rgb(226, 232, 240);
+  --calendar-action-icon: rgb(34, 211, 238);
+  --calendar-action-hover-bg: rgba(34, 211, 238, 0.14);
+  --calendar-action-hover-border: rgba(34, 211, 238, 0.34);
+  --calendar-action-hover-text: rgb(103, 232, 249);
+}
+
+[data-theme="light"] {
+  --calendar-surface: rgba(255, 255, 255, 0.82);
+  --calendar-surface-soft: rgba(248, 250, 252, 0.86);
+  --calendar-border: rgba(15, 23, 42, 0.10);
+
+  --calendar-heading: rgb(15, 23, 42);
+  --calendar-muted: rgb(100, 116, 139);
+
+  --calendar-today-bg: rgba(8, 145, 178, 0.10);
+  --calendar-hover-bg: rgba(8, 145, 178, 0.07);
+
+  --calendar-event-bg: rgba(8, 145, 178, 0.14);
+  --calendar-event-border: rgba(8, 145, 178, 0.28);
+  --calendar-event-text: rgb(14, 116, 144);
+
+  --calendar-button-bg: rgba(8, 145, 178, 0.10);
+  --calendar-button-text: rgb(14, 116, 144);
+  --calendar-button-border: rgba(8, 145, 178, 0.20);
+
+  --calendar-button-active-bg: rgb(8, 145, 178);
+  --calendar-button-active-text: rgb(255, 255, 255);
+
+  --calendar-action-bg: rgba(8, 145, 178, 0.07);
+  --calendar-action-border: rgba(8, 145, 178, 0.18);
+  --calendar-action-text: rgb(15, 23, 42);
+  --calendar-action-icon: rgb(8, 145, 178);
+  --calendar-action-hover-bg: rgba(8, 145, 178, 0.11);
+  --calendar-action-hover-border: rgba(8, 145, 178, 0.28);
+  --calendar-action-hover-text: rgb(14, 116, 144);
+}
+
+/* ── FullCalendar Theme ── */
+.nexus-calendar {
+  overflow: hidden;
+  border: 1px solid var(--calendar-border);
+  border-radius: 22px;
+  background: var(--calendar-surface);
+  box-shadow: none;
+}
+
+.nexus-calendar .fc {
+  color: var(--foreground);
+}
+
+.nexus-calendar .fc-toolbar {
+  gap: 14px;
+  padding: 14px 18px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--calendar-border);
+}
+
+.nexus-calendar .fc-toolbar-title {
+  color: var(--calendar-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.nexus-calendar .fc-button {
+  border: 1px solid var(--calendar-button-border) !important;
+  border-radius: 12px !important;
+  background: var(--calendar-button-bg) !important;
+  color: var(--calendar-button-text) !important;
+  box-shadow: none !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+}
+
+.nexus-calendar .fc-button:hover,
+.nexus-calendar .fc-button:focus {
+  border-color: var(--calendar-button-border) !important;
+  background: var(--calendar-hover-bg) !important;
+  color: var(--calendar-button-text) !important;
+}
+
+.nexus-calendar .fc-button-active {
+  border-color: transparent !important;
+  background: var(--calendar-button-active-bg) !important;
+  color: var(--calendar-button-active-text) !important;
+}
+
+.nexus-calendar .fc-scrollgrid,
+.nexus-calendar .fc-theme-standard td,
+.nexus-calendar .fc-theme-standard th {
+  border-color: var(--calendar-border) !important;
+}
+
+.nexus-calendar .fc-col-header-cell {
+  background: var(--calendar-surface-soft);
+  border-radius: 0 !important;
+}
+
+.nexus-calendar .fc-scrollgrid {
+  border-radius: 0 !important;
+}
+
+.nexus-calendar table {
+  border-radius: 0 !important;
+}
+
+.nexus-calendar .fc-col-header-cell-cushion {
+  padding: 9px 8px;
+  color: var(--calendar-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nexus-calendar .fc-daygrid-day-frame {
+  transition: background-color 180ms ease;
+}
+
+.nexus-calendar .fc-daygrid-day-number {
+  padding: 10px;
+  color: var(--foreground-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.nexus-calendar .fc-daygrid-day-frame {
+  min-height: 92px;
+}
+
+.nexus-calendar .fc-daygrid-day-events {
+  margin-top: 2px;
+}
+
+.nexus-calendar .fc-day-today {
+  background: var(--calendar-today-bg) !important;
+}
+
+.nexus-calendar .fc-daygrid-day:hover {
+  background: var(--calendar-hover-bg);
+}
+
+.nexus-calendar .fc-event {
+  border: 1px solid var(--calendar-event-border) !important;
+  border-radius: 999px !important;
+  background: var(--calendar-event-bg) !important;
+  color: var(--calendar-event-text) !important;
+  padding: 2px 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  box-shadow: none !important;
+}
+
+.nexus-calendar .fc-event-title,
+.nexus-calendar .fc-event-time {
+  color: inherit;
+  font-weight: 700;
+}
+
+.nexus-calendar .fc-daygrid-more-link {
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.nexus-calendar .fc-now-indicator-line {
+  border-color: var(--primary) !important;
+}
+
+.nexus-calendar .fc-now-indicator-arrow {
+  border-color: var(--primary) !important;
+}
+
+/* ── Tasks Theme ── */
+:root {
+  --task-card-bg: rgba(15, 23, 42, 0.34);
+  --task-card-border: rgba(148, 163, 184, 0.14);
+  --task-card-hover-border: rgba(34, 211, 238, 0.24);
+
+  --task-add-bg: rgba(34, 211, 238, 0.12);
+  --task-add-border: rgba(34, 211, 238, 0.26);
+  --task-add-text: rgb(103, 232, 249);
+  --task-add-icon: rgb(34, 211, 238);
+  --task-add-hover-bg: rgba(34, 211, 238, 0.18);
+
+  --task-start-bg: rgba(34, 211, 238, 0.1);
+  --task-start-text: rgb(103, 232, 249);
+  --task-start-border: rgba(34, 211, 238, 0.22);
+  --task-start-hover-bg: rgba(34, 211, 238, 0.16);
+
+  --task-complete-bg: rgba(43, 170, 89, 0.12);
+  --task-complete-text: rgb(74, 222, 128);
+  --task-complete-border: rgba(43, 170, 89, 0.24);
+  --task-complete-hover-bg: rgba(43, 170, 89, 0.18);
+
+  --task-back-bg: rgba(148, 163, 184, 0.08);
+  --task-back-text: rgb(203, 213, 225);
+  --task-back-border: rgba(148, 163, 184, 0.16);
+  --task-back-hover-bg: rgba(148, 163, 184, 0.13);
+
+  --task-delete-text: rgb(248, 113, 113);
+  --task-delete-hover-text: rgb(252, 165, 165);
+}
+
+[data-theme="light"] {
+  --task-card-bg: rgba(255, 255, 255, 0.64);
+  --task-card-border: rgba(15, 23, 42, 0.09);
+  --task-card-hover-border: rgba(8, 145, 178, 0.22);
+
+  --task-add-bg: rgba(8, 145, 178, 0.09);
+  --task-add-border: rgba(8, 145, 178, 0.2);
+  --task-add-text: rgb(14, 116, 144);
+  --task-add-icon: rgb(8, 145, 178);
+  --task-add-hover-bg: rgba(8, 145, 178, 0.13);
+
+  --task-start-bg: rgba(8, 145, 178, 0.08);
+  --task-start-text: rgb(14, 116, 144);
+  --task-start-border: rgba(8, 145, 178, 0.18);
+  --task-start-hover-bg: rgba(8, 145, 178, 0.12);
+
+  --task-complete-bg: rgba(5, 150, 105, 0.09);
+  --task-complete-text: rgb(4, 120, 87);
+  --task-complete-border: rgba(5, 150, 105, 0.18);
+  --task-complete-hover-bg: rgba(5, 150, 105, 0.13);
+
+  --task-back-bg: rgba(100, 116, 139, 0.08);
+  --task-back-text: rgb(71, 85, 105);
+  --task-back-border: rgba(100, 116, 139, 0.16);
+  --task-back-hover-bg: rgba(100, 116, 139, 0.12);
+
+  --task-delete-text: rgb(185, 28, 28);
+  --task-delete-hover-text: rgb(220, 38, 38);
+}
+
+/* ── Task Delete Button ── */
+.task-delete-button {
+  color: var(--task-delete-text);
+}
+
+.task-delete-button:hover {
+  color: var(--task-delete-hover-text);
+}
+
+.task-delete-button svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  transition:
+    color 180ms ease,
+    stroke 180ms ease,
+    transform 180ms ease;
+}
+
+.task-delete-button:hover svg {
+  transform: scale(1.1);
+}
+
+/* ── AI Messages Theme ── */
+:root {
+  --ai-chip-bg: rgba(34, 211, 238, 0.08);
+  --ai-chip-border: rgba(34, 211, 238, 0.16);
+  --ai-chip-text: rgba(226, 232, 240, 0.76);
+  --ai-chip-hover-bg: rgba(34, 211, 238, 0.13);
+  --ai-chip-hover-border: rgba(34, 211, 238, 0.28);
+  --ai-chip-hover-text: rgb(103, 232, 249);
+
+  --ai-input-bg: rgba(15, 23, 42, 0.46);
+  --ai-input-border: rgba(148, 163, 184, 0.14);
+  --ai-input-focus-bg: rgba(15, 23, 42, 0.62);
+  --ai-input-focus-border: rgba(34, 211, 238, 0.28);
+
+  --ai-send-bg: rgba(34, 211, 238, 0.12);
+  --ai-send-border: rgba(34, 211, 238, 0.24);
+  --ai-send-text: rgb(103, 232, 249);
+  --ai-send-hover-bg: rgba(34, 211, 238, 0.18);
+
+  --ai-send-disabled-bg: rgba(148, 163, 184, 0.08);
+  --ai-send-disabled-border: rgba(148, 163, 184, 0.12);
+  --ai-send-disabled-text: rgba(148, 163, 184, 0.62);
+
+  /* داخل :root في AI Messages Theme */
+  --ai-user-message-bg: rgba(34, 211, 238, 0.08);
+  --ai-user-message-border: rgba(34, 211, 238, 0.2);
+  --ai-user-message-label: rgb(103, 232, 249);
+
+  --ai-assistant-message-bg: rgba(15, 23, 42, 0.42);
+  --ai-assistant-message-border: rgba(148, 163, 184, 0.16);
+  --ai-assistant-message-label: rgba(148, 163, 184, 0.86);
+}
+
+[data-theme="light"] {
+  --ai-chip-bg: rgba(8, 145, 178, 0.07);
+  --ai-chip-border: rgba(8, 145, 178, 0.16);
+  --ai-chip-text: rgb(71, 85, 105);
+  --ai-chip-hover-bg: rgba(8, 145, 178, 0.11);
+  --ai-chip-hover-border: rgba(8, 145, 178, 0.26);
+  --ai-chip-hover-text: rgb(14, 116, 144);
+
+  --ai-input-bg: rgba(255, 255, 255, 0.72);
+  --ai-input-border: rgba(15, 23, 42, 0.1);
+  --ai-input-focus-bg: rgba(255, 255, 255, 0.92);
+  --ai-input-focus-border: rgba(8, 145, 178, 0.24);
+
+  --ai-send-bg: rgba(8, 145, 178, 0.1);
+  --ai-send-border: rgba(8, 145, 178, 0.22);
+  --ai-send-text: rgb(14, 116, 144);
+  --ai-send-hover-bg: rgba(8, 145, 178, 0.15);
+
+  --ai-send-disabled-bg: rgba(100, 116, 139, 0.08);
+  --ai-send-disabled-border: rgba(100, 116, 139, 0.12);
+  --ai-send-disabled-text: rgba(100, 116, 139, 0.62);
+
+  --ai-user-message-bg: rgba(8, 145, 178, 0.08);
+  --ai-user-message-border: rgba(8, 145, 178, 0.18);
+  --ai-user-message-label: rgb(14, 116, 144);
+
+  --ai-assistant-message-bg: rgba(255, 255, 255, 0.68);
+  --ai-assistant-message-border: rgba(15, 23, 42, 0.1);
+  --ai-assistant-message-label: rgba(71, 85, 105, 0.86);
+}
+
+/* ── AI Messages Theme ── */
+:root {
+  --ai-mark-bg: rgba(34, 211, 238, 0.08);
+  --ai-mark-border: rgba(34, 211, 238, 0.18);
+  --ai-mark-text: rgb(103, 232, 249);
+  --ai-brand-text: rgba(103, 232, 249, 0.86);
+
+  --ai-status-icon: rgb(34, 211, 238);
+  --ai-status-text: rgba(148, 163, 184, 0.9);
+  --ai-hint-text: rgba(148, 163, 184, 0.86);
+  --ai-dot-text: rgba(34, 211, 238, 0.55);
+
+  --ai-chip-bg: rgba(34, 211, 238, 0.08);
+  --ai-chip-border: rgba(34, 211, 238, 0.16);
+  --ai-chip-text: rgba(226, 232, 240, 0.76);
+  --ai-chip-hover-bg: rgba(34, 211, 238, 0.13);
+  --ai-chip-hover-border: rgba(34, 211, 238, 0.28);
+  --ai-chip-hover-text: rgb(103, 232, 249);
+
+  --ai-input-bg: rgba(15, 23, 42, 0.46);
+  --ai-input-border: rgba(148, 163, 184, 0.14);
+  --ai-input-focus-bg: rgba(15, 23, 42, 0.62);
+  --ai-input-focus-border: rgba(34, 211, 238, 0.28);
+
+  --ai-send-bg: rgba(34, 211, 238, 0.12);
+  --ai-send-border: rgba(34, 211, 238, 0.24);
+  --ai-send-text: rgb(103, 232, 249);
+  --ai-send-hover-bg: rgba(34, 211, 238, 0.18);
+
+  --ai-send-disabled-bg: rgba(148, 163, 184, 0.08);
+  --ai-send-disabled-border: rgba(148, 163, 184, 0.12);
+  --ai-send-disabled-text: rgba(148, 163, 184, 0.62);
+
+  --ai-user-message-bg: rgba(34, 211, 238, 0.08);
+  --ai-user-message-border: rgba(34, 211, 238, 0.2);
+  --ai-user-message-label: rgb(103, 232, 249);
+
+  --ai-assistant-message-bg: rgba(15, 23, 42, 0.42);
+  --ai-assistant-message-border: rgba(148, 163, 184, 0.16);
+  --ai-assistant-message-label: rgba(148, 163, 184, 0.86);
+
+  --ai-pending-bg: rgba(34, 211, 238, 0.07);
+  --ai-pending-border: rgba(34, 211, 238, 0.18);
+  --ai-pending-icon-bg: rgba(34, 211, 238, 0.1);
+  --ai-pending-icon-text: rgb(103, 232, 249);
+}
+
+[data-theme="light"] {
+  --ai-mark-bg: rgba(8, 145, 178, 0.08);
+  --ai-mark-border: rgba(8, 145, 178, 0.18);
+  --ai-mark-text: rgb(8, 145, 178);
+  --ai-brand-text: rgba(14, 116, 144, 0.82);
+
+  --ai-status-icon: rgb(8, 145, 178);
+  --ai-status-text: rgba(71, 85, 105, 0.9);
+  --ai-hint-text: rgba(71, 85, 105, 0.82);
+  --ai-dot-text: rgba(8, 145, 178, 0.5);
+
+  --ai-chip-bg: rgba(8, 145, 178, 0.07);
+  --ai-chip-border: rgba(8, 145, 178, 0.16);
+  --ai-chip-text: rgb(71, 85, 105);
+  --ai-chip-hover-bg: rgba(8, 145, 178, 0.11);
+  --ai-chip-hover-border: rgba(8, 145, 178, 0.26);
+  --ai-chip-hover-text: rgb(14, 116, 144);
+
+  --ai-input-bg: rgba(255, 255, 255, 0.72);
+  --ai-input-border: rgba(15, 23, 42, 0.1);
+  --ai-input-focus-bg: rgba(255, 255, 255, 0.92);
+  --ai-input-focus-border: rgba(8, 145, 178, 0.24);
+
+  --ai-send-bg: rgba(8, 145, 178, 0.1);
+  --ai-send-border: rgba(8, 145, 178, 0.22);
+  --ai-send-text: rgb(14, 116, 144);
+  --ai-send-hover-bg: rgba(8, 145, 178, 0.15);
+
+  --ai-send-disabled-bg: rgba(100, 116, 139, 0.08);
+  --ai-send-disabled-border: rgba(100, 116, 139, 0.12);
+  --ai-send-disabled-text: rgba(100, 116, 139, 0.62);
+
+  --ai-user-message-bg: rgba(8, 145, 178, 0.08);
+  --ai-user-message-border: rgba(8, 145, 178, 0.18);
+  --ai-user-message-label: rgb(14, 116, 144);
+
+  --ai-assistant-message-bg: rgba(255, 255, 255, 0.68);
+  --ai-assistant-message-border: rgba(15, 23, 42, 0.1);
+  --ai-assistant-message-label: rgba(71, 85, 105, 0.86);
+
+  --ai-pending-bg: rgba(8, 145, 178, 0.07);
+  --ai-pending-border: rgba(8, 145, 178, 0.18);
+  --ai-pending-icon-bg: rgba(8, 145, 178, 0.1);
+  --ai-pending-icon-text: rgb(14, 116, 144);
+}
+
+
+/* ── Settings Theme ── */
+:root {
+  --settings-kicker-text: rgb(103, 232, 249);
+  --settings-icon-text: rgb(34, 211, 238);
+
+  --settings-divider: rgba(148, 163, 184, 0.14);
+
+  --settings-option-bg: rgba(15, 23, 42, 0.52);
+  --settings-option-border: rgba(148, 163, 184, 0.16);
+  --settings-option-text: rgb(203, 213, 225);
+
+  --settings-option-hover-bg: rgba(34, 211, 238, 0.09);
+  --settings-option-hover-border: rgba(34, 211, 238, 0.24);
+  --settings-option-hover-text: rgb(226, 232, 240);
+
+  --settings-option-active-bg: rgba(34, 211, 238, 0.16);
+  --settings-option-active-border: rgba(34, 211, 238, 0.34);
+  --settings-option-active-text: rgb(103, 232, 249);
+
+  --settings-export-bg: rgba(34, 211, 238, 0.12);
+  --settings-export-border: rgba(34, 211, 238, 0.28);
+  --settings-export-text: rgb(103, 232, 249);
+  --settings-export-hover-bg: rgba(34, 211, 238, 0.18);
+}
+
+[data-theme="light"] {
+  --settings-kicker-text: rgb(14, 116, 144);
+  --settings-icon-text: rgb(8, 145, 178);
+
+  --settings-divider: rgba(15, 23, 42, 0.11);
+
+  --settings-option-bg: rgba(255, 255, 255, 0.72);
+  --settings-option-border: rgba(15, 23, 42, 0.12);
+  --settings-option-text: rgb(51, 65, 85);
+
+  --settings-option-hover-bg: rgba(8, 145, 178, 0.09);
+  --settings-option-hover-border: rgba(8, 145, 178, 0.24);
+  --settings-option-hover-text: rgb(15, 23, 42);
+
+  --settings-option-active-bg: rgba(8, 145, 178, 0.14);
+  --settings-option-active-border: rgba(8, 145, 178, 0.32);
+  --settings-option-active-text: rgb(14, 116, 144);
+
+  --settings-export-bg: rgba(8, 145, 178, 0.11);
+  --settings-export-border: rgba(8, 145, 178, 0.28);
+  --settings-export-text: rgb(14, 116, 144);
+  --settings-export-hover-bg: rgba(8, 145, 178, 0.16);
+}
+
+/* ── Notifications Theme ── */
+:root {
+  --notification-panel-bg: rgba(15, 23, 42, 0.96);
+  --notification-panel-border: rgba(148, 163, 184, 0.14);
+
+  --notification-header-border: rgba(148, 163, 184, 0.12);
+
+  --notification-item-border: rgba(148, 163, 184, 0.1);
+  --notification-item-unread-bg: rgba(34, 211, 238, 0.06);
+
+  --notification-icon-bg: rgba(34, 211, 238, 0.1);
+  --notification-icon-text: rgb(103, 232, 249);
+
+  --notification-dot: rgb(34, 211, 238);
+  --notification-time-text: rgba(103, 232, 249, 0.8);
+
+  --notification-close-bg-hover: rgba(148, 163, 184, 0.08);
+  --notification-close-text-hover: rgb(226, 232, 240);
+
+  --notification-shadow: none;
+}
+
+[data-theme="light"] {
+  --notification-panel-bg: rgba(255, 255, 255, 0.96);
+  --notification-panel-border: rgba(15, 23, 42, 0.1);
+
+  --notification-header-border: rgba(15, 23, 42, 0.08);
+
+  --notification-item-border: rgba(15, 23, 42, 0.08);
+  --notification-item-unread-bg: rgba(8, 145, 178, 0.055);
+
+  --notification-icon-bg: rgba(8, 145, 178, 0.09);
+  --notification-icon-text: rgb(14, 116, 144);
+
+  --notification-dot: rgb(8, 145, 178);
+  --notification-time-text: rgba(14, 116, 144, 0.76);
+
+  --notification-close-bg-hover: rgba(15, 23, 42, 0.06);
+  --notification-close-text-hover: rgb(15, 23, 42);
+
+  --notification-shadow: none;
+}
+
+
+/* ── Sidebar Search Dropdown ── */
+:root {
+  --sidebar-search-panel-bg: rgba(10, 15, 30, 0.96);
+  --sidebar-search-panel-border: rgba(34, 211, 238, 0.18);
+
+  --sidebar-search-item-border: rgba(148, 163, 184, 0.10);
+  --sidebar-search-item-hover-bg: rgba(34, 211, 238, 0.08);
+
+  --sidebar-search-title: rgb(226, 232, 240);
+  --sidebar-search-meta: rgba(148, 163, 184, 0.72);
+
+  --sidebar-search-empty: rgba(148, 163, 184, 0.72);
+}
+
+[data-theme="light"] {
+  --sidebar-search-panel-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-search-panel-border: rgba(8, 145, 178, 0.16);
+
+  --sidebar-search-item-border: rgba(15, 23, 42, 0.08);
+  --sidebar-search-item-hover-bg: rgba(8, 145, 178, 0.07);
+
+  --sidebar-search-title: rgb(15, 23, 42);
+  --sidebar-search-meta: rgba(71, 85, 105, 0.74);
+
+  --sidebar-search-empty: rgba(71, 85, 105, 0.74);
+}
+  
+.auth-link {
+  color: var(--auth-link);
+}
+
+.auth-link:hover {
+  color: var(--primary);
 }

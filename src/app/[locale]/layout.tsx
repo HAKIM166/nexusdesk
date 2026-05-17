@@ -5,10 +5,11 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const isRTL = locale === "ar";
+  const safeLocale: Locale = locale === "ar" ? "ar" : "en";
+  const isRTL = safeLocale === "ar";
 
   return (
     <div

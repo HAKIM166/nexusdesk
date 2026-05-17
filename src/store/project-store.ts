@@ -2,6 +2,13 @@
 
 import { create } from "zustand";
 import { useNotificationStore } from "./notification-store";
+import {
+  createProject,
+  deleteProjectById,
+  getProjects,
+  updateProjectById,
+  updateProjectStatusById,
+} from "@/services/projects.service";
 
 export type ProjectStatus = "Planned" | "In Progress" | "Completed" | "On Hold";
 
@@ -19,74 +26,82 @@ export type Project = {
 type ProjectStore = {
   projects: Project[];
   selectedProject: Project | null;
+  isLoading: boolean;
+  error: string | null;
+
+  initializeProjects: () => Promise<void>;
   setSelectedProject: (project: Project | null) => void;
-  addProject: (project: Omit<Project, "id">) => void;
-  deleteProject: (id: string) => void;
-  updateProject: (id: string, updatedProject: Omit<Project, "id">) => void;
-  updateProjectStatus: (id: string, status: ProjectStatus) => void;
+  addProject: (project: Omit<Project, "id">) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
+  updateProject: (id: string, updatedProject: Omit<Project, "id">) => Promise<void>;
+  updateProjectStatus: (id: string, status: ProjectStatus) => Promise<void>;
   getProjectById: (id: string) => Project | undefined;
   getProjectsByClientId: (clientId: string) => Project[];
 };
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
-  projects: [
-    {
-      id: "p1",
-      title: "Website Redesign",
-      description: "Redesign the company website for a modern user experience.",
-      clientId: "c1",
-      status: "In Progress",
-      deadline: "2026-05-15",
-      budget: 5000,
-      paidAmount: 2500,
-    },
-    {
-      id: "p2",
-      title: "Brand Identity",
-      description: "Create a new visual identity and branding assets.",
-      clientId: "c2",
-      status: "Planned",
-      deadline: "2026-06-01",
-      budget: 3000,
-      paidAmount: 0,
-    },
-    {
-      id: "p3",
-      title: "CRM Dashboard",
-      description: "Build a dashboard to manage leads, clients, and reports.",
-      clientId: "c3",
-      status: "Completed",
-      deadline: "2026-04-10",
-      budget: 8000,
-      paidAmount: 8000,
-    },
-  ],
-
+  projects: [],
   selectedProject: null,
+  isLoading: false,
+  error: null,
+
+  initializeProjects: async () => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const projects = await getProjects();
+      set({ projects, isLoading: false, error: null });
+    } catch (error) {
+      set({
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to load projects.",
+      });
+    }
+  },
 
   setSelectedProject: (project) => set({ selectedProject: project }),
 
-  addProject: (project) =>
-    set((state) => {
-      const newProject = {
-        id: crypto.randomUUID(),
-        ...project,
-      };
+  addProject: async (project) => {
+    set({ error: null });
+
+    try {
+      const newProject = await createProject(project);
+
+      set((state) => ({
+        projects: [newProject, ...state.projects],
+      }));
 
       useNotificationStore.getState().addNotification({
         type: "project",
         title: "Project created",
         description: `${project.title} added to workspace`,
       });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to create project.",
+      });
+    }
+  },
 
-      return {
-        projects: [newProject, ...state.projects],
-      };
-    }),
+  deleteProject: async (id) => {
+    const deletedProject = get().projects.find((project) => project.id === id);
 
-  deleteProject: (id) =>
-    set((state) => {
-      const deletedProject = state.projects.find((project) => project.id === id);
+    set({ error: null });
+
+    try {
+      await deleteProjectById(id);
+
+      set((state) => ({
+        projects: state.projects.filter((project) => project.id !== id),
+        selectedProject:
+          state.selectedProject?.id === id ? null : state.selectedProject,
+      }));
 
       if (deletedProject) {
         useNotificationStore.getState().addNotification({
@@ -95,44 +110,64 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
           description: `${deletedProject.title} removed from workspace`,
         });
       }
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to delete project.",
+      });
+    }
+  },
 
-      return {
-        projects: state.projects.filter((project) => project.id !== id),
+  updateProject: async (id, updatedProject) => {
+    set({ error: null });
+
+    try {
+      const savedProject = await updateProjectById(id, updatedProject);
+
+      set((state) => ({
+        projects: state.projects.map((project) =>
+          project.id === id ? savedProject : project,
+        ),
         selectedProject:
-          state.selectedProject?.id === id ? null : state.selectedProject,
-      };
-    }),
+          state.selectedProject?.id === id
+            ? savedProject
+            : state.selectedProject,
+      }));
 
-  updateProject: (id, updatedProject) =>
-    set((state) => {
       useNotificationStore.getState().addNotification({
         type: "project",
         title: "Project updated",
         description: `${updatedProject.title} details updated`,
       });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update project.",
+      });
+    }
+  },
 
-      return {
+  updateProjectStatus: async (id, status) => {
+    const currentProject = get().projects.find((project) => project.id === id);
+
+    set({ error: null });
+
+    try {
+      const savedProject = await updateProjectStatusById(id, status);
+
+      set((state) => ({
         projects: state.projects.map((project) =>
-          project.id === id
-            ? {
-                ...project,
-                ...updatedProject,
-              }
-            : project,
+          project.id === id ? savedProject : project,
         ),
         selectedProject:
           state.selectedProject?.id === id
-            ? {
-                ...state.selectedProject,
-                ...updatedProject,
-              }
+            ? savedProject
             : state.selectedProject,
-      };
-    }),
-
-  updateProjectStatus: (id, status) =>
-    set((state) => {
-      const currentProject = state.projects.find((project) => project.id === id);
+      }));
 
       if (currentProject) {
         useNotificationStore.getState().addNotification({
@@ -141,25 +176,15 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
           description: `${currentProject.title} status changed to ${status}`,
         });
       }
-
-      return {
-        projects: state.projects.map((project) =>
-          project.id === id
-            ? {
-                ...project,
-                status,
-              }
-            : project,
-        ),
-        selectedProject:
-          state.selectedProject?.id === id
-            ? {
-                ...state.selectedProject,
-                status,
-              }
-            : state.selectedProject,
-      };
-    }),
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update project status.",
+      });
+    }
+  },
 
   getProjectById: (id) => {
     return get().projects.find((project) => project.id === id);

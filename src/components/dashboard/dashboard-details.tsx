@@ -10,9 +10,7 @@ import { useProjectStore } from "@/store/project-store";
 
 import QuickActionsSection from "./quick-actions-section";
 import RecentListsSection from "./recent-lists-section";
-import PricingSection from "./pricing-section";
-import TestimonialsSection from "./testimonials-section";
-import DashboardFooter from "./dashboard-footer";
+
 
 /* =========================
    TYPES
@@ -89,18 +87,18 @@ export default function DashboardDetails() {
    PLANS / WORKSPACE PACKAGES SECTION
    ========================= */}
 
-      <PricingSection isArabic={isArabic} />
+
 
       {/* =========================
    TESTIMONIALS SECTION
    ========================= */}
 
-      <TestimonialsSection isArabic={isArabic} />
+
       {/* =========================
    FOOTER SECTION
    ========================= */}
 
-      <DashboardFooter isArabic={isArabic} />
+
     </div>
   );
 }

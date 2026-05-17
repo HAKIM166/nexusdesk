@@ -16,10 +16,13 @@ export default async function AIPage({ params }: AIPageProps) {
 
   return (
     <DashboardShell>
-      <div className="space-y-8">
+      <div className="space-y-4 pb-8 md:space-y-8 md:pb-0">
         <div className={isArabic ? "text-right" : "text-left"}>
           <h1 className="section-title">{messages.ai.title}</h1>
-          <p className="section-subtitle">{messages.ai.subtitle}</p>
+
+          <p className="section-subtitle mt-2 max-w-2xl">
+            {messages.ai.subtitle}
+          </p>
         </div>
 
         <AIChatContainer locale={locale} />
