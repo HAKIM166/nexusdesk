@@ -30,7 +30,7 @@ export default function DashboardShell({
     currentSection === "documentation" ||
     currentSection === "reset-password";
 
-  const [isCheckingAuth, setIsCheckingAuth] = useState(!isPublicRoute);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
