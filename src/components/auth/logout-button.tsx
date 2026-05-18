@@ -33,7 +33,7 @@ export default function LogoutButton({
 
     await supabase.auth.signOut();
 
-    window.location.replace(`/${locale}/login`);
+    window.location.replace(`/${locale}`);
   }
 
   return (

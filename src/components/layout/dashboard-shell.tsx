@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -21,13 +21,19 @@ export default function DashboardShell({
   const isRTL = pathname?.startsWith("/ar");
   const contentDir = isRTL ? "rtl" : "ltr";
   const locale = pathname?.split("/")[1] === "ar" ? "ar" : "en";
-  const allowedEmails = (process.env.NEXT_PUBLIC_ALLOWED_DASHBOARD_EMAILS || "")
-    .split(",")
-    .map((email) => email.trim().toLowerCase())
-    .filter(Boolean);
+  const allowedEmails = useMemo(
+    () =>
+      (process.env.NEXT_PUBLIC_ALLOWED_DASHBOARD_EMAILS || "")
+        .split(",")
+        .map((email) => email.trim().toLowerCase())
+        .filter(Boolean),
+    [],
+  );
   const currentSection = pathname?.split("/")[2];
 
   const isPublicRoute =
+    !currentSection ||
+    currentSection === "home" ||
     currentSection === "login" ||
     currentSection === "terms" ||
     currentSection === "privacy" ||
@@ -61,7 +67,7 @@ export default function DashboardShell({
 
       if (!isAllowedUser) {
         await supabase.auth.signOut();
-        router.replace(`/${locale}`);
+        window.location.replace(`/${locale}`);
         return;
       }
 
@@ -76,7 +82,7 @@ export default function DashboardShell({
       if (!isMounted || isPublicRoute) return;
 
       if (!session) {
-        router.replace(`/${locale}/login`);
+        router.replace(`/${locale}`);
       }
     });
 
@@ -84,7 +90,7 @@ export default function DashboardShell({
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, [isPublicRoute, locale, router, supabase]);
+  }, [isPublicRoute, locale, router, supabase, allowedEmails]);
 
   if (isCheckingAuth) {
     return (

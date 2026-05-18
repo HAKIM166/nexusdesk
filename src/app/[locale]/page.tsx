@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import LoginPage from "./login/page";
 
 type LocalePageProps = {
   params: Promise<{
@@ -6,8 +6,10 @@ type LocalePageProps = {
   }>;
 };
 
-export default async function LocalePage({ params }: LocalePageProps) {
+export default async function LocalePage({
+  params,
+}: LocalePageProps) {
   const { locale } = await params;
 
-  redirect(`/${locale}/dashboard`);
+  return <LoginPage params={Promise.resolve({ locale })} />;
 }

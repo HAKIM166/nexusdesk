@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Locale } from "@/lib/constants";
@@ -42,8 +42,39 @@ export default function LoginForm({ locale }: LoginFormProps) {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    async function restoreRecoverySession() {
+      if (typeof window === "undefined") return;
+
+      const hash = window.location.hash.replace("#", "");
+      const params = new URLSearchParams(hash);
+
+      const accessToken = params.get("access_token");
+      const refreshToken = params.get("refresh_token");
+
+      if (!accessToken || !refreshToken) return;
+
+      await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+
+      setMode("new-password");
+    }
+
+    restoreRecoverySession();
+  }, [supabase]);
+
   const messages = getMessages(locale);
   const copy = getAuthCopy(locale, messages);
+  const allowedEmails = (process.env.NEXT_PUBLIC_ALLOWED_DASHBOARD_EMAILS || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+
+  function canOpenDashboard(userEmail: string) {
+    return allowedEmails.includes(userEmail.trim().toLowerCase());
+  }
 
   const passwordRules = [
     {
@@ -187,15 +218,13 @@ export default function LoginForm({ locale }: LoginFormProps) {
           return;
         }
 
-        await supabase.auth.signOut();
-
         setMessage(copy.passwordUpdated);
 
-        setTimeout(() => {
-          router.replace(`/${locale}/login`);
-          router.refresh();
-        }, 1200);
+        setTimeout(async () => {
+          await supabase.auth.signOut();
 
+          window.location.href = `/${locale}/login`;
+        }, 1200);
         return;
       }
 
@@ -248,8 +277,13 @@ export default function LoginForm({ locale }: LoginFormProps) {
           return;
         }
 
+        if (!canOpenDashboard(normalizedEmail)) {
+          await supabase.auth.signOut();
+          window.location.replace(`/${locale}/home`);
+          return;
+        }
+
         router.replace(`/${locale}/dashboard`);
-        router.refresh();
         return;
       }
 
@@ -263,8 +297,13 @@ export default function LoginForm({ locale }: LoginFormProps) {
         return;
       }
 
+      if (!canOpenDashboard(normalizedEmail)) {
+        await supabase.auth.signOut();
+        window.location.replace(`/${locale}/home`);
+        return;
+      }
+
       router.replace(`/${locale}/dashboard`);
-      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : copy.invalid);
     } finally {

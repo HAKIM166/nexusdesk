@@ -1,6 +1,5 @@
 "use client";
 
-import { div } from "framer-motion/client";
 
 type PricingSectionProps = {
   isArabic: boolean;

@@ -115,7 +115,7 @@ export default function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
 
       setIsRedirecting(true);
 
-      router.replace(`/${locale}/login`);
+      window.location.replace(`/${locale}/login`);
     } catch {
       setError(
         isArabic
