@@ -52,7 +52,7 @@ export default function DashboardShell({
       if (!isMounted) return;
 
       if (!session) {
-        router.replace(`/${locale}/login`);
+        router.replace(`/${locale}`);
         return;
       }
 

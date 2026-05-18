@@ -2,7 +2,6 @@
 
 import { FormEvent, useState } from "react";
 import {
-  CheckCircle2,
   KeyRound,
   Loader2,
   LockKeyhole,
@@ -52,14 +51,16 @@ export default function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
 
   const [showPasswords, setShowPasswords] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
-    setMessage("");
+
 
     if (!password.trim() || !confirmPassword.trim()) {
       setError(
@@ -106,21 +107,21 @@ export default function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
             ? "تم حفظ شكل الصفحة. تغيير كلمة المرور الحقيقي يحتاج رابط استعادة صالح من البريد."
             : "The page UI is ready. Real password update requires a valid recovery email link.",
         );
+        setIsLoading(false);
         return;
       }
 
       await supabase.auth.signOut();
 
-      setMessage(
-        isArabic
-          ? "تم تغيير كلمة المرور بنجاح. سيتم تحويلك لتسجيل الدخول."
-          : "Password updated successfully. Redirecting to login.",
-      );
+      setIsRedirecting(true);
 
-      window.setTimeout(() => {
-        router.replace(`/${locale}/login`);
-      }, 1400);
-    } finally {
+      router.replace(`/${locale}/login`);
+    } catch {
+      setError(
+        isArabic
+          ? "حدث خطأ غير متوقع. حاول مرة أخرى."
+          : "Something went wrong. Please try again.",
+      );
       setIsLoading(false);
     }
   }
@@ -210,16 +211,10 @@ export default function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
               </div>
             )}
 
-            {message && (
-              <div className="flex items-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--success)_24%,transparent)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] px-4 py-3 text-sm font-medium text-[var(--success)]">
-                <CheckCircle2 className="h-4 w-4" />
-                {message}
-              </div>
-            )}
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isRedirecting}
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
