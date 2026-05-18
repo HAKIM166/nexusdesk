@@ -39,6 +39,7 @@ The platform includes:
 - AI assistant workspace
 - Settings page
 - Supabase authentication
+- Public home landing page for non-dashboard users
 - Arabic / English localization
 - Dark / Light theme support
 
@@ -71,6 +72,7 @@ AI workspace connected to project and client context for smarter business sugges
 - AI-powered dashboard assistant
 - Supabase authentication
 - Protected workspace routes
+- Public `/[locale]/home` route for non-dashboard users
 - Clients, projects, employees, tasks, and calendar modules
 - Arabic / English localization
 - RTL Arabic support
@@ -174,6 +176,38 @@ Features include:
 - Protected dashboard routes
 - Allowed dashboard users configuration
 - Secure production redirects
+- Public home route for regular authenticated users
+- Dashboard access restricted by allowed email list
+
+### Access Flow
+
+NexusDesk separates public access from protected dashboard access:
+
+- Approved dashboard emails can access the internal workspace.
+- Regular users are redirected to the public home / landing page.
+- Unauthorized users are signed out before being redirected away from protected dashboard routes.
+- Logout redirects users back to the public locale route.
+- Password reset redirects users back to the login flow after completion.
+
+Public user route:
+
+```bash
+src/app/[locale]/home/page.tsx
+```
+
+Protected dashboard shell:
+
+```bash
+src/components/layout/dashboard-shell.tsx
+```
+
+Authentication UI:
+
+```bash
+src/components/auth/login-form.tsx
+src/components/auth/logout-button.tsx
+src/components/auth/reset-password-form.tsx
+```
 
 Protected workspace areas include:
 
@@ -300,6 +334,7 @@ src/app/[locale]
 
 Main routes include:
 
+- home
 - dashboard
 - clients
 - clients/[id]
@@ -492,6 +527,34 @@ Recommended production setup:
 
 ---
 
+## Recent Stability Updates
+
+Recent production-readiness work included:
+
+- Added a public localized home route at `/[locale]/home`.
+- Connected the home page to existing marketing sections.
+- Fixed dashboard redirect loops between landing and protected routes.
+- Updated login behavior so only allowed emails can access the dashboard.
+- Redirected regular users to the public home landing route.
+- Updated logout behavior to avoid protected-route loops.
+- Improved password reset redirect behavior after successful updates.
+- Confirmed production build passes successfully.
+- Confirmed ESLint has no blocking errors.
+
+Verification commands used:
+
+```bash
+npm run lint
+npm run build
+```
+
+Current known lint status:
+
+- `npm run lint` passes with warnings only.
+- `npm run build` completes successfully.
+
+---
+
 ## Development Goals
 
 This project was built to demonstrate:
@@ -521,6 +584,8 @@ Planned improvements include:
 - Email notifications
 - More advanced AI analytics
 - Public landing page finalization
+- Cleanup remaining ESLint warnings
+- Replace remaining raw `<img>` tags with optimized image handling where appropriate
 
 ---
 
