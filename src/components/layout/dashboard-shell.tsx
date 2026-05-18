@@ -21,6 +21,10 @@ export default function DashboardShell({
   const isRTL = pathname?.startsWith("/ar");
   const contentDir = isRTL ? "rtl" : "ltr";
   const locale = pathname?.split("/")[1] === "ar" ? "ar" : "en";
+  const allowedEmails = (process.env.NEXT_PUBLIC_ALLOWED_DASHBOARD_EMAILS || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
   const currentSection = pathname?.split("/")[2];
 
   const isPublicRoute =
@@ -49,7 +53,15 @@ export default function DashboardShell({
 
       if (!session) {
         router.replace(`/${locale}/login`);
-        setIsCheckingAuth(false);
+        return;
+      }
+
+      const userEmail = session.user.email?.toLowerCase() || "";
+      const isAllowedUser = allowedEmails.includes(userEmail);
+
+      if (!isAllowedUser) {
+        await supabase.auth.signOut();
+        router.replace(`/${locale}`);
         return;
       }
 
